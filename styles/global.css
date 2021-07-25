@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Poppins&display=swap");
-@import url("https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.6/css/flag-icon.min.css");
+/*@import url("https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.6/css/flag-icon.min.css");*/
 
 h1 {
   @apply text-5xl;
@@ -25,7 +25,7 @@ h3,
 h4,
 h5,
 h6 {
-  @apply font-sans;
+  /*@apply font-sans;*/
 }
 
 code {
@@ -50,6 +50,10 @@ button {
   &:focus {
     outline: none !important;
   }
+}
+
+a {
+  @apply text-blue-700;
 }
 
 /**
@@ -145,6 +149,9 @@ body {
 }
 .text-twitter {
   color: #00a9f1;
+}
+.text-telegram {
+  color: #0088cc;
 }
 .text-github {
   color: #2f2f2f;

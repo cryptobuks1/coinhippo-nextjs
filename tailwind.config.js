@@ -247,6 +247,10 @@ module.exports = {
         '"Courier New"',
         'monospace',
       ],
+      inter: [
+        'Inter',
+        'sans-serif',
+      ],
     },
     fontSize: {
       '3xs': ['0.6rem', { lineHeight: '1' }],

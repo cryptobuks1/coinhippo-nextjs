@@ -1,5 +1,5 @@
 [data-navbar="light"] {
-  .navbar {
+  .navbar,.footer {
     @apply text-gray-900;
     @apply bg-white border-gray-100;
     .navbar-search {
@@ -11,7 +11,7 @@
 }
 
 [data-navbar="dark"] {
-  .navbar {
+  .navbar,.footer {
     @apply text-white;
     background: color(theme('colors.gray.900') tint(5%));
     border-color: color(theme('colors.gray.900') tint(10%));

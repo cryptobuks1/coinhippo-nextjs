@@ -10,8 +10,11 @@ export default function Layouts({ children }) {
   if (['/404', '/500'].includes(pathname)) {
     return <Centered>{children}</Centered>
   }
-  else if ([].includes(pathname)) {
+  else if (['/widget'].includes(pathname)) {
     return <Empty>{children}</Empty>
+  }
+  else if (['/blog', '/blog/[category_id]', '/blog/[category_id]/[post_id]'].includes(pathname)) {
+    return <Layout noSiderbar={true}>{children}</Layout>
   }
   else {
     return <Layout>{children}</Layout>

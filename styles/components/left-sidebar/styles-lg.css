@@ -189,10 +189,10 @@
   .left-sidebar-1 {
     @apply text-sm;
     [data-left-sidebar="light"] & {
-      @apply bg-white border-r border-gray-200 text-gray-900;
+      @apply bg-white border-b border-r border-gray-200 text-gray-900;
     }
     [data-left-sidebar="dark"] & {
-      @apply border-r text-white;
+      @apply border-b border-r text-white;
       background: color(theme("colors.gray.900") tint(5%));
       border-color: color(theme("colors.gray.900") tint(10%));
     }

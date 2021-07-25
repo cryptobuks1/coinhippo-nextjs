@@ -3,7 +3,7 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import { FiBox, FiMenu } from 'react-icons/fi'
 import { CONFIG_KEY } from '../../reducers/types'
 
-export default function Logo() {
+export default function Logo({ noSiderbar, className }) {
   const dispatch = useDispatch()
   const { config, leftSidebar } = useSelector(state => ({ config: state.config, leftSidebar: state.leftSidebar }), shallowEqual)
   const { name, collapsed } = { ...config }
@@ -11,24 +11,26 @@ export default function Logo() {
 
   if (showLogo) {
     return (
-      <div className="logo truncate">
+      <div className={`logo truncate ${className ? className : ''}`}>
         <Link href="/">
           <a className="flex flex-row items-center justify-start space-x-2">
             <FiBox size={28} />
-            <span>{name}</span>
+            {!noSiderbar && (<span>{name}</span>)}
           </a>
         </Link>
-        <button
-          onClick={() =>
-            dispatch({
-              type: CONFIG_KEY,
-              key: 'collapsed',
-              value: !collapsed
-            })
-          }
-          className="block lg:hidden ml-auto mr-4">
-          <FiMenu size={20} />
-        </button>
+        {!noSiderbar && (
+          <button
+            onClick={() =>
+              dispatch({
+                type: CONFIG_KEY,
+                key: 'collapsed',
+                value: !collapsed
+              })
+            }
+            className="block lg:hidden ml-auto mr-4">
+            <FiMenu size={20} />
+          </button>
+        )}
       </div>
     )
   }
