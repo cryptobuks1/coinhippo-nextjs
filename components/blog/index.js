@@ -47,11 +47,11 @@ export default function Blog() {
     }
   }, [category_id, post_id])
 
-  const headMeta = meta(asPath, blogData)
-
   if (!category_id && blogsData && _.orderBy(blogsData.filter(blog => !blog.post_id), ['order'], ['asc'])[0]) {
     router.push(`/blog/${_.orderBy(blogsData.filter(blog => !blog.post_id), ['order'], ['asc'])[0].category_id}`)
   }
+
+  const headMeta = meta(asPath, blogData)
 
   return blogData && (
     <>
