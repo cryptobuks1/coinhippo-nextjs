@@ -44,24 +44,24 @@ export default function Layout({ children, noSiderbar }) {
         <title>{headMeta.title || title}</title>
         <meta name="og:site_name" property="og:site_name" content={headMeta.title} />
         <meta name="og:title" property="og:title" content={headMeta.title} />
-        <meta itemprop="name" content={headMeta.title} />
-        <meta itemprop="headline" content={headMeta.title} />
-        <meta itemprop="publisher" content={headMeta.title} />
+        <meta itemProp="name" content={headMeta.title} />
+        <meta itemProp="headline" content={headMeta.title} />
+        <meta itemProp="publisher" content={headMeta.title} />
         <meta name="twitter:title" content={headMeta.title} />
 
         <meta name="description" content={headMeta.description} />
         <meta name="og:description" property="og:description" content={headMeta.description} />
-        <meta itemprop="description" content={headMeta.description} />
+        <meta itemProp="description" content={headMeta.description} />
         <meta name="twitter:description" content={headMeta.description} />
 
         <meta name="og:image" property="og:image" content={headMeta.image} />
-        <meta itemprop="thumbnailUrl" content={headMeta.image} />
-        <meta itemprop="image" content={headMeta.image} />
+        <meta itemProp="thumbnailUrl" content={headMeta.image} />
+        <meta itemProp="image" content={headMeta.image} />
         <meta name="twitter:image" content={headMeta.image} />
         <link rel="image_src" href={headMeta.image} />
 
         <meta name="og:url" property="og:url" content={headMeta.url} />
-        <meta itemprop="url" content={headMeta.url} />
+        <meta itemProp="url" content={headMeta.url} />
         <meta name="twitter:url" content={headMeta.url} />
         <link rel="canonical" href={headMeta.url} />
       </Head>

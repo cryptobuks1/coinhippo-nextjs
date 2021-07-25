@@ -52,8 +52,23 @@ button {
   }
 }
 
-a {
+.blog a {
   @apply text-blue-700;
+}
+
+.ul-blog {
+  list-style-type: disc;
+  list-style-position: initial;
+  margin-left: 2rem;
+
+  li {
+    display: list-item !important;
+    margin-top: .25rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 
 /**

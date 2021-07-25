@@ -9,7 +9,7 @@ export default function Header({ blogsData }) {
   const { category_id } = { ...query }
 
   return blogsData && blogsData.filter(blogData => !blogData.post_id).length > 1 && (
-    <div className="navbar font-inter px-2 mb-4">
+    <div className="blog navbar font-inter px-2 mb-4">
       <div className="navbar-inner w-full flex items-center justify-start overflow-x-scroll">
         {_.orderBy(blogsData.filter(blogData => !blogData.post_id), ['order'], ['asc']).map((blogData, i) => (
           <Link key={i} href={`/blog/${blogData.category_id}`}>
