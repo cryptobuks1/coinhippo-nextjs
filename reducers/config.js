@@ -7,7 +7,7 @@ export default function config(
     description: process.env.NEXT_PUBLIC_DEFAULT_DESCRIPTION,
     url: process.env.NEXT_PUBLIC_SITE_URL,
     layout: 'layout',
-    collapsed: false,
+    collapsed: true,
     backdrop: false,
   },
   action

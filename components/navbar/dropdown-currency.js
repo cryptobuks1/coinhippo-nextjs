@@ -40,9 +40,9 @@ export default function DropdownCurrency() {
       >
         {currency.image ?
           <img
-            className="w-6 h-6 rounded-full"
             src={currency.image}
             alt={currency.id.toUpperCase()}
+            className="w-6 h-6 rounded-full"
           />
           :
           <span className={`${currency.background} w-6 h-6 rounded-full flex items-center justify-center text-white text-sm`}>
