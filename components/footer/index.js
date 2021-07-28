@@ -19,7 +19,7 @@ export default function Footer() {
         <a href="https://cryptopanic.com" target="_blank" rel="noopener noreferrer" className="flex items-center ml-2"><Image src="/logos/api/cryptopanic.png" alt="" width={24} height={24} /></a>
       </span>
       <span className="w-full md:w-1/3 flex items-center justify-center text-gray-400 mt-4 md:mt-0">
-        © {moment().format('YYYY')} made with <FaHeart className="text-red-400 text-xl mx-1" /> by <span className="font-bold mx-1">{process.env.NEXT_PUBLIC_APP_NAME}</span> team.
+        © {moment().format('YYYY')} made with <FaHeart className="text-red-400 text-xl mx-1" /> by <span className="font-semibold mx-1">{process.env.NEXT_PUBLIC_APP_NAME}</span> team.
       </span>
       <span className="w-full md:w-1/3 flex items-center justify-center md:justify-end text-gray-400 mt-4 md:mt-0">
         Follow us on

@@ -7,7 +7,7 @@ const Widget = ({ key = null, title = null, description = null, right = null, ch
         <div className="flex flex-row items-center justify-between mb-6">
           <div className="flex flex-col">
             <div className="text-gray-500 text-sm font-light">{title}</div>
-            <div className="text-sm font-bold">{description}</div>
+            <div className="text-sm font-semibold">{description}</div>
           </div>
           {right}
         </div>

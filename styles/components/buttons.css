@@ -16,7 +16,7 @@ button:focus {
 }
 
 .btn {
-  @apply font-bold uppercase;
+  @apply font-semibold uppercase;
   &:disabled {
     @apply opacity-50 cursor-not-allowed;
   }

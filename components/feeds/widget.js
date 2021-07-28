@@ -2,33 +2,35 @@ import Link from 'next/link'
 import { useSelector, shallowEqual } from 'react-redux'
 import PropTypes from 'prop-types'
 import Widget from '../widget'
+import FearAndGreed from '../feeds/fear-and-greed'
+import { FiArrowUp, FiArrowDown } from 'react-icons/fi'
 import { FaBitcoin, FaGasPump, FaYoutube, FaPodcast, FaRegNewspaper, FaBookDead, FaCoins, FaSearch, FaRegGrinStars } from 'react-icons/fa'
 import { AiFillAlert } from 'react-icons/ai'
 import { IoIosRocket } from 'react-icons/io'
 import { RiEmotionSadLine } from 'react-icons/ri'
-import { GiUnicorn } from 'react-icons/gi'
+import { GiWatch, GiUnicorn, GiWalk, GiRun, GiRunningNinja } from 'react-icons/gi'
 import { BiTime, BiGhost } from 'react-icons/bi'
 import { BsPencilSquare } from 'react-icons/bs'
 import { HiOutlineRefresh } from 'react-icons/hi'
 import parse from 'html-react-parser'
 import Linkify from 'react-linkify'
 import moment from 'moment'
+import { getName, numberFormat } from '../../lib/utils'
 
 const FeedWidget = ({ feedType = null, data = null }) => {
   const { theme } = useSelector(state => ({ theme: state.theme }), shallowEqual)
   const { background } = { ...theme }
 
-  const json = data && data.Json && JSON.parse(data.Json)
+  const json =  data && data.Json && JSON.parse(data.Json)
 
   const isSkeleton = data && data.ID === 'skeleton'
-  const skeletonColor = background === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
 
-  return data && (
+  return (
     <Widget>
       <div className="flex items-start justify-start space-x-4 p-2">
         <div className="w-8 flex-shrink-0">
           {isSkeleton ?
-            <div className={`${skeletonColor} animate-pulse w-full h-8 shadow-lg rounded-full ring`} />
+            <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-full h-8 shadow-lg rounded-full" />
             :
             <img
               src={`/logos/api/${
@@ -44,9 +46,9 @@ const FeedWidget = ({ feedType = null, data = null }) => {
           }
         </div>
         <div className="w-full flex flex-col">
-          <div className="flex items-center text-base font-semibold">
+          <div className="flex items-center text-base font-medium">
             {isSkeleton ?
-              <div className={`${skeletonColor} animate-pulse w-3/4 h-4 rounded my-1.5`} />
+              <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-3/4 h-4 rounded my-1.5" />
               :
               feedType === 'fear_and_greed' ?
                 <><FaBitcoin size={24} className="text-yellow-500 mb-0.5 mr-2" /><span className="h-6">Fear & Greed Index</span></> :
@@ -66,7 +68,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                 data.SortKey.endsWith('_trending') ?
                   <><FaSearch size={20} className="text-indigo-400 mr-2.5" /><span className="h-6">Trending Search</span></> :
                 data.SortKey.endsWith('_defi') ?
-                  <><GiUnicorn size={24} className="text-indigo-400 mb-1 mr-1.5" /><span className="h-6">Top DeFi</span></> :
+                  <><GiUnicorn size={24} className="text-indigo-400 mb-1 mr-1.5" /><span className="h-6">Top {getName('defi')}</span></> :
                 data.SortKey.endsWith('_nfts') ?
                   <><BiGhost size={24} className="text-indigo-400 mr-1.5" /><span className="h-6">Top NFTs</span></> :
                 data.SortKey.endsWith('_fomo') ?
@@ -78,61 +80,203 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                 : null
             }
           </div>
-          <div className={`flex flex-row items-center text-gray-400 text-xs font-light mt-0.5 ml-${isSkeleton ? 8 : `7 pl-${feedType === 'news' ? 1 : 0.5}`}`}>
+          <div className="flex flex-row items-center text-gray-400 text-xs font-light mt-0.5">
             {isSkeleton ?
-              <div className={`${skeletonColor} animate-pulse w-2/3 h-3 rounded my-1.5`} />
+              <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-2/3 h-3 rounded mb-3" />
               :
               feedType === 'fear_and_greed' ?
                 <><HiOutlineRefresh size={14} className="mb-1 mr-1" /><span className="h-5">{moment(data.CreatedAt * 1000).fromNow()} ({moment(data.CreatedAt * 1000).format('h:[00] A')})</span></> :
               feedType === 'news' ?
                 <><BsPencilSquare size={14} className="mb-1 mr-1" /><span className="h-5">{moment(json.published_at).fromNow()}{moment().diff(moment(json.published_at), 'hours') >= 1 && (<> ({moment(json.published_at).format('LT')})</>)}</span></> :
-                <><BiTime size={14} className="mb-1 mr-1" /><span className="h-5">{moment(data.CreatedAt * 1000).fromNow()}{moment().diff(moment(data.CreatedAt * 1000), 'hours') >= 1 && (<> ({moment(data.CreatedAt * 1000).format('LT')})</>)}</span></>
+                <>{feedType === 'gas' ? <GiWatch size={18} className="mb-1 mr-1" /> : <BiTime size={14} className="mb-1 mr-1" />}<span className="h-5">{moment(data.CreatedAt * 1000).fromNow()}{moment().diff(moment(data.CreatedAt * 1000), 'hours') >= 1 && (<> ({moment(data.CreatedAt * 1000).format('LT')})</>)}</span></>
             }
           </div>
-          <div className={`text-${background === 'dark' ? 'gray-400' : 'gray-600'} text-sm mt-2`}>
+          <div className="text-gray-600 dark:text-gray-400 text-sm mt-2">
             {isSkeleton ?
               <div className="space-y-2">
-                {['fear_and_greed', 'gas'].includes(feedType) ?
-                  <></> :
+                {feedType === 'fear_and_greed' ?
+                  <>
+                    <div className="flex items-center">
+                      <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-3/5 h-4 rounded" />
+                      <span className="ml-auto">
+                        <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-6 h-6 rounded-full" />
+                      </span>
+                    </div>
+                    <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-5/6 h-3.5 rounded" />
+                  </> :
+                feedType === 'gas' ?
+                  <>
+                    <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-5/6 h-3 rounded" />
+                    <div className="flex items-center py-2">
+                      {[...Array(3).keys()].map(i => (
+                        <div key={i} className="w-1/3 flex flex-col items-center justify-center">
+                          <div className="h-6 mb-2">
+                            <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-6 h-6 rounded-full" />
+                          </div>
+                          <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-3/4 h-3 rounded" />
+                        </div>
+                      ))}
+                    </div>
+                  </> :
                 feedType === 'whales' ?
                   <></> :
+                feedType.startsWith('markets') ?
+                  ['_ath', '_atl', '_marketcap', '_trending', '_defi', '_nfts', '_fomo', '_panic'].findIndex(market_type => feedType.endsWith(market_type)) > -1 ?
+                    [...Array(3).keys()].map(i => (
+                      <div key={i} className={`mt-${i  > 0 ? 3 : 0} mb-2 ${i < 3 - 1 ? 'border-b pb-4' : ''}`}>
+                        <div className="flex items-center font-semibold">
+                          <div className="w-1/2 flex items-center mr-2">
+                            <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-8 h-8 rounded-full mr-2" />
+                            <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-1/3 h-3.5 rounded" />
+                          </div>
+                          <div className="w-1/2 flex items-center ml-auto">
+                            <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-1/2 h-4 rounded ml-auto" />
+                          </div>
+                        </div>
+                        <div className="flex items-center mt-1">
+                          <div className="w-1/2 bg-gray-100 dark:bg-gray-800 animate-pulse w-2/5 h-3 rounded mr-2" />
+                          <div className="w-1/2 flex items-center ml-auto">
+                            <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-2/5 h-3 rounded ml-auto" />
+                          </div>
+                        </div>
+                      </div>
+                    )) :
+                  ['_bitcoin'].findIndex(market_type => feedType.endsWith(market_type)) > -1 ?
+                    <>
+                      <div className="flex items-start mb-4">
+                        <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-1/2 h-6 rounded" />
+                        <span className="w-1/2 flex items-start">
+                          <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-1/3 h-4 rounded ml-auto" />
+                        </span>
+                      </div>
+                      <div className="w-full flex flex-col">
+                        <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-2/5 h-3 rounded" />
+                        <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-1/2 h-3 rounded mt-2" />
+                      </div>
+                    </>
+                    : null
+                  :
                   <>
-                    <div className={`${skeletonColor} animate-pulse w-7/8 h-3.5 rounded`} />
-                    <div className={`${skeletonColor} animate-pulse w-7/8 h-3.5 rounded`} />
-                    <div className={`${skeletonColor} animate-pulse w-7/8 h-3.5 rounded`} />
-                    <div className={`${skeletonColor} animate-pulse w-3/4 h-3.5 rounded`} />
+                    <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-7/8 h-3.5 rounded" />
+                    <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-7/8 h-3.5 rounded" />
+                    <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-3/4 h-3.5 rounded" />
                   </>
                 }
               </div>
               :
               feedType === 'fear_and_greed' ?
-                <Linkify>{parse(data.Message.replace('\n', '<br>'))}</Linkify> :
+                <FearAndGreed data={json} /> :
               feedType === 'gas' ?
-                <Linkify>{parse(data.Message.replace('\n', '<br>'))}</Linkify> :
+                <>
+                  Maybe it's time to <Link href="/defi"><a className="font-semibold">{getName('defi')}</a></Link> or <Link href="/non-fungible-tokens-nft"><a className="font-semibold">{getName('nfts')}</a></Link>.
+                  <div className="flex items-center mt-4 mb-2">
+                    {['SafeGasPrice', 'ProposeGasPrice', 'FastGasPrice'].map((speed, i) => (
+                      <div key={i} className="w-1/3 flex flex-col items-center justify-center">
+                        <div className="h-6 mb-2">
+                          {i === 0 ?
+                            <GiWalk size={24} className="text-red-300" /> :
+                          i === 2 ?
+                            <GiRunningNinja size={24} className="text-red-500" /> :
+                            <GiRun size={22} className="text-red-400 mt-0.5" />
+                          }
+                        </div>
+                        <span className="text-gray-900 dark:text-gray-100 font-semibold">{json[speed]} Gwei</span>
+                      </div>
+                    ))}
+                  </div>
+                </> :
               feedType === 'news' ?
-                json.title :
+                <Linkify>{json.title}</Linkify> :
               feedType === 'whales' ?
                 <Linkify>{parse(data.Message.replace('\n', '<br>'))}</Linkify> :
-              feedType === 'markets' ?
-                <Linkify>{parse(data.Message.replace('\n', '<br>'))}</Linkify>:<Linkify>{parse(data.Message.replace('\n', '<br>'))}</Linkify>
+              feedType === 'markets' && data.SortKey ?
+                ['_ath', '_atl', '_marketcap', '_trending', '_defi', '_nfts', '_fomo', '_panic'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ?
+                  json.length === 1 ?
+                    json.map(coinData => (
+                      <div key={coinData.id}>
+                        <div className="flex items-center mr-2">
+                          <img
+                            src={coinData.image || coinData.large || coinData.thumb}
+                            alt=""
+                            className="w-8 h-8 rounded-full mr-2"
+                          />
+                          <span className="text-base font-semibold">{coinData.name}</span>
+                        </div>
+                        <div className={`flex items-start text-${coinData.price_change_percentage_24h < 0 ? 'red' : coinData.price_change_percentage_24h > 0 ? 'green' : 'gray'}-500 text-3xl font-semibold my-2`}>
+                          <span className="mr-2">${numberFormat(data.SortKey.endsWith('_ath') ? coinData.high_price : data.SortKey.endsWith('_atl') ? coinData.low_price : coinData.current_price, '0,0.00000000')}</span>
+                          <span className="flex items-start text-sm font-light mt-0.5 ml-auto">
+                            {numberFormat(coinData.price_change_percentage_24h / 100, '+0,0.00%')}
+                            {coinData.price_change_percentage_24h < 0 ? <FiArrowDown size={18} className="ml-0.5" /> : coinData.price_change_percentage_24h > 0 ? <FiArrowUp size={18} className="ml-0.5" /> : null}
+                          </span>
+                        </div>
+                        <div className="w-full flex flex-col mt-3 mb-2">
+                          <div className="uppercase text-gray-400"><span className="text-xs mr-1">Market Cap</span><span className="font-semibold">#{numberFormat(coinData.market_cap_rank, '0,0')}</span></div>
+                          <div className="text-xs font-semibold">{numberFormat(coinData.market_cap, '0,0')}</div>
+                        </div>
+                      </div>
+                    ))
+                    :
+                    json.map((coinData, i) => (
+                      <div key={coinData.id} className={`mt-${i  > 0 ? 3 : 0} mb-2 ${i < json.length - 1 ? 'border-b pb-4' : ''}`}>
+                        <div className="flex items-center text-sm font-semibold">
+                          <div className="flex items-center mr-2">
+                            <img
+                              src={coinData.image || coinData.large || coinData.thumb}
+                              alt=""
+                              className="w-6 h-6 rounded-full mr-2"
+                            />
+                            <span className={`${data.SortKey.endsWith('_trending') ? 'font-extrabold' : ''}`}>{coinData.symbol && coinData.symbol.toUpperCase()}</span>
+                          </div>
+                          <div className={`flex items-center text-${coinData.price_change_percentage_24h < 0 ? 'red' : coinData.price_change_percentage_24h > 0 ? 'green' : 'gray'}-500 text-sm ${['_ath', '_atl'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ? 'font-extrabold' : 'font-medium'} ml-auto`}>
+                            ${numberFormat(data.SortKey.endsWith('_ath') ? coinData.high_price : data.SortKey.endsWith('_atl') ? coinData.low_price : coinData.current_price, '0,0.00000000')}
+                            {coinData.price_change_percentage_24h < 0 ? <FiArrowDown size={16} className="mb-0.5 ml-0.5" /> : coinData.price_change_percentage_24h > 0 ? <FiArrowUp size={16} className="mb-0.5 ml-0.5" /> : null}
+                          </div>
+                        </div>
+                        <div className="flex items-center text-xs font-semibold mt-1">
+                          <div className="text-gray-400 dark:text-gray-500 font-light mr-2"><span className="text-gray-600 dark:text-gray-400 font-semibold mr-1.5">#{numberFormat(coinData.market_cap_rank, '0,0')}</span>{coinData.name}</div>
+                          <div className={`text-${coinData.price_change_percentage_24h < 0 ? 'red' : coinData.price_change_percentage_24h > 0 ? 'green' : 'gray'}-500 ${data.SortKey.endsWith('_marketcap') ? 'font-extrabold' : 'font-light'} ml-auto`}>
+                            {numberFormat(coinData.price_change_percentage_24h / 100, '+0,0.00%')}
+                          </div>
+                        </div>
+                      </div>
+                    )) :
+                ['_bitcoin'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ?
+                  json.map(coinData => (
+                    <div key={coinData.id}>
+                      <div className={`flex items-start text-${coinData.price_change_percentage_24h < 0 ? 'red' : coinData.price_change_percentage_24h > 0 ? 'green' : 'gray'}-500 text-3xl font-semibold my-2`}>
+                        <span className="mr-2">${numberFormat(coinData.current_price, '0,0')}</span>
+                        <span className="flex items-start text-sm font-light mt-0.5 ml-auto">
+                          {numberFormat(coinData.price_change_percentage_24h / 100, '+0,0.00%')}
+                          {coinData.price_change_percentage_24h < 0 ? <FiArrowDown size={18} className="ml-0.5" /> : coinData.price_change_percentage_24h > 0 ? <FiArrowUp size={18} className="ml-0.5" /> : null}
+                        </span>
+                      </div>
+                      <div className="w-full flex flex-col mt-3 mb-2">
+                        <div className="uppercase text-gray-400"><span className="text-xs mr-1">Market Cap</span><span className="font-semibold">#{numberFormat(coinData.market_cap_rank, '0,0')}</span></div>
+                        <div className="text-xs font-semibold">{numberFormat(coinData.market_cap, '0,0')}</div>
+                      </div>
+                    </div>
+                  ))
+                  : null
+                : null
             }
           </div>
           <div className="flex flex-wrap text-gray-400 text-sm font-light mt-2">
             {isSkeleton ?
-              <div className={`${skeletonColor} animate-pulse w-2/3 h-3 rounded my-1.5`} />
+              <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-2/3 h-3 rounded mt-3 mb-1.5" />
               :
               ['fear_and_greed', 'gas'].includes(feedType) ?
-                <><span className="h-6 mr-2">via</span><a href={json.url} target="_blank" rel="noopener noreferrer" className="text-indigo-500 font-semibold">{json.source_name}</a></> :
+                <><span className="h-6 mr-1">via</span><a href={json.url} target="_blank" rel="noopener noreferrer" className="font-semibold">{json.source_name}</a></> :
               feedType === 'news' ?
-                <><span className="h-6 mr-2">via</span><a href={json.url} target="_blank" rel="noopener noreferrer" className="text-indigo-500 font-semibold">{json.source.title}</a></> :
+                <><span className="h-6 mr-1">via</span><a href={json.url} target="_blank" rel="noopener noreferrer" className="font-semibold">{json.source.title}</a></> :
               feedType === 'whales' ?
-                <><span className="h-6 mr-2">via</span><a href="https://twitter.com/whale_alert" target="_blank" rel="noopener noreferrer" className="text-indigo-500 font-semibold">Whale Alert</a></> :
+                <><span className="h-6 mr-1">via</span><a href="https://twitter.com/whale_alert" target="_blank" rel="noopener noreferrer" className="font-semibold">Whale Alert</a></> :
               feedType === 'markets' && data.SortKey ?
-                ['_ath', '_atl', '_marketcap', '_fomo', '_panic', '_trending', '_defi', '_nfts', '_bitcoin'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ?
+                ['_ath', '_atl', '_marketcap', '_trending', '_defi', '_nfts', '_fomo', '_panic', '_bitcoin'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ?
                   <>
-                    {json.map(coinData => <Link href={`/coin${coinData ? `/${coinData.id}` : 's'}`}><a className="text-indigo-500 font-semibold mr-2">#{coinData && coinData.name}</a></Link>)}
-                    {['_ath', '_atl', '_trending', '_bitcoin'].findIndex(market_type => data.SortKey.endsWith(market_type)) < 0 && (
-                    	<Link href={`/coins${data.SortKey.endsWith('_defi') ? '/defi' : data.SortKey.endsWith('_nfts') ? '/nfts' : ''}`}><a className="text-indigo-500 font-semibold">#{data.SortKey.endsWith('_defi') ? 'DeFi' : data.SortKey.endsWith('_nfts') ? 'NFTs' : 'Market'}</a></Link>
+                    {json.map((coinData, i) => <Link key={i} href={`/coin${coinData ? `/${coinData.id}` : 's'}`}><a className="font-semibold mr-1">#{coinData && coinData.name}</a></Link>)}
+                    {json.length < 2 && json.map((coinData, i) => <Link key={i} href={`/coin${coinData ? `/${coinData.id}` : 's'}`}><a className="font-semibold mr-1">${coinData && coinData.symbol && coinData.symbol.toUpperCase()}</a></Link>)}
+                    {json.length > 1 && ['_ath', '_atl', '_trending', '_bitcoin'].findIndex(market_type => data.SortKey.endsWith(market_type)) < 0 && (
+                      <Link href={`/coins${data.SortKey.endsWith('_defi') ? '/defi' : data.SortKey.endsWith('_nfts') ? '/non-fungible-tokens-nft' : ''}`}><a className="font-semibold">#{data.SortKey.endsWith('_defi') ? getName('defi') : data.SortKey.endsWith('_nfts') ? 'NFTs' : 'Market'}</a></Link>
                     )}
                   </> : null
                 : null

@@ -1,6 +1,6 @@
 import { weightedRand } from '../../lib/utils'
 
-const feedTypes = ['news', 'markets_marketcap', 'whales', 'markets_fomo', 'markets_trending', 'gas', 'markets_bitcoin', 'markets_panic', 'markets_defi', 'fear_and_greed', 'markets_nfts']
+const feedTypes = ['fear_and_greed', 'gas', 'news', 'whales', 'markets_marketcap', 'markets_trending', 'markets_defi', 'markets_nfts', 'markets_fomo', 'markets_panic', 'markets_bitcoin']
 
 export default function SkeletonData(size) {
   return [...Array(size).keys()].map(i => { return { ID: 'skeleton', SortKey: i, FeedType: weightedRand(feedTypes) } })

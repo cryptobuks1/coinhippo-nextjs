@@ -6,7 +6,7 @@ const SectionTitle = ({ title, subtitle, right = null }) => {
       <div className="flex flex-row items-center justify-between mb-4">
         <div className="flex flex-col">
           <div className="uppercase text-gray-500 text-xs font-light">{title}</div>
-          <div className="text-xl font-bold">{subtitle}</div>
+          <div className="min-w-max text-xl font-semibold">{subtitle}</div>
         </div>
         {right}
       </div>

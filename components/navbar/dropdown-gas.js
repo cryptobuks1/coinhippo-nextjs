@@ -73,7 +73,7 @@ export default function DropdownGas() {
         <FaGasPump size={20} className="mb-1" />
         <ProgressBar width={secondUntilRefresh * 100 / refresh_rate_second} color="bg-blue-300" className="h-0.5" />
         <span
-          className={`bg-${avgGas <= gas_gwei_threshold ? 'green-700' : avgGas <= gas_gwei_threshold * 2 ? 'green-500' : avgGas <= gas_gwei_threshold * 4 ? 'red-500' : 'red-700'} w-5 h-5 absolute leading-none rounded-full text-white text-2xs font-bold inline-flex items-center justify-center`}
+          className={`bg-${avgGas <= gas_gwei_threshold ? 'green-700' : avgGas <= gas_gwei_threshold * 2 ? 'green-500' : avgGas <= gas_gwei_threshold * 4 ? 'red-500' : 'red-700'} w-5 h-5 absolute leading-none rounded-full text-white text-2xs font-semibold inline-flex items-center justify-center`}
           style={{ top: 4, right: -2 }}
         >
           {gas_data.ProposeGasPrice}

@@ -27,14 +27,14 @@ export const Badge = ({
 
   if (outlined) {
     return (
-      <span className={`bg-transparent border border-current inline-flex uppercase font-bold text-center ${css}`}>
+      <span className={`bg-transparent border border-current inline-flex uppercase font-semibold text-center ${css}`}>
         {children}
       </span>
     )
   }
 
   return (
-    <span className={`inline-flex uppercase font-bold text-center badge-${size} ${css}`}>
+    <span className={`inline-flex uppercase font-semibold text-center badge-${size} ${css}`}>
       {children}
     </span>
   )
@@ -72,14 +72,14 @@ export const CircularBadge = ({
 
   if (outlined) {
     return (
-      <span className={`bg-transparent leading-none border border-current inline-flex uppercase font-bold text-center p-0 ${css}`}>
+      <span className={`bg-transparent leading-none border border-current inline-flex uppercase font-semibold text-center p-0 ${css}`}>
         {children}
       </span>
     )
   }
 
   return (
-    <span className={`leading-none inline-flex uppercase font-bold text-center p-0 ${css}`}>
+    <span className={`leading-none inline-flex uppercase font-semibold text-center p-0 ${css}`}>
       {children}
     </span>
   )

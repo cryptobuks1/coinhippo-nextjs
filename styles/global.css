@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap");
 /*@import url("https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.6/css/flag-icon.min.css");*/
 
 h1 {
@@ -29,10 +29,10 @@ h6 {
 }
 
 code {
-  @apply font-mono p-1 inline rounded font-bold;
+  @apply font-mono p-1 inline rounded font-semibold;
 }
 pre {
-  @apply font-mono p-2 block rounded font-bold;
+  @apply font-mono p-2 block rounded font-semibold;
   @apply whitespace-pre-wrap;
 }
 
@@ -52,8 +52,14 @@ button {
   }
 }
 
-.blog a {
+.blog a,
+.widget a {
   @apply text-blue-700;
+}
+
+.dark .blog a,
+.dark .widget a {
+  @apply text-blue-300;
 }
 
 .ul-blog {

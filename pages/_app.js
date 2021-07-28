@@ -14,6 +14,7 @@ import '../styles/components/left-sidebar/styles-sm.css'
 import '../styles/components/buttons.css'
 import '../styles/components/dropdowns.css'
 import '../styles/components/nprogress.css'
+import '../styles/components/recharts.css'
 
 Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
