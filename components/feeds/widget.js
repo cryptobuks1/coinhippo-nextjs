@@ -4,21 +4,23 @@ import PropTypes from 'prop-types'
 import Widget from '../widget'
 import FearAndGreed from '../feeds/fear-and-greed'
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi'
-import { FaBitcoin, FaGasPump, FaYoutube, FaPodcast, FaRegNewspaper, FaBookDead, FaCoins, FaSearch, FaRegGrinStars } from 'react-icons/fa'
-import { AiFillAlert } from 'react-icons/ai'
+import { FaBitcoin, FaGasPump, FaYoutube, FaPodcast, FaRegNewspaper, FaBookDead, FaCoins, FaSearch, FaRegGrinStars, FaUserNinja } from 'react-icons/fa'
+import { AiFillAlert, AiOutlinePrinter } from 'react-icons/ai'
 import { IoIosRocket } from 'react-icons/io'
 import { RiEmotionSadLine } from 'react-icons/ri'
-import { GiWatch, GiUnicorn, GiWalk, GiRun, GiRunningNinja } from 'react-icons/gi'
-import { BiTime, BiGhost } from 'react-icons/bi'
-import { BsPencilSquare } from 'react-icons/bs'
+import { GiWatch, GiUnicorn, GiWalk, GiRun, GiSprint, GiCelebrationFire } from 'react-icons/gi'
+import { BiTime, BiGhost, BiDonateHeart } from 'react-icons/bi'
+import { BsPencilSquare, BsBoxArrowInRight, BsQuestionSquare } from 'react-icons/bs'
 import { HiOutlineRefresh } from 'react-icons/hi'
+import { FcLock, FcUnlock } from 'react-icons/fc'
 import parse from 'html-react-parser'
 import Linkify from 'react-linkify'
 import moment from 'moment'
 import { getName, numberFormat } from '../../lib/utils'
 
 const FeedWidget = ({ feedType = null, data = null }) => {
-  const { theme } = useSelector(state => ({ theme: state.theme }), shallowEqual)
+  const { _data, theme } = useSelector(state => ({ _data: state.data, theme: state.theme }), shallowEqual)
+  const { all_crypto_data } = { ..._data }
   const { background } = { ...theme }
 
   const json =  data && data.Json && JSON.parse(data.Json)
@@ -92,7 +94,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
             }
           </div>
           <div className="text-gray-600 dark:text-gray-400 text-sm mt-2">
-            {isSkeleton ?
+            {!isSkeleton ?
               <div className="space-y-2">
                 {feedType === 'fear_and_greed' ?
                   <>
@@ -119,11 +121,33 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                     </div>
                   </> :
                 feedType === 'whales' ?
-                  <></> :
+                  <div>
+                    <div className="w-full flex items-center mt-1">
+                      <div className="w-full flex items-center font-semibold">
+                        <div className="w-1/2 flex items-center mr-2">
+                          <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-8 h-8 rounded-full mr-2" />
+                          <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-1/3 h-3.5 rounded" />
+                        </div>
+                        <div className="w-1/2 flex items-center ml-auto">
+                          <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-1/2 h-4 rounded ml-auto" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center py-2">
+                      {[...Array(3).keys()].map(i => (
+                        <div key={i} className="w-1/3 flex flex-col items-center justify-center">
+                          <div className="h-6 mb-2">
+                            <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-6 h-6 rounded-full" />
+                          </div>
+                          <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-3/4 h-3 rounded" />
+                        </div>
+                      ))}
+                    </div>
+                  </div> :
                 feedType.startsWith('markets') ?
                   ['_ath', '_atl', '_marketcap', '_trending', '_defi', '_nfts', '_fomo', '_panic'].findIndex(market_type => feedType.endsWith(market_type)) > -1 ?
                     [...Array(3).keys()].map(i => (
-                      <div key={i} className={`mt-${i  > 0 ? 3 : 0} mb-2 ${i < 3 - 1 ? 'border-b pb-4' : ''}`}>
+                      <div key={i} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < 3 - 1 ? 'border-b pb-4' : ''}`}>
                         <div className="flex items-center font-semibold">
                           <div className="w-1/2 flex items-center mr-2">
                             <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-8 h-8 rounded-full mr-2" />
@@ -157,8 +181,8 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                     : null
                   :
                   <>
-                    <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-7/8 h-3.5 rounded" />
-                    <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-7/8 h-3.5 rounded" />
+                    <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-full h-3.5 rounded" />
+                    <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-full h-3.5 rounded" />
                     <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-3/4 h-3.5 rounded" />
                   </>
                 }
@@ -176,7 +200,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                           {i === 0 ?
                             <GiWalk size={24} className="text-red-300" /> :
                           i === 2 ?
-                            <GiRunningNinja size={24} className="text-red-500" /> :
+                            <GiSprint size={24} className="text-red-500 mt-0.5" /> :
                             <GiRun size={22} className="text-red-400 mt-0.5" />
                           }
                         </div>
@@ -188,7 +212,115 @@ const FeedWidget = ({ feedType = null, data = null }) => {
               feedType === 'news' ?
                 <Linkify>{json.title}</Linkify> :
               feedType === 'whales' ?
-                <Linkify>{parse(data.Message.replace('\n', '<br>'))}</Linkify> :
+                json.map((txData, i) => {
+                  const coinData = txData && txData.symbol && all_crypto_data && all_crypto_data.coins && _.head(all_crypto_data.coins.filter(coinData => coinData.symbol && coinData.symbol.toLowerCase() === txData.symbol))
+                  const fromExchangeData = txData && txData.from_address_type === 'exchange' && txData.from_address_name && all_crypto_data && all_crypto_data.exchanges && _.head(all_crypto_data.exchanges.filter(exchangeData => (exchangeData.name && exchangeData.name.toLowerCase().split(' ').includes(txData.from_address_name.toLowerCase())) || (exchangeData.id && exchangeData.id.toLowerCase().split(' ').includes(txData.from_address_name.toLowerCase()))))
+                  const toExchangeData = txData && txData.to_address_type === 'exchange' && txData.to_address_name && all_crypto_data && all_crypto_data.exchanges && _.head(all_crypto_data.exchanges.filter(exchangeData => (exchangeData.name && exchangeData.name.toLowerCase().split(' ').includes(txData.to_address_name.toLowerCase())) || (exchangeData.id && exchangeData.id.toLowerCase().split(' ').includes(txData.to_address_name.toLowerCase()))))
+
+                  const fromComponent = (
+                    <>
+                      <div className="h-6 mt-2 mb-1">
+                        {fromExchangeData && fromExchangeData.large ?
+                          <img
+                            src={fromExchangeData.large}
+                            alt=""
+                            className="w-6 h-6 rounded-full"
+                          />
+                          :
+                          <BsQuestionSquare size={20} />
+                        }
+                      </div>
+                      <span className="text-gray-900 dark:text-gray-100 text-xs font-medium">{txData.from_address_name}</span>
+                    </>
+                  )
+
+                  const toComponent = (
+                    <>
+                      <div className="h-6 flex justify-end mt-2 mb-1">
+                        {toExchangeData && toExchangeData.large ?
+                          <img
+                            src={toExchangeData.large}
+                            alt=""
+                            className="w-6 h-6 rounded-full"
+                          />
+                          :
+                          <BsQuestionSquare size={20} />
+                        }
+                      </div>
+                      <span className="text-gray-900 dark:text-gray-100 text-xs font-medium text-right">{txData.to_address_name}</span>
+                    </>
+                  )
+
+                  return (
+                    <div key={txData.key} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < json.length - 1 ? 'border-b pb-2' : ''}`}>
+                      <div className="flex items-center mt-1">
+                        <div className="flex items-center mr-2">
+                          {coinData && (
+                            <img
+                              src={coinData.image || coinData.large || coinData.thumb}
+                              alt=""
+                              className="w-8 h-8 rounded-full mr-2"
+                            />
+                          )}
+                          <span className="text-sm font-semibold">{txData.symbol && txData.symbol.toUpperCase()}</span>
+                        </div>
+                        <div className="flex flex-col items-end ml-auto">
+                          <div className="text-sm font-semibold">{numberFormat(txData.amount, '0,0')} {txData.symbol && txData.symbol.toUpperCase()}</div>
+                          <div className="text-xs font-light">${numberFormat(txData.amount_usd, '0,0')}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-start mt-3 mb-2">
+                        {['burn', 'transfer'].includes(txData.transaction_type) && (
+                          <div className="w-2/5 flex flex-col items-start">
+                            <span className="text-gray-400 dark:text-gray-300 text-xs font-light">From</span>
+                            {txData.from_url ?
+                              <a href={txData.from_url} target="_blank" rel="noopener noreferrer">
+                                {fromComponent}
+                              </a>
+                              :
+                              fromComponent
+                            }
+                          </div>
+                        )}
+                        <div className="w-1/5 my-auto">
+                          <a href={txData.tx_url} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center">
+                            <div className="h-6 mt-2 mb-1">
+                              {txData.transaction_type === 'mint' ?
+                                <AiOutlinePrinter size={24} /> :
+                              txData.transaction_type === 'burn' ?
+                                <GiCelebrationFire size={24} /> :
+                              txData.transaction_type === 'lock' ?
+                                <FcLock size={24} /> :
+                              txData.transaction_type === 'unlock' ?
+                                <FcUnlock size={24} /> :
+                              txData.is_donation ?
+                                <BiDonateHeart size={24} /> :
+                              txData.is_hacked ?
+                                <FaUserNinja size={24} /> :
+                                <BsBoxArrowInRight size={24} />
+                              }
+                            </div>
+                            <span className="text-xs font-medium">
+                              {txData.transaction_type ? getName(txData.is_donation ? 'donation' : txData.is_hacked ? 'stolen funds' : txData.transaction_type) : null}
+                            </span>
+                          </a>
+                        </div>
+                        {txData.transaction_type !== 'burn' && (
+                          <div className="w-2/5 flex flex-col items-end">
+                            <span className="text-gray-400 dark:text-gray-300 text-xs font-light">To</span>
+                            {txData.to_url ?
+                              <a href={txData.to_url} target="_blank" rel="noopener noreferrer" className="text-right">
+                                {toComponent}
+                              </a>
+                              :
+                              toComponent
+                            }
+                          </div>
+                         )}
+                      </div>
+                    </div>
+                  )
+                }) :
               feedType === 'markets' && data.SortKey ?
                 ['_ath', '_atl', '_marketcap', '_trending', '_defi', '_nfts', '_fomo', '_panic'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ?
                   json.length === 1 ?
@@ -214,10 +346,9 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                           <div className="text-xs font-semibold">{numberFormat(coinData.market_cap, '0,0')}</div>
                         </div>
                       </div>
-                    ))
-                    :
+                    )) :
                     json.map((coinData, i) => (
-                      <div key={coinData.id} className={`mt-${i  > 0 ? 3 : 0} mb-2 ${i < json.length - 1 ? 'border-b pb-4' : ''}`}>
+                      <div key={coinData.id} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < json.length - 1 ? 'border-b pb-4' : ''}`}>
                         <div className="flex items-center text-sm font-semibold">
                           <div className="flex items-center mr-2">
                             <img

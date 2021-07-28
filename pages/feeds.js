@@ -25,7 +25,14 @@ export default function FeedsIndex() {
       const response = await Feeds({ method: 'query', limit: 60, order: 'desc', ':id': 'feeds', ':time': moment().subtract(1, 'days').unix(), key: 'ID = :id', filter: 'CreatedAt > :time' })
 
       if (response) {
-        setFeedsData(response.data || [])
+        setFeedsData(response.data ?
+          response.data.flatMap(feedData => feedData.FeedType === 'whales' && feedData.Json ?
+            JSON.parse(feedData.Json).map(tx => {
+              return { ...feedData, Json: JSON.stringify([tx]) }
+            })
+            : feedData
+          ) : []
+        )
       }
     }
 
@@ -85,9 +92,9 @@ export default function FeedsIndex() {
         gutterWidth={12}
         gutterHeight={12}
       >
-        {(feedsData ? feedsData.filter(feedData => feedTypesSelect.length < 1 || feedTypesSelect.includes(feedData.FeedType)) : skeletonData(20)).map(feedData => (
+        {(feedsData ? feedsData.filter(feedData => feedTypesSelect.length < 1 || feedTypesSelect.includes(feedData.FeedType)) : skeletonData(20)).map((feedData, i) => (
           <FeedWidget
-            key={feedData.SortKey}
+            key={i}
             feedType={feedData.FeedType}
             data={feedData}
           />
