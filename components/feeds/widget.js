@@ -94,7 +94,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
             }
           </div>
           <div className="text-gray-600 dark:text-gray-400 text-sm mt-2">
-            {!isSkeleton ?
+            {isSkeleton ?
               <div className="space-y-2">
                 {feedType === 'fear_and_greed' ?
                   <>
