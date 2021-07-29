@@ -22,7 +22,7 @@ export default function FeedsIndex() {
 
   useEffect(() => {
     const getFeeds = async () => {
-      const response = await Feeds({ method: 'query', limit: 60, order: 'desc', ':id': 'feeds', ':time': moment().subtract(1, 'days').unix(), key: 'ID = :id', filter: 'CreatedAt > :time' })
+      const response = await Feeds({ method: 'query', limit: 48, order: 'desc', ':id': 'feeds', ':time': moment().subtract(1, 'days').unix(), key: 'ID = :id', filter: 'CreatedAt > :time' })
 
       if (response) {
         setFeedsData(response.data ?
