@@ -52,6 +52,10 @@ button {
   }
 }
 
+.dark .border-b {
+  @apply border-gray-800;
+}
+
 .blog a,
 .widget a {
   @apply text-blue-700;

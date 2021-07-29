@@ -8,7 +8,7 @@ import { FaBitcoin, FaGasPump, FaYoutube, FaPodcast, FaRegNewspaper, FaBookDead,
 import { AiFillAlert, AiOutlinePrinter } from 'react-icons/ai'
 import { IoIosRocket } from 'react-icons/io'
 import { RiEmotionSadLine } from 'react-icons/ri'
-import { GiWatch, GiUnicorn, GiWalk, GiRun, GiSprint, GiCelebrationFire } from 'react-icons/gi'
+import { GiWatch, GiUnicorn, GiWalk, GiRun, GiSprint, GiBurningEmbers, GiDolphin, GiSharkFin, GiWhaleTail, GiSpermWhale } from 'react-icons/gi'
 import { BiTime, BiGhost, BiDonateHeart } from 'react-icons/bi'
 import { BsPencilSquare, BsBoxArrowInRight, BsQuestionSquare } from 'react-icons/bs'
 import { HiOutlineRefresh } from 'react-icons/hi'
@@ -18,17 +18,57 @@ import Linkify from 'react-linkify'
 import moment from 'moment'
 import { getName, numberFormat } from '../../lib/utils'
 
+const repeatIcon = (data, iconSize = 24) => {
+  const min_amount = 10000000
+
+  const amount = data.amount_usd
+
+  const icon = data.transaction_type === 'mint' ? <AiOutlinePrinter size={iconSize} /> :
+    data.transaction_type === 'burn' ? <GiBurningEmbers size={iconSize} /> :
+    data.transaction_type === 'lock' ? <FcLock size={iconSize} /> :
+    data.transaction_type === 'unlock' ? <FcUnlock size={iconSize} /> :
+    data.is_donation ? <BiDonateHeart size={iconSize} /> :
+    data.is_hacked ? <FaUserNinja size={iconSize} /> :
+    amount <= 5 * min_amount ? <GiDolphin size={iconSize} /> :
+    amount <= 10 * min_amount ? <GiSharkFin size={iconSize} /> :
+    amount <= 50 * min_amount ? <GiWhaleTail size={iconSize} /> :
+    <GiSpermWhale size={iconSize} />
+
+  return [...Array(
+    amount <= (data.transaction_type !== 'transfer' ? 1.5 : data.is_donation || data.is_hacked ? 1 : 5) * min_amount ? 1 :
+    amount <= (data.transaction_type !== 'transfer' ? 3 : data.is_donation || data.is_hacked ? 2 : 10) * min_amount ? 2 :
+    amount <= (data.transaction_type !== 'transfer' ? 10 : data.is_donation || data.is_hacked ? 5 : 50) * min_amount ? 3 : 4
+  ).keys()]
+  .map(i => (<span key={i}>{icon}</span>))
+}
+
 const FeedWidget = ({ feedType = null, data = null }) => {
   const { _data, theme } = useSelector(state => ({ _data: state.data, theme: state.theme }), shallowEqual)
   const { all_crypto_data } = { ..._data }
   const { background } = { ...theme }
 
-  const json =  data && data.Json && JSON.parse(data.Json)
+  let json = data && data.Json && JSON.parse(data.Json)
+  if (feedType === 'whales' && json && !Array.isArray(json)) {
+    json = [json]
+  }
 
   const isSkeleton = data && data.ID === 'skeleton'
 
+  const isInterested = data && json ?
+    data.FeedType === 'fear_and_greed' ?
+      Number(json.value) <= json.low_threshold || Number(json.value) >= json.high_threshold :
+    data.FeedType === 'gas' ?
+      json.avgGas <= json.gas_gwei_threshold * 2 / 3 :
+    data.FeedType === 'news' ?
+      false :
+    data.FeedType === 'whales' ?
+      repeatIcon(json[0]).length > 3 :
+    data.FeedType === 'markets' ?
+      ['_ath', '_atl', '_fomo', '_panic', '_bitcoin'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 : false
+    : false
+
   return (
-    <Widget>
+    <Widget className={`${isInterested ? 'shadow-sm border-yellow-300 dark:border-yellow-500' : ''}`}>
       <div className="flex items-start justify-start space-x-4 p-2">
         <div className="w-8 flex-shrink-0">
           {isSkeleton ?
@@ -59,7 +99,12 @@ const FeedWidget = ({ feedType = null, data = null }) => {
               feedType === 'news' ?
                 json.kind === 'media' ? json.domain && json.domain.includes('youtube') ? <><FaYoutube size={24} className="text-red-500 mr-2" /><span className="h-6">YouTube</span></> : <><FaPodcast size={24} className="text-blue-400 mr-2" /><span className="h-6">Podcast</span></> : <><FaRegNewspaper size={24} className="text-gray-500 mr-2" /><span className="h-6">News</span></> :
               feedType === 'whales' ?
-                <><AiFillAlert size={20} className="text-red-500 mb-1 mr-2.5" /><span className="h-6">Whale activity</span></> :
+                <div className="w-full flex items-center">
+                  <AiFillAlert size={20} className="text-red-500 mb-1 mr-2.5" /><span className="h-6 mr-1">Whale activity</span>
+                  <div className="flex items-center text-indigo-800 ml-auto">
+                    {repeatIcon(json[0], 18)}
+                  </div>
+                </div> :
               feedType === 'markets' && data.SortKey ?
                 data.SortKey.endsWith('_ath') ?
                   <><IoIosRocket size={24} className="text-green-500 mr-2" /><span className="h-6">All Time High</span></> :
@@ -227,7 +272,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                             className="w-6 h-6 rounded-full"
                           />
                           :
-                          <BsQuestionSquare size={20} />
+                          <BsQuestionSquare size={20} className={`${txData.from_url ? '' : 'text-gray-300 dark:text-gray-500'}`} />
                         }
                       </div>
                       <span className="text-gray-900 dark:text-gray-100 text-xs font-medium">{txData.from_address_name}</span>
@@ -244,7 +289,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                             className="w-6 h-6 rounded-full"
                           />
                           :
-                          <BsQuestionSquare size={20} />
+                          <BsQuestionSquare size={20} className={`${txData.to_url ? '' : 'text-gray-300 dark:text-gray-500'}`} />
                         }
                       </div>
                       <span className="text-gray-900 dark:text-gray-100 text-xs font-medium text-right">{txData.to_address_name}</span>
@@ -288,7 +333,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                               {txData.transaction_type === 'mint' ?
                                 <AiOutlinePrinter size={24} /> :
                               txData.transaction_type === 'burn' ?
-                                <GiCelebrationFire size={24} /> :
+                                <GiBurningEmbers size={24} /> :
                               txData.transaction_type === 'lock' ?
                                 <FcLock size={24} /> :
                               txData.transaction_type === 'unlock' ?
