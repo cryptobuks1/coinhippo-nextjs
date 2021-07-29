@@ -27,7 +27,7 @@ export default function Logo({ noSiderbar, className }) {
                 value: !collapsed
               })
             }
-            className="block lg:hidden ml-auto mr-4">
+            className="block md:hidden ml-auto mr-4">
             <FiMenu size={20} />
           </button>
         )}

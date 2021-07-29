@@ -68,17 +68,17 @@ export default function FeedsIndex() {
         title={<><span className="mr-1.5">{moment().format('MMM D, YYYY')}</span><span className="absolute inline-flex items-center">{background === 'dark' ? <FiClock size={16} className="mr-1" /> : <FcClock size={16} className="mr-0.5" />}{moment().format('LT')}</span></>}
         subtitle="Latest Feeds"
         right={
-          <div className="flex items-center overflow-x-scroll ml-0 sm:ml-4 p-1">
+          <div className="flex flex-wrap items-center ml-0 sm:ml-4 px-1">
             {isSkeleton ?
               [...Array(3).keys()].map(i => (
-                <div key={i} className={`${skeletonColor} animate-pulse w-20 h-8 rounded ml-${i > 0 ? 3 : 0}`} />
+                <div key={i} className={`${skeletonColor} animate-pulse w-20 h-8 rounded mr-${i < 3 - 1 ? 2 : 0}`} />
               ))
               :
               Object.keys(feedTypesCount).map((feedType, i) => (
                 <button
                   key={feedType}
                   onClick={() => setFeedTypesSelect(_.uniq(feedTypesSelect.includes(feedType) ? feedTypesSelect.filter(_feedType => _feedType !== feedType) : feedTypesSelect.concat([feedType])))}
-                  className={`btn btn-raised min-w-max btn-rounded flex items-center ${feedTypesSelect.includes(feedType) ? 'bg-indigo-600 text-white' : `bg-transparent hover:bg-${background === 'dark' ? 'indigo-900 text-white hover:text-gray-200' : 'indigo-50 text-indigo-500 hover:text-indigo-600'}`} text-xs ${i > 0 ? 'ml-2 md:ml-3' : ''} p-2`}
+                  className={`btn btn-raised min-w-max btn-rounded flex items-center ${feedTypesSelect.includes(feedType) ? 'bg-indigo-600 text-white' : `bg-transparent hover:bg-${background === 'dark' ? 'indigo-900 text-white hover:text-gray-200' : 'indigo-50 text-indigo-500 hover:text-indigo-600'}`} text-xs my-1 ${i < Object.keys(feedTypesCount).length - 1 ? 'mr-2 md:mr-3' : ''} p-2`}
                 >
                   {getName(feedType)}<CircularBadge color="bg-indigo-600 text-white ml-1">{feedTypesCount[feedType]}</CircularBadge>
                 </button>
@@ -86,7 +86,7 @@ export default function FeedsIndex() {
             }
           </div>
         }
-        className="flex-col sm:flex-row items-start sm:items-center"
+        className="flex-col sm:flex-row items-start sm:items-center mx-1"
       />
       <StackGrid
         columnWidth={326}

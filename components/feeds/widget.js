@@ -403,14 +403,14 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                             />
                             <span className={`${data.SortKey.endsWith('_trending') ? 'font-extrabold' : ''}`}>{coinData.symbol && coinData.symbol.toUpperCase()}</span>
                           </div>
-                          <div className={`flex items-center text-${coinData.price_change_percentage_24h < 0 ? 'red' : coinData.price_change_percentage_24h > 0 ? 'green' : 'gray'}-500 text-sm ${['_ath', '_atl'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ? 'font-extrabold' : 'font-medium'} ml-auto`}>
+                          <div className={`flex items-center text-${coinData.price_change_percentage_24h < 0 ? 'red' : coinData.price_change_percentage_24h > 0 ? 'green' : 'gray'}-500 ${['_ath', '_atl'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ? 'font-extrabold' : 'font-medium'} ml-auto`}>
                             ${numberFormat(data.SortKey.endsWith('_ath') ? coinData.high_price : data.SortKey.endsWith('_atl') ? coinData.low_price : coinData.current_price, '0,0.00000000')}
                             {coinData.price_change_percentage_24h < 0 ? <FiArrowDown size={16} className="mb-0.5 ml-0.5" /> : coinData.price_change_percentage_24h > 0 ? <FiArrowUp size={16} className="mb-0.5 ml-0.5" /> : null}
                           </div>
                         </div>
-                        <div className="flex items-center text-xs font-semibold mt-1">
-                          <div className="text-gray-400 dark:text-gray-500 font-light mr-2"><span className="text-gray-600 dark:text-gray-400 font-semibold mr-1.5">#{numberFormat(coinData.market_cap_rank, '0,0')}</span>{coinData.name}</div>
-                          <div className={`text-${coinData.price_change_percentage_24h < 0 ? 'red' : coinData.price_change_percentage_24h > 0 ? 'green' : 'gray'}-500 ${data.SortKey.endsWith('_marketcap') ? 'font-extrabold' : 'font-light'} ml-auto`}>
+                        <div className="flex items-center text-xs font-light mt-1">
+                          <div className="text-gray-400 dark:text-gray-500 mr-2"><span className="text-gray-600 dark:text-gray-400 font-semibold mr-1.5">#{numberFormat(coinData.market_cap_rank, '0,0')}</span>{coinData.name}</div>
+                          <div className={`text-${coinData.price_change_percentage_24h < 0 ? 'red' : coinData.price_change_percentage_24h > 0 ? 'green' : 'gray'}-500 ${data.SortKey.endsWith('_marketcap') ? 'font-extrabold' : ''} ml-auto`}>
                             {numberFormat(coinData.price_change_percentage_24h / 100, '+0,0.00%')}
                           </div>
                         </div>

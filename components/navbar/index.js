@@ -1,6 +1,7 @@
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import Logo from '../left-sidebar/logo'
 import Search from './search'
+import CoinPrices from './coin-prices'
 import DropdownGas from './dropdown-gas'
 import DropdownCurrency from './dropdown-currency'
 import { FiMenu, FiMoon, FiSun } from 'react-icons/fi'
@@ -32,6 +33,7 @@ export default function Navbar({ noSiderbar }) {
           <Logo noSiderbar={noSiderbar} className="mx-3 mb-1" />
         }
         <Search />
+        <CoinPrices />
         <span className="ml-auto" />
         <DropdownGas />
         <DropdownCurrency />
