@@ -1,6 +1,7 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
-import { FiBox, FiMenu } from 'react-icons/fi'
+import { FiMenu } from 'react-icons/fi'
 import { CONFIG_KEY } from '../../reducers/types'
 
 export default function Logo({ noSiderbar, className }) {
@@ -14,8 +15,8 @@ export default function Logo({ noSiderbar, className }) {
       <div className={`logo truncate ${className ? className : ''}`}>
         <Link href="/">
           <a className="flex flex-row items-center justify-start space-x-2">
-            <FiBox size={28} />
-            {!noSiderbar && (<span>{name}</span>)}
+            <Image src="/logos/api/coinhippo.png" alt="" width={48} height={48} className="rounded-full" />
+            {!noSiderbar && (<span className="text-indigo-600 dark:text-indigo-400">{name}</span>)}
           </a>
         </Link>
         {!noSiderbar && (

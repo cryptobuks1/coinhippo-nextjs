@@ -60,6 +60,16 @@
         span {
           @apply invisible opacity-0;
         }
+        a {
+          div {
+            div {
+              @apply min-w-max;
+              img {
+                @apply w-8;
+              }
+            }
+          }
+        }
       }
     }
   }

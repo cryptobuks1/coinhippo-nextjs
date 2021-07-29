@@ -1,5 +1,5 @@
-import { useSelector, shallowEqual } from 'react-redux'
 import { useState, useEffect } from 'react'
+import { useSelector, shallowEqual } from 'react-redux'
 import MarqueeCoins from './marquee-coins'
 import { coinsMarkets } from '../../lib/api/coingecko'
 
@@ -14,7 +14,7 @@ export default function CoinPrices() {
       const response = await coinsMarkets({ vs_currency, order: 'market_cap_desc', per_page: 10, page: 1, price_change_percentage: '24h' })
 
       if (response && Array.isArray(response)) {
-        setCoinsData(response)
+        setCoinsData(response.map(coinData => { return { ...coinData, vs_currency } }))
       }
     }
 
