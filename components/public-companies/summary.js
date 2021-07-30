@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import Widget from '../widget'
 import { FiPieChart } from 'react-icons/fi'
-import { BiDollarCircle, BiBuildings } from 'react-icons/bi'
+import { BiBuildings, BiDollarCircle } from 'react-icons/bi'
 import _ from 'lodash'
 import { numberFormat } from '../../lib/utils'
 
