@@ -22,7 +22,7 @@ export default function FeedsIndex() {
 
   useEffect(() => {
     const getFeeds = async () => {
-      const response = await Feeds({ method: 'query', limit: 48, order: 'desc', ':id': 'feeds', ':time': moment().subtract(1, 'days').unix(), key: 'ID = :id', filter: 'CreatedAt > :time' })
+      const response = await Feeds({ method: 'query', limit: 60, order: 'desc', ':id': 'feeds', ':time': moment().subtract(1, 'days').unix(), key: 'ID = :id', filter: 'CreatedAt > :time' })
 
       if (response) {
         setFeedsData(response.data ?
@@ -58,7 +58,6 @@ export default function FeedsIndex() {
   }, [timer])
 
   const isSkeleton = feedsData.findIndex(feedData => feedData.ID === 'skeleton') > -1
-  const skeletonColor = background === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
 
   const feedTypesCount = _.countBy(feedsData, 'FeedType')
 
@@ -71,7 +70,7 @@ export default function FeedsIndex() {
           <div className="flex flex-wrap items-center ml-0 sm:ml-4 px-1">
             {isSkeleton ?
               [...Array(3).keys()].map(i => (
-                <div key={i} className={`${skeletonColor} animate-pulse w-20 h-8 rounded mr-${i < 3 - 1 ? 2 : 0}`} />
+                <div key={i} className={`bg-gray-100 dark:bg-gray-800 animate-pulse w-20 h-8 rounded mr-${i < 3 - 1 ? 2 : 0}`} />
               ))
               :
               Object.keys(feedTypesCount).map((feedType, i) => (

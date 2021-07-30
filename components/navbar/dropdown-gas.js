@@ -63,17 +63,19 @@ export default function DropdownGas() {
 
   const avgGas = gas_data && _.mean([gas_data.SafeGasPrice, gas_data.ProposeGasPrice, gas_data.FastGasPrice].map(gas => Number(gas)))
 
+  const color = avgGas <= gas_gwei_threshold ? 'green-700' : avgGas <= gas_gwei_threshold * 2 ? 'green-500' : avgGas <= gas_gwei_threshold * 4 ? 'red-500' : 'red-700'
+
   return gas_data && (
     <div className="relative">
       <button
         ref={buttonRef}
         onClick={handleDropdownClick}
-        className="w-8 h-16 flex flex-col items-center justify-center text-gray-400"
+        className={`w-8 h-16 flex flex-col items-center justify-center text-${color}`}
       >
         <FaGasPump size={20} className="mb-1" />
-        <ProgressBar width={secondUntilRefresh * 100 / refresh_rate_second} color="bg-blue-300" className="h-0.5" />
+        <ProgressBar width={secondUntilRefresh * 100 / refresh_rate_second} color={`bg-${color}`} className="h-0.5" />
         <span
-          className={`bg-${avgGas <= gas_gwei_threshold ? 'green-700' : avgGas <= gas_gwei_threshold * 2 ? 'green-500' : avgGas <= gas_gwei_threshold * 4 ? 'red-500' : 'red-700'} w-5 h-5 absolute leading-none rounded-full text-white text-2xs font-semibold inline-flex items-center justify-center`}
+          className={`bg-${color} w-5 h-5 absolute leading-none rounded-full text-white text-2xs font-semibold inline-flex items-center justify-center`}
           style={{ top: 4, right: -2 }}
         >
           {gas_data.ProposeGasPrice}

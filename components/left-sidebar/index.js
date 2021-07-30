@@ -1,4 +1,4 @@
-import React from 'react'
+import { Fragment } from 'react'
 import Logo from './logo'
 import Title from './title'
 import Item from './item'
@@ -6,10 +6,10 @@ import { navigation } from '../../lib/menus'
 
 export default function LeftSidebar() {
   return (
-    <div className="left-sidebar left-sidebar-1">
+    <div className="left-sidebar left-sidebar-1 inline-table md:block">
       <Logo />
       {navigation.map((menu, i) => (
-        <React.Fragment key={i}>
+        <Fragment key={i}>
           <Title>{menu.title}</Title>
           <ul>
             {menu.items.map((l0, a) => (
@@ -46,7 +46,7 @@ export default function LeftSidebar() {
               </li>
             ))}
           </ul>
-        </React.Fragment>
+        </Fragment>
       ))}
     </div>
   )

@@ -88,7 +88,7 @@
         width: 0;
       }
     }
-    &.open-sibling {
+    &.open-sibling & [data-collapsed="false"] {
       @apply text-blue-500;
       &:after {
         content: "";

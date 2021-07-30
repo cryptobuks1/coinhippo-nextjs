@@ -13,7 +13,6 @@ import { BiTime, BiGhost, BiDonateHeart } from 'react-icons/bi'
 import { BsPencilSquare, BsBoxArrowInRight, BsQuestionSquare } from 'react-icons/bs'
 import { HiOutlineRefresh } from 'react-icons/hi'
 import { FcLock, FcUnlock } from 'react-icons/fc'
-import parse from 'html-react-parser'
 import Linkify from 'react-linkify'
 import moment from 'moment'
 import { getName, numberFormat } from '../../lib/utils'
@@ -192,7 +191,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                 feedType.startsWith('markets') ?
                   ['_ath', '_atl', '_marketcap', '_trending', '_defi', '_nfts', '_fomo', '_panic'].findIndex(market_type => feedType.endsWith(market_type)) > -1 ?
                     [...Array(3).keys()].map(i => (
-                      <div key={i} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < 3 - 1 ? 'border-b pb-4' : ''}`}>
+                      <div key={i} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < 3 - 1 ? 'border-b border-gray-100 pb-4' : ''}`}>
                         <div className="flex items-center font-semibold">
                           <div className="w-1/2 flex items-center mr-2">
                             <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-8 h-8 rounded-full mr-2" />
@@ -297,7 +296,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                   )
 
                   return (
-                    <div key={txData.key} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < json.length - 1 ? 'border-b pb-2' : ''}`}>
+                    <div key={txData.key} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < json.length - 1 ? 'border-b border-gray-100 pb-2' : ''}`}>
                       <div className="flex items-center mt-1">
                         <div className="flex items-center mr-2">
                           {coinData && (
@@ -393,7 +392,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                       </div>
                     )) :
                     json.map((coinData, i) => (
-                      <div key={coinData.id} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < json.length - 1 ? 'border-b pb-4' : ''}`}>
+                      <div key={coinData.id} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < json.length - 1 ? 'border-b border-gray-100 pb-4' : ''}`}>
                         <div className="flex items-center text-sm font-semibold">
                           <div className="flex items-center mr-2">
                             <img
