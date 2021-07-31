@@ -29,8 +29,14 @@ export default function FeedsIndex() {
           response.data.flatMap(feedData => feedData.FeedType === 'whales' && feedData.Json ?
             JSON.parse(feedData.Json).map(tx => {
               return { ...feedData, Json: JSON.stringify(tx) }
-            })
-            : feedData
+            }) : feedData)
+            .filter(feedData => !(feedData.FeedType === 'markets' && feedData.Json && feedData.SortKey &&
+              ['_trending', '_defi', '_nfts'].findIndex(market_type => feedData.SortKey.endsWith(market_type)) > -1 &&
+                response.data.findIndex(_feedData => _feedData.FeedType === feedData.FeedType && _.last(_feedData.SortKey.split('_')) === _.last(feedData.SortKey.split('_')) &&
+                  _feedData.CreatedAt > feedData.CreatedAt &&
+                  _feedData.Json && _.isEqual(JSON.parse(_feedData.Json).map(coinData => coinData.id), JSON.parse(feedData.Json).map(coinData => coinData.id))
+                ) > -1
+            )
           ) : []
         )
       }

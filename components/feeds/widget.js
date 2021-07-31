@@ -55,19 +55,19 @@ const FeedWidget = ({ feedType = null, data = null }) => {
 
   const isInterested = data && json ?
     data.FeedType === 'fear_and_greed' ?
-      Number(json.value) <= json.low_threshold || Number(json.value) >= json.high_threshold :
+      Number(json.value) <= json.low_threshold * 3 / 2 || Number(json.value) >= json.high_threshold * 2 / 3 :
     data.FeedType === 'gas' ?
       json.avgGas <= json.gas_gwei_threshold * 2 / 3 :
     data.FeedType === 'news' ?
-      false :
+      json.title && ['breaking'].findIndex(keyword => json.title.toLowerCase().includes(keyword)) > -1 :
     data.FeedType === 'whales' ?
-      repeatIcon(json[0]).length > 3 :
+      json[0].is_donation || json[0].is_hacked || repeatIcon(json[0]).length > (json[0].transaction_type === 'transfer' ? 3 : 2) :
     data.FeedType === 'markets' ?
       ['_ath', '_atl', '_fomo', '_panic', '_bitcoin'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 : false
     : false
 
   return (
-    <Widget className={`${isInterested ? 'shadow-sm border-yellow-300 dark:border-yellow-500' : ''}`}>
+    <Widget className={`${isInterested ? 'shadow border-yellow-400 dark:border-yellow-600' : ''}`}>
       <div className="flex items-start justify-start space-x-4 p-2">
         <div className="w-8 flex-shrink-0">
           {isSkeleton ?
