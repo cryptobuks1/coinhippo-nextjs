@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import Global from '../components/dashboard/global'
 import FearAndGreed from '../components/dashboard/fear-and-greed'
 import Dominance from '../components/dashboard/dominance'
-import TopMover from '../components/dashboard/top-mover'
+import TopMovers from '../components/dashboard/top-movers'
 import Trending from '../components/dashboard/trending'
 import SectionTitle from '../components/section-title'
 import { cryptoGlobal } from '../lib/api/coingecko'
@@ -53,7 +53,7 @@ export default function Index() {
       <div className="w-full grid grid-flow-row grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
         <FearAndGreed data={fearAndGreedData} />
         <Dominance />
-        <TopMover />
+        <TopMovers />
         <Trending />
       </div>
     </>
