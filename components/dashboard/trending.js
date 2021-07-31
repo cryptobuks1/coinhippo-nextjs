@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import Widget from '../widget'
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi'
-import { RiSearchEyeLine } from 'react-icons/ri'
+import { AiOutlineFire } from 'react-icons/ai'
 import _ from 'lodash'
 import { coinsMarkets } from '../../lib/api/coingecko'
 import { currencies } from '../../lib/menus'
@@ -39,7 +39,7 @@ export default function Trending() {
           <Image src="/logos/api/coingecko.png" alt="" width={24} height={24} className="my-auto" />
           <span className="text-gray-500 ml-2">Trending Search</span>
         </a>
-        <RiSearchEyeLine size={32} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
+        <AiOutlineFire size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
       </span>}
       description={<div className="mt-1.5">
         {coinsData ?

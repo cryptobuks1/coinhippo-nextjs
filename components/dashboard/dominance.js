@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useSelector, shallowEqual } from 'react-redux'
 import Widget from '../widget'
 import { ProgressBar } from '../progress-bars'
-import { FiPieChart } from 'react-icons/fi'
+import { AiOutlinePieChart } from 'react-icons/ai'
 import _ from 'lodash'
 import { numberFormat } from '../../lib/utils'
 
@@ -14,7 +14,7 @@ export default function Dominance() {
     <Widget
       title={<span className="uppercase flex items-center">
         Dominance
-        <FiPieChart size={32} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
+        <AiOutlinePieChart size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
       </span>}
       description={<div className="mt-2.5 mb-1">
         {global_data && all_crypto_data ?

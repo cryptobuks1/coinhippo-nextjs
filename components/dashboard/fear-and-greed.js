@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Widget from '../widget'
 import Circle from '../circle'
-import { BiTachometer } from 'react-icons/bi'
+import { VscDashboard } from 'react-icons/vsc'
 import { FaBitcoin, FaRegGrinSquintTears, FaRegGrinSquint, FaRegGrinBeamSweat, FaRegGrin, FaRegGrinWink, FaRegGrinBeam, FaRegGrinStars } from 'react-icons/fa'
 import moment from 'moment'
 
@@ -63,7 +63,7 @@ const FearAndGreed = ({ data }) => {
       title={<span className="uppercase flex items-center">
         <FaBitcoin size={24} className="text-yellow-500 mb-0.5 mr-2" />
         Fear & Greed Index
-        <BiTachometer size={32} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
+        <VscDashboard size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
       </span>}
       description={<div className="mt-4 mb-2">
         {dayData ?

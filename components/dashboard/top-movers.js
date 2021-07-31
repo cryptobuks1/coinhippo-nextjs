@@ -2,7 +2,8 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import Widget from '../widget'
-import { FiArrowUp, FiArrowDown, FiPlus, FiMinus } from 'react-icons/fi'
+import { FiArrowUp, FiArrowDown } from 'react-icons/fi'
+import { IoTrendingUp, IoTrendingDown } from 'react-icons/io5'
 import _ from 'lodash'
 import { coinsMarkets } from '../../lib/api/coingecko'
 import { currencies } from '../../lib/menus'
@@ -48,9 +49,9 @@ export default function TopMover() {
           </button>
         ))}
         {sortDirection === 'desc' ?
-          <FiPlus size={32} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
+          <IoTrendingUp size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
           :
-          <FiMinus size={32} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
+          <IoTrendingDown size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
         }
       </span>}
       description={<div className="mt-1.5">

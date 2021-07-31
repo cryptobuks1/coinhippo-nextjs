@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import Widget from '../widget'
-import { FiPieChart } from 'react-icons/fi'
 import { BiBuildings, BiDollarCircle } from 'react-icons/bi'
+import { AiOutlinePieChart } from 'react-icons/ai'
 import _ from 'lodash'
 import { numberFormat } from '../../lib/utils'
 
@@ -32,7 +32,7 @@ const Summary = ({ data, navigationItemData }) => {
       <Widget
         title={<span className="uppercase">Dominance</span>}
         description={<span className="text-xl">{numberFormat(data.market_cap_dominance || _.sumBy(data.companies, 'percentage_of_total_supply'), '0,0.00')}%</span>}
-        right={<FiPieChart size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}
+        right={<AiOutlinePieChart size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}
       />
     </div>
   )

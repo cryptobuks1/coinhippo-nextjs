@@ -2,8 +2,9 @@ import Link from 'next/link'
 import { useSelector, shallowEqual } from 'react-redux'
 import Widget from '../widget'
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi'
-import { BiCoinStack } from 'react-icons/bi'
-import { AiOutlineShop, AiOutlineStock, AiOutlineBarChart } from 'react-icons/ai'
+import { GiCoins } from 'react-icons/gi'
+import { RiExchangeBoxLine } from 'react-icons/ri'
+import { AiOutlineStock, AiOutlineBarChart } from 'react-icons/ai'
 import { currencies } from '../../lib/menus'
 import { numberFormat } from '../../lib/utils'
 
@@ -26,7 +27,7 @@ export default function Global() {
                 <div className="bg-gray-50 dark:bg-gray-800 animate-pulse w-16 h-6 rounded mt-1" />
               }
             </span>}
-            right={<BiCoinStack size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}
+            right={<GiCoins size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}
           />
         </a>
       </Link>
@@ -41,7 +42,7 @@ export default function Global() {
                 <div className="bg-gray-50 dark:bg-gray-800 animate-pulse w-16 h-6 rounded mt-1" />
               }
             </span>}
-            right={<AiOutlineShop size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}
+            right={<RiExchangeBoxLine size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}
           />
         </a>
       </Link>
