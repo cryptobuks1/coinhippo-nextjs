@@ -83,7 +83,7 @@ export default function FeedsIndex() {
                 <button
                   key={feedType}
                   onClick={() => setFeedTypesSelect(_.uniq(feedTypesSelect.includes(feedType) ? feedTypesSelect.filter(_feedType => _feedType !== feedType) : feedTypesSelect.concat([feedType])))}
-                  className={`btn btn-raised min-w-max btn-rounded flex items-center ${feedTypesSelect.includes(feedType) ? 'bg-indigo-600 text-white' : `bg-transparent hover:bg-${background === 'dark' ? 'indigo-900 text-white hover:text-gray-200' : 'indigo-50 text-indigo-500 hover:text-indigo-600'}`} text-xs my-1 ${i < Object.keys(feedTypesCount).length - 1 ? 'mr-2 md:mr-3' : ''} p-2`}
+                  className={`btn btn-raised min-w-max btn-rounded flex items-center ${feedTypesSelect.includes(feedType) ? 'bg-indigo-600 text-white' : 'bg-transparent hover:bg-indigo-50 text-indigo-500 hover:text-indigo-600 dark:hover:bg-indigo-900 dark:text-white dark:hover:text-gray-200'} text-xs my-1 ${i < Object.keys(feedTypesCount).length - 1 ? 'mr-2 md:mr-3' : ''} p-2`}
                 >
                   {getName(feedType)}<CircularBadge color="bg-indigo-600 text-white ml-1">{feedTypesCount[feedType]}</CircularBadge>
                 </button>

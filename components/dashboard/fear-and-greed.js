@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useSelector, shallowEqual } from 'react-redux'
 import PropTypes from 'prop-types'
 import Widget from '../widget'
 import Circle from '../circle'
@@ -18,9 +17,6 @@ const days = [
 ]
 
 const FearAndGreed = ({ data }) => {
-  const { theme } = useSelector(state => ({ theme: state.theme }), shallowEqual)
-  const { background } = { ...theme }
-
   const [dayData, setDayData] = useState(null)
   const [day, setDay] = useState(0)
 
@@ -67,11 +63,11 @@ const FearAndGreed = ({ data }) => {
       title={<span className="uppercase flex items-center">
         <FaBitcoin size={24} className="text-yellow-500 mb-0.5 mr-2" />
         Fear & Greed Index
-        <BiTachometer size={32} className="stroke-current text-gray-300 dark:text-gray-500 ml-auto" />
+        <BiTachometer size={32} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
       </span>}
       description={<div className="mt-4 mb-2">
         {dayData ?
-          <div className="my-1.5 mx-4 md:mx-8 lg:mx-0 xl:mx-8">
+          <div className="my-1.5 mx-4 md:mx-8 lg:mx-0 xl:mx-4">
             <div className="flex items-center">
               <Circle size="lg" progress={dayData.value} color={progressColor} />
               <div className={`flex flex-col items-end text-${color} ml-auto`}>
@@ -85,7 +81,7 @@ const FearAndGreed = ({ data }) => {
                 <button
                   key={i}
                   onClick={() => setDay(_day.day)}
-                  className={`btn btn-raised btn-sm min-w-max btn-rounded ${_day.day === day ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white' : `bg-transparent hover:bg-${background === 'dark' ? 'gray-800 text-gray-100 hover:text-gray-300' : 'gray-50 text-gray-500 hover:text-gray-700'}`} mr-${i < days.length - 1 ? 2 : 0}`}
+                  className={`btn btn-raised btn-sm min-w-max btn-rounded ${_day.day === day ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white' : 'bg-transparent hover:bg-gray-50 text-gray-500 hover:text-gray-700 dark:hover:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-200'} mr-${i < days.length - 1 ? 2 : 0}`}
                   style={{ fontSize: '.5rem' }}
                 >
                   {_day.title}

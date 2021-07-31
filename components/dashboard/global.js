@@ -26,7 +26,7 @@ export default function Global() {
                 <div className="bg-gray-50 dark:bg-gray-800 animate-pulse w-16 h-6 rounded mt-1" />
               }
             </span>}
-            right={<BiCoinStack size={32} className="stroke-current text-gray-300 dark:text-gray-500" />}
+            right={<BiCoinStack size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}
           />
         </a>
       </Link>
@@ -41,7 +41,7 @@ export default function Global() {
                 <div className="bg-gray-50 dark:bg-gray-800 animate-pulse w-16 h-6 rounded mt-1" />
               }
             </span>}
-            right={<AiOutlineShop size={32} className="stroke-current text-gray-300 dark:text-gray-500" />}
+            right={<AiOutlineShop size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}
           />
         </a>
       </Link>
@@ -68,7 +68,7 @@ export default function Global() {
                 <div className="bg-gray-50 dark:bg-gray-800 animate-pulse w-36 h-6 rounded mt-1" />
               }
             </span>}
-            right={<AiOutlineStock size={32} className="stroke-current text-gray-300 dark:text-gray-500" />}
+            right={<AiOutlineStock size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}
           />
         </a>
       </Link>
@@ -87,7 +87,7 @@ export default function Global() {
                 <div className="bg-gray-50 dark:bg-gray-800 animate-pulse w-36 h-6 rounded mt-1" />
               }
             </span>}
-            right={<AiOutlineBarChart size={32} className="stroke-current text-gray-300 dark:text-gray-500" />}
+            right={<AiOutlineBarChart size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}
           />
         </a>
       </Link>

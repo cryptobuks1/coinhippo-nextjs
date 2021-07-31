@@ -1,15 +1,11 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useSelector, shallowEqual } from 'react-redux'
 import PublicCompanies from '../../components/public-companies'
 import SectionTitle from '../../components/section-title'
 import { navigation } from '../../lib/menus'
 import { getName } from '../../lib/utils'
 
 export default function PublicCompaniesCoin() {
-  const { theme } = useSelector(state => ({ theme: state.theme }), shallowEqual)
-  const { background } = { ...theme }
-
   const router = useRouter()
   const { query, asPath } = { ...router }
   const { coin_id } = { ...query }
@@ -47,7 +43,7 @@ export default function PublicCompaniesCoin() {
           <div className="flex flex-wrap items-center ml-0 sm:ml-4 px-1">
             {navigationData.items.map((item, i) => (
               <Link key={i} href={item.url}>
-                <a className={`btn btn-raised min-w-max btn-rounded flex items-center ${navigationItemData && item.url === navigationItemData.url ? 'bg-indigo-600 text-white' : `bg-transparent hover:bg-${background === 'dark' ? 'indigo-900 text-white hover:text-gray-200' : 'indigo-50 text-indigo-500 hover:text-indigo-600'}`} text-xs my-1 ${i < navigationData.items.length - 1 ? 'mr-2 md:mr-3' : ''} p-2`}>
+                <a className={`btn btn-raised min-w-max btn-rounded flex items-center ${navigationItemData && item.url === navigationItemData.url ? 'bg-indigo-600 text-white' : 'bg-transparent hover:bg-indigo-50 text-indigo-500 hover:text-indigo-600 dark:hover:bg-indigo-900 dark:text-white dark:hover:text-gray-200'} text-xs my-1 ${i < navigationData.items.length - 1 ? 'mr-2 md:mr-3' : ''} p-2`}>
                   {item.image && (
                     <img
                       src={item.image}

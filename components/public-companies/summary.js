@@ -11,7 +11,7 @@ const Summary = ({ data, navigationItemData }) => {
       <Widget
         title={<span className="uppercase">Companies</span>}
         description={<span className="text-xl">{numberFormat(data.companies && data.companies.length, '0,0')}</span>}
-        right={<BiBuildings size={32} className="stroke-current text-gray-300 dark:text-gray-500" />}
+        right={<BiBuildings size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}
       />
       <Widget
         title={<span className="uppercase">Total Holdings</span>}
@@ -27,12 +27,12 @@ const Summary = ({ data, navigationItemData }) => {
       <Widget
         title={<span className="uppercase">Total Value</span>}
         description={<span className="text-xl">${numberFormat(data.total_value_usd, '0,0')}</span>}
-        right={<BiDollarCircle size={32} className="stroke-current text-gray-300 dark:text-gray-500" />}
+        right={<BiDollarCircle size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}
       />
       <Widget
         title={<span className="uppercase">Dominance</span>}
         description={<span className="text-xl">{numberFormat(data.market_cap_dominance || _.sumBy(data.companies, 'percentage_of_total_supply'), '0,0.00')}%</span>}
-        right={<FiPieChart size={32} className="stroke-current text-gray-300 dark:text-gray-500" />}
+        right={<FiPieChart size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}
       />
     </div>
   )

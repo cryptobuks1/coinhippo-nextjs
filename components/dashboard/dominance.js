@@ -14,7 +14,7 @@ export default function Dominance() {
     <Widget
       title={<span className="uppercase flex items-center">
         Dominance
-        <FiPieChart size={32} className="stroke-current text-gray-300 dark:text-gray-500 ml-auto" />
+        <FiPieChart size={32} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
       </span>}
       description={<div className="mt-2.5 mb-1">
         {global_data && all_crypto_data ?

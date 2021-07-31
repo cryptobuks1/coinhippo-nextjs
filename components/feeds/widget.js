@@ -236,7 +236,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                 <FearAndGreed data={json} /> :
               feedType === 'gas' ?
                 <>
-                  Maybe it's time to <Link href="/defi"><a className="font-semibold">{getName('defi')}</a></Link> or <Link href="/non-fungible-tokens-nft"><a className="font-semibold">{getName('nfts')}</a></Link>.
+                  Maybe it's time to <Link href="/decentralized-finance-defi"><a className="font-semibold">{getName('defi')}</a></Link> or <Link href="/non-fungible-tokens-nft"><a className="font-semibold">{getName('nfts')}</a></Link>.
                   <div className="flex items-center mt-4 mb-2">
                     {['SafeGasPrice', 'ProposeGasPrice', 'FastGasPrice'].map((speed, i) => (
                       <div key={i} className="w-1/3 flex flex-col items-center justify-center">
@@ -451,7 +451,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                     {json.map((coinData, i) => <Link key={i} href={`/coin${coinData ? `/${coinData.id}` : 's'}`}><a className="font-semibold mr-1">#{coinData && coinData.name}</a></Link>)}
                     {json.length < 2 && json.map((coinData, i) => <Link key={i} href={`/coin${coinData ? `/${coinData.id}` : 's'}`}><a className="font-semibold mr-1">${coinData && coinData.symbol && coinData.symbol.toUpperCase()}</a></Link>)}
                     {json.length > 1 && ['_ath', '_atl', '_trending', '_bitcoin'].findIndex(market_type => data.SortKey.endsWith(market_type)) < 0 && (
-                      <Link href={`/coins${data.SortKey.endsWith('_defi') ? '/defi' : data.SortKey.endsWith('_nfts') ? '/non-fungible-tokens-nft' : ''}`}><a className="font-semibold">#{data.SortKey.endsWith('_defi') ? getName('defi') : data.SortKey.endsWith('_nfts') ? 'NFTs' : 'Market'}</a></Link>
+                      <Link href={`/coins${data.SortKey.endsWith('_defi') ? '/decentralized-finance-defi' : data.SortKey.endsWith('_nfts') ? '/non-fungible-tokens-nft' : ''}`}><a className="font-semibold">#{data.SortKey.endsWith('_defi') ? getName('defi') : data.SortKey.endsWith('_nfts') ? 'NFTs' : 'Market'}</a></Link>
                     )}
                   </> : null
                 : null
