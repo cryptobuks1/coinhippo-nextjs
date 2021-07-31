@@ -21,7 +21,7 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   )
 })
 
-export default function Datatable({ columns, data, rowSelectEnable, defaultPageSize, className }) {
+export default function Datatable({ columns, data, rowSelectEnable, defaultPageSize, className = '' }) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -64,7 +64,7 @@ export default function Datatable({ columns, data, rowSelectEnable, defaultPageS
 
   return (
     <>
-      <table { ...getTableProps() } className={`table ${className ? className : ''}`}>
+      <table { ...getTableProps() } className={`table ${className}`}>
         <thead>
           {headerGroups.map(headerGroup => (
             <tr { ...headerGroup.getHeaderGroupProps() }>
@@ -122,7 +122,7 @@ export default function Datatable({ columns, data, rowSelectEnable, defaultPageS
         </span>
 
         <select
-          className="form-select bg-white dark:bg-gray-800 outline-none dark:border-gray-800 shadow-none focus:shadow-none text-xs"
+          className="form-select dark:bg-gray-800 outline-none dark:border-gray-800 shadow-none focus:shadow-none text-xs"
           value={pageSize}
           onChange={e => setPageSize(Number(e.target.value))}>
           {[10, 25, 50, 100].map(pageSize => (

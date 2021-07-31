@@ -82,7 +82,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                 feedType === 'markets' && data.SortKey && data.SortKey.endsWith('_trending') ? 'coingecko' :
                 'coinhippo'}.png`}
               alt=""
-              className="w-full h-8 bg-white shadow-lg rounded-full ring"
+              className="w-full h-8 shadow-lg rounded-full ring"
             />
           }
         </div>

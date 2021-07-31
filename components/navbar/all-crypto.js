@@ -8,8 +8,8 @@ const AllCrypto = ({ data, trendingData, inputSearch, handleDropdownClick }) => 
   if (allCryptoData) {
     Object.keys(allCryptoData).forEach(genre => {
       allCryptoData[genre] = allCryptoData[genre] && _.orderBy(allCryptoData[genre].filter(item => inputSearch && item).map(item => {
-        return { ...item, scores: ['symbol', 'name'].map(field => item[field] && item[field].toLowerCase().includes(inputSearch.toLowerCase()) ? inputSearch.length > 1 ? inputSearch.length / item[field].length : .5 : -1) }
-      }).filter(item => _.max(item.scores) > 3 / 10), ['scores'], ['desc'])
+        return { ...item, scores: ['symbol', 'name'].map(field => item[field] && item[field].toLowerCase().includes(inputSearch.toLowerCase()) ? inputSearch.length > 1 ? (item.market_cap_rank < 50) * inputSearch.length / item[field].length : .5 : -1) }
+      }).filter(item => _.max(item.scores) > 3 / 10), ['scores'], ['desc']).filter((item, i) => i < 100)
 
       if (!(allCryptoData[genre] && allCryptoData[genre].length > 0)) {
         delete allCryptoData[genre]

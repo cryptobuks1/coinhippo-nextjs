@@ -7,12 +7,14 @@ const FearAndGreed = ({ data = null }) => {
 
   if (data) {
     data.value = Number(data.value)
+
     color = data.value <= data.low_threshold ? 'red-600' :
       data.value >= data.high_threshold ? 'green-500' :
       data.value < 50 ?
         data.value <= (50 - data.low_threshold) / 2 ? 'red-500' : 'yellow-600' :
         data.value > 50 ? data.value >= 50 + ((data.high_threshold - 50) / 2) ? 'green-400' : 'yellow-400' :
       'yellow-500'
+
     icon = data.value <= data.low_threshold ? <FaRegGrinSquintTears size={24} /> :
       data.value >= data.high_threshold ? <FaRegGrinStars size={24} /> :
       data.value < 50 ?

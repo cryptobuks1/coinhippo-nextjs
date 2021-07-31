@@ -1,10 +1,11 @@
-import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import Global from '../components/dashboard/global'
+import FearAndGreed from '../components/dashboard/fear-and-greed'
+import Dominance from '../components/dashboard/dominance'
 import SectionTitle from '../components/section-title'
 import { cryptoGlobal } from '../lib/api/coingecko'
-import FearAndGreed from '../lib/api/fear-and-greed'
+import FearAndGreedAPI from '../lib/api/fear-and-greed'
 import { getName } from '../lib/utils'
 import { GLOBAL_DATA } from '../reducers/types'
 
@@ -33,7 +34,7 @@ export default function Index() {
 
   useEffect(() => {
     const getFearAndGreed = async () => {
-      const response = await FearAndGreed({ limit: 31 })
+      const response = await FearAndGreedAPI({ limit: 31 })
 
       if (response && response.data) {
         setFearAndGreedData(response.data)
@@ -47,6 +48,10 @@ export default function Index() {
     <>
       <SectionTitle title="Overview" subtitle="Dashboard" />
       <Global />
+      <div className="w-full grid grid-flow-row grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+        <FearAndGreed data={fearAndGreedData} />
+        <Dominance />
+      </div>
     </>
   )
 }
