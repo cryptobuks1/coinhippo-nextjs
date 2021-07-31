@@ -72,7 +72,7 @@ export default function Search() {
       if (response) {
         dispatch({
           type: TRENDING_DATA,
-          value: response
+          value: response.coins
         })
       }
     }

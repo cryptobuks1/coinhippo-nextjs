@@ -6,7 +6,7 @@ const Widget = ({ className = '', contentClassName = '', title = null, descripti
       {(title || description || right) && (
         <div className={`flex flex-row ${contentClassName.includes('items-') ? '' : 'items-center'} justify-between ${contentClassName}`}>
           <div className="w-full flex flex-col">
-            <div className="text-gray-500 text-sm font-light">{title}</div>
+            <div className="text-gray-500 text-sm font-medium">{title}</div>
             <div className="text-sm font-semibold">{description}</div>
           </div>
           {right}

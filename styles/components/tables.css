@@ -35,6 +35,9 @@
   tbody tr td {
     @apply text-left;
   }
+  thead tr th {
+    position: sticky;
+  }
 }
 
 [data-background="light"] {

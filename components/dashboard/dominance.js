@@ -16,7 +16,7 @@ export default function Dominance() {
         Dominance
         <FiPieChart size={32} className="stroke-current text-gray-300 dark:text-gray-500 ml-auto" />
       </span>}
-      description={<div className="mb-1.5">
+      description={<div className="mt-2.5 mb-1">
         {global_data && all_crypto_data ?
           _.slice(_.orderBy(Object.keys(global_data.market_cap_percentage).map(symbol => {
             return {
@@ -58,7 +58,7 @@ export default function Dominance() {
                   <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-8 h-3.5 rounded" />
                 </span>
               </div>
-              <div className={`bg-gray-100 dark:bg-gray-800 animate-pulse w-${6 - i}/12 h-1.5 rounded mt-1.5`} />
+              <div className={`bg-gray-100 dark:bg-gray-800 animate-pulse w-${6 - i}/12 h-1 rounded mt-1.5`} />
             </div>
           ))
         }

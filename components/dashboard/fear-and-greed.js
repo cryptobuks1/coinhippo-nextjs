@@ -69,7 +69,7 @@ const FearAndGreed = ({ data }) => {
         Fear & Greed Index
         <BiTachometer size={32} className="stroke-current text-gray-300 dark:text-gray-500 ml-auto" />
       </span>}
-      description={<div className="mt-3 mb-1.5">
+      description={<div className="mt-4 mb-2">
         {dayData ?
           <div className="my-1.5 mx-4 md:mx-8 lg:mx-0 xl:mx-8">
             <div className="flex items-center">
