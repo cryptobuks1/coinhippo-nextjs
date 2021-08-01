@@ -8,6 +8,7 @@ import { AiOutlineFire } from 'react-icons/ai'
 import _ from 'lodash'
 import { coinsMarkets } from '../../lib/api/coingecko'
 import { currencies } from '../../lib/menus'
+import useMountedRef from '../../lib/mountedRef'
 import { numberFormat } from '../../lib/utils'
 
 export default function Trending() {
@@ -17,12 +18,16 @@ export default function Trending() {
 
   const [coinsData, setCoinsData] = useState(null)
 
+  const mountedRef = useMountedRef()
+
   useEffect(() => {
     const getCoinsMarkets = async () => {
       if (trending_data) {
         const response = await coinsMarkets({ vs_currency, ids: trending_data.map(coinData => coinData.item && coinData.item.id).join(','), price_change_percentage: '24h' })
 
-        setCoinsData(trending_data.map(coinData => { return { ...coinData.item, vs_currency, ...(response && Array.isArray(response) ? response[response.findIndex(_coinData => _coinData.id === coinData.item.id)] : null) } }))
+        if (mountedRef.current) {
+          setCoinsData(trending_data.map(coinData => { return { ...coinData.item, vs_currency, ...(response && Array.isArray(response) ? response[response.findIndex(_coinData => _coinData.id === coinData.item.id)] : null) } }))
+        }
       }
     }
 

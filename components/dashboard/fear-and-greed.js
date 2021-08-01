@@ -5,6 +5,7 @@ import Circle from '../circle'
 import { VscDashboard } from 'react-icons/vsc'
 import { FaBitcoin, FaRegGrinSquintTears, FaRegGrinSquint, FaRegGrinBeamSweat, FaRegGrin, FaRegGrinWink, FaRegGrinBeam, FaRegGrinStars } from 'react-icons/fa'
 import moment from 'moment'
+import useMountedRef from '../../lib/mountedRef'
 
 const low_threshold = 20
 const high_threshold = 75
@@ -20,10 +21,14 @@ const FearAndGreed = ({ data }) => {
   const [dayData, setDayData] = useState(null)
   const [day, setDay] = useState(0)
 
+  const mountedRef = useMountedRef()
+
   useEffect(() => {
     const getDayData = () => {
       if (data) {
-        setDayData(data[day])
+        if (mountedRef.current) {
+          setDayData(data[day])
+        }
       }
     }
 

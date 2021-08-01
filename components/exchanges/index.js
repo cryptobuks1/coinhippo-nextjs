@@ -9,6 +9,7 @@ import { ProgressBar } from '../../components/progress-bars'
 import _ from 'lodash'
 import { exchanges } from '../../lib/api/coingecko'
 import { navigation, currencies } from '../../lib/menus'
+import useMountedRef from '../../lib/mountedRef'
 import { getName, numberFormat } from '../../lib/utils'
 
 const per_page = 100
@@ -28,6 +29,8 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
   const _asPath = asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath
 
   const [exchangesData, setExchangesData] = useState(null)
+
+  const mountedRef = useMountedRef()
 
   useEffect(() => {
     const getExchanges = async () => {
@@ -62,7 +65,9 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
           return { ...exchangeData, market_share: exchangeData.trade_volume_24h_btc > -1 ? exchangeData.trade_volume_24h_btc / _.sumBy(data.filter(_exchangeData => _exchangeData.trade_volume_24h_btc > 0), 'trade_volume_24h_btc') : -1 }
         })
 
-        setExchangesData({ data, exchange_type })
+        if (mountedRef.current) {
+          setExchangesData({ data, exchange_type })
+        }
       }
     }
 

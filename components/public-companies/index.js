@@ -8,6 +8,7 @@ import { ProgressBar } from '../../components/progress-bars'
 import _ from 'lodash'
 import { publicCompanies } from '../../lib/api/coingecko'
 import { navigation } from '../../lib/menus'
+import useMountedRef from '../../lib/mountedRef'
 import { numberFormat } from '../../lib/utils'
 
 const PublicCompanies = ({ navigationData, navigationItemData }) => {
@@ -18,12 +19,16 @@ const PublicCompanies = ({ navigationData, navigationItemData }) => {
 
   const [treasuryData, setTreasuryData] = useState(null)
 
+  const mountedRef = useMountedRef()
+
   useEffect(() => {
     const getPublicCompanies = async () => {
       const response = await publicCompanies(coin_id)
 
       if (response) {
-        setTreasuryData({ ...response, coin_id })
+        if (mountedRef.current) {
+          setTreasuryData({ ...response, coin_id })
+        }
       }
     }
 

@@ -9,6 +9,7 @@ import parse from 'html-react-parser'
 import Linkify from 'react-linkify'
 import Blogs from '../../lib/api/blog'
 import meta from '../../lib/meta'
+import useMountedRef from '../../lib/mountedRef'
 
 export default function Blog() {
   const router = useRouter()
@@ -18,12 +19,16 @@ export default function Blog() {
   const [blogsData, setBlogsData] = useState(null)
   const [blogData, setBlogData] = useState(null)
 
+  const mountedRef = useMountedRef()
+
   useEffect(() => {
     const getBlogs = async () => {
       const response = await Blogs()
 
       if (response) {
-        setBlogsData(response)
+        if (mountedRef.current) {
+          setBlogsData(response)
+        }
       }
     }
 
@@ -35,7 +40,9 @@ export default function Blog() {
       const response = await Blogs({ category_id, post_id, include_html: true })
 
       if (response) {
-        setBlogData(response)
+        if (mountedRef.current) {
+          setBlogData(response)
+        }
       }
       else {
         router.push('/blog')

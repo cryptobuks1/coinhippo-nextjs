@@ -8,6 +8,7 @@ import Trending from '../components/dashboard/trending'
 import SectionTitle from '../components/section-title'
 import { cryptoGlobal } from '../lib/api/coingecko'
 import FearAndGreedAPI from '../lib/api/fear-and-greed'
+import useMountedRef from '../lib/mountedRef'
 import { getName } from '../lib/utils'
 import { GLOBAL_DATA } from '../reducers/types'
 
@@ -15,6 +16,8 @@ export default function Index() {
   const dispatch = useDispatch()
 
   const [fearAndGreedData, setFearAndGreedData] = useState(null)
+
+  const mountedRef = useMountedRef()
 
   useEffect(() => {
     const getCryptoGlobal = async () => {
@@ -39,7 +42,9 @@ export default function Index() {
       const response = await FearAndGreedAPI({ limit: 31 })
 
       if (response && response.data) {
-        setFearAndGreedData(response.data)
+        if (mountedRef.current) {
+          setFearAndGreedData(response.data)
+        }
       }
     }
 

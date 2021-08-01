@@ -5,6 +5,7 @@ import { ProgressBar } from '../progress-bars'
 import { FaGasPump } from 'react-icons/fa'
 import _ from 'lodash'
 import Etherscan from '../../lib/api/etherscan'
+import useMountedRef from '../../lib/mountedRef'
 import { GAS_DATA } from '../../reducers/types'
 
 const gas_gwei_threshold = 15
@@ -20,6 +21,8 @@ export default function DropdownGas() {
 
   const buttonRef = useRef(null)
   const dropdownRef = useRef(null)
+
+  const mountedRef = useMountedRef()
 
   useEffect(() => {
     const handleClickOutside = event => {
@@ -40,7 +43,7 @@ export default function DropdownGas() {
   const handleDropdownClick = () => setHidden(!hidden)
 
   useEffect(() => {
-    const interval = setInterval(() => setSecondUntilRefresh(secondUntilRefresh - 1 || refresh_rate_second), 1000)
+    const interval = setInterval(() => { if (mountedRef.current) setSecondUntilRefresh(secondUntilRefresh - 1 || refresh_rate_second) }, 1000)
     return () => clearInterval(interval)
   }, [secondUntilRefresh])
 

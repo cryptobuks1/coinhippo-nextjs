@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import MarqueeCoins from './marquee-coins'
 import { coinsMarkets } from '../../lib/api/coingecko'
+import useMountedRef from '../../lib/mountedRef'
 
 export default function CoinPrices() {
   const { preferences } = useSelector(state => ({ preferences: state.preferences }), shallowEqual)
@@ -9,12 +10,16 @@ export default function CoinPrices() {
 
   const [coinsData, setCoinsData] = useState(null)
 
+  const mountedRef = useMountedRef()
+
   useEffect(() => {
     const getCoinsMarkets = async () => {
       const response = await coinsMarkets({ vs_currency, order: 'market_cap_desc', per_page: 10, page: 1, price_change_percentage: '24h' })
 
       if (response && Array.isArray(response)) {
-        setCoinsData(response.map(coinData => { return { ...coinData, vs_currency } }))
+        if (mountedRef.current) {
+          setCoinsData(response.map(coinData => { return { ...coinData, vs_currency } }))
+        }
       }
     }
 

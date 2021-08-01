@@ -7,6 +7,7 @@ import { IoTrendingUp, IoTrendingDown } from 'react-icons/io5'
 import _ from 'lodash'
 import { coinsMarkets } from '../../lib/api/coingecko'
 import { currencies } from '../../lib/menus'
+import useMountedRef from '../../lib/mountedRef'
 import { numberFormat } from '../../lib/utils'
 
 const sortDirections = [
@@ -21,12 +22,17 @@ export default function TopMover() {
   const [coinsData, setCoinsData] = useState(null)
   const [sortDirection, setSortDirection] = useState('desc')
 
+  const mountedRef = useMountedRef()
+
   useEffect(() => {
     const getCoinsMarkets = async () => {
       const response = await coinsMarkets({ vs_currency, order: 'market_cap_desc', per_page: 250, page: 1, price_change_percentage: '24h' })
 
-      if (response && Array.isArray(response))
-      setCoinsData(response.map(coinData => { return { ...coinData, vs_currency } }))
+      if (response && Array.isArray(response)) {
+        if (mountedRef.current) {
+          setCoinsData(response.map(coinData => { return { ...coinData, vs_currency } }))
+        }
+      }
     }
 
     getCoinsMarkets()

@@ -6,6 +6,7 @@ import { FiArrowUp, FiArrowDown } from 'react-icons/fi'
 import PageVisibility from 'react-page-visibility'
 import Ticker from 'react-ticker'
 import { currencies } from '../../lib/menus'
+import useMountedRef from '../../lib/mountedRef'
 import { numberFormat } from '../../lib/utils'
 
 const MarqueeCoins = ({ data }) => {
@@ -15,10 +16,14 @@ const MarqueeCoins = ({ data }) => {
   const [pageVisible, setPageVisible] = useState(true)
   const [currentCurrency, setCurrentCurrency] = useState(vs_currency)
 
+  const mountedRef = useMountedRef()
+
   const handleVisibilityChange = visible => setPageVisible(visible)
 
   useEffect(() => {
-    setCurrentCurrency(currentCurrency && currentCurrency !== vs_currency ? null : vs_currency)
+    if (mountedRef.current) {
+      setCurrentCurrency(currentCurrency && currentCurrency !== vs_currency ? null : vs_currency)
+    }
   }, [vs_currency, currentCurrency])
 
   return data && currentCurrency === vs_currency && (
