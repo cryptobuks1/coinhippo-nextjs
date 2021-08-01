@@ -63,7 +63,7 @@ export default function DropdownGas() {
 
   const avgGas = gas_data && _.mean([gas_data.SafeGasPrice, gas_data.ProposeGasPrice, gas_data.FastGasPrice].map(gas => Number(gas)))
 
-  const color = avgGas <= gas_gwei_threshold ? 'green-700' : avgGas <= gas_gwei_threshold * 2 ? 'green-500' : avgGas <= gas_gwei_threshold * 4 ? 'red-500' : 'red-700'
+  const color = gas_data && typeof gas_data === 'object' ? avgGas <= gas_gwei_threshold ? 'green-700' : avgGas <= gas_gwei_threshold * 2 ? 'green-500' : avgGas <= gas_gwei_threshold * 4 ? 'red-500' : 'red-700' : 'gray-500'
 
   return gas_data && (
     <div className="relative">
@@ -78,7 +78,7 @@ export default function DropdownGas() {
           className={`bg-${color} w-5 h-5 absolute leading-none rounded-full text-white text-2xs font-semibold inline-flex items-center justify-center`}
           style={{ top: 4, right: -2 }}
         >
-          {typeof gas_data.ProposeGasPrice === 'number' ? gas_data.ProposeGasPrice : '?'}
+          {gas_data.ProposeGasPrice || '?'}
         </span>
       </button>
       <div

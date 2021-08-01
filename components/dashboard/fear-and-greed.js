@@ -94,14 +94,14 @@ const FearAndGreed = ({ data }) => {
             <div className="flex items-center">
               <Circle size="lg" progress={0} color="transparent" />
               <div className={`flex flex-col items-end ml-auto`}>
-                <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-14 h-4 rounded" />
-                <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-10 h-10 rounded-full mt-2" />
-                <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-16 h-3 rounded mt-4" />
+                <div className="skeleton w-14 h-4 rounded" />
+                <div className="skeleton w-10 h-10 rounded-full mt-2" />
+                <div className="skeleton w-16 h-3 rounded mt-4" />
               </div>
             </div>
             <div className="flex items-center justify-center mt-4">
               {[...Array(4).keys()].map(i => (
-                <div key={i} className={`bg-gray-100 dark:bg-gray-800 animate-pulse w-16 h-6 rounded my-1 mr-${i < 4 - 1 ? 2 : 0}`} />
+                <div key={i} className={`skeleton w-16 h-6 rounded my-1 mr-${i < 4 - 1 ? 2 : 0}`} />
               ))}
             </div>
           </div>

@@ -66,20 +66,20 @@ export default function TopMover() {
                       <img
                         src={coinData.image}
                         alt=""
-                        className="w-5 h-5 rounded-full mr-1"
+                        className="w-5 h-5 rounded mr-1"
                       />
                       <span className="text-gray-900 dark:text-gray-100">{coinData.name}</span>
                       <span className="text-gray-400 font-normal ml-1">{coinData.symbol && coinData.symbol.toUpperCase()}</span>
                     </a>
                   </Link>
                   <span className={`${coinData.price_change_percentage_24h < 0 ? 'text-red-500 dark:text-red-400' : coinData.price_change_percentage_24h > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} text-xs font-medium text-right ml-auto`}>
-                    {currency.symbol}{numberFormat(coinData.current_price, '0,0.00000000')}{!currency.symbol && <> {currency.id.toUpperCase()}</>}
+                    {currency.symbol}{numberFormat(coinData.current_price, '0,0.00000000')}{!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}
                   </span>
                 </div>
                 <div className="w-full flex items-center font-normal ml-0.5" style={{ fontSize: '.65rem' }}>
                   <div className="text-gray-600 dark:text-gray-400 mr-2">
                     <span className="text-gray-600 dark:text-gray-400 font-semibold mr-1">#{numberFormat(coinData.market_cap_rank, '0,0')}</span>
-                    <span className="text-gray-500 dark:text-gray-500 font-medium mr-1">MCap:</span>{currency.symbol}{numberFormat(coinData.market_cap, '0,0.00000000')}{!currency.symbol && <> {currency.id.toUpperCase()}</>}
+                    <span className="text-gray-500 dark:text-gray-500 font-medium mr-1">MCap:</span>{currency.symbol}{numberFormat(coinData.market_cap, '0,0.00000000')}{!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}
                   </div>
                   <div className={`flex items-center ${coinData.price_change_percentage_24h < 0 ? 'text-red-500 dark:text-red-400' : coinData.price_change_percentage_24h > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} font-extrabold ml-auto`}>
                     {numberFormat(coinData.price_change_percentage_24h / 100, '+0,0.00%')}
@@ -93,17 +93,17 @@ export default function TopMover() {
           [...Array(5).keys()].map(i => (
             <div key={i} className="my-0.5">
               <div className="flex items-center">
-                <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-5 h-5 rounded-full mr-1" />
-                <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-1/4 h-3 rounded" />
+                <div className="skeleton w-5 h-5 rounded mr-1" />
+                <div className="skeleton w-1/4 h-3 rounded" />
                 <span className="ml-auto">
-                  <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-12 h-3.5 rounded" />
+                  <div className="skeleton w-12 h-3.5 rounded" />
                 </span>
               </div>
               <div className="flex items-center my-1 ml-0.5">
-                <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-6 h-2.5 rounded-full mr-1" />
-                <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-2/5 h-2.5 rounded" />
+                <div className="skeleton w-4 h-2.5 rounded mr-1" />
+                <div className="skeleton w-2/5 h-2.5 rounded" />
                 <span className="ml-auto">
-                  <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-8 h-3 rounded" />
+                  <div className="skeleton w-8 h-3 rounded" />
                 </span>
               </div>
             </div>

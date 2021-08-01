@@ -24,7 +24,7 @@ export default function Global() {
               {global_data ?
                 numberFormat(global_data.active_cryptocurrencies, '0,0')
                 :
-                <div className="bg-gray-50 dark:bg-gray-800 animate-pulse w-16 h-6 rounded mt-1" />
+                <div className="skeleton w-16 h-6 rounded mt-1" />
               }
             </span>}
             right={<GiCoins size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}
@@ -39,7 +39,7 @@ export default function Global() {
               {all_crypto_data ?
                 numberFormat(all_crypto_data.exchanges && all_crypto_data.exchanges.length, '0,0')
                 :
-                <div className="bg-gray-50 dark:bg-gray-800 animate-pulse w-16 h-6 rounded mt-1" />
+                <div className="skeleton w-16 h-6 rounded mt-1" />
               }
             </span>}
             right={<RiExchangeBoxLine size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}
@@ -63,10 +63,10 @@ export default function Global() {
                 <>
                   {currency.symbol}
                   {numberFormat(global_data.total_market_cap && global_data.total_market_cap[vs_currency], '0,0')}
-                  {!currency.symbol && <>&nbsp;{currency.id.toUpperCase()}</>}
+                  {!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}
                 </>
                 :
-                <div className="bg-gray-50 dark:bg-gray-800 animate-pulse w-36 h-6 rounded mt-1" />
+                <div className="skeleton w-36 h-6 rounded mt-1" />
               }
             </span>}
             right={<AiOutlineStock size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}
@@ -82,10 +82,10 @@ export default function Global() {
                 <>
                   {currency.symbol}
                   {numberFormat(global_data.total_volume && global_data.total_volume[vs_currency], '0,0')}
-                  {!currency.symbol && <>&nbsp;{currency.id.toUpperCase()}</>}
+                  {!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}
                 </>
                 :
-                <div className="bg-gray-50 dark:bg-gray-800 animate-pulse w-36 h-6 rounded mt-1" />
+                <div className="skeleton w-36 h-6 rounded mt-1" />
               }
             </span>}
             right={<AiOutlineBarChart size={32} className="stroke-current text-gray-500 dark:text-gray-400" />}

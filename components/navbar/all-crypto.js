@@ -41,7 +41,7 @@ const AllCrypto = ({ data, trendingData, inputSearch, handleDropdownClick }) => 
                   <img
                     src={item.large}
                     alt=""
-                    className="w-6 h-6 rounded-full"
+                    className="w-6 h-6 rounded"
                   />
                 )}
                 <span className="w-full flex items-center text-xs">

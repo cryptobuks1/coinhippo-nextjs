@@ -33,7 +33,7 @@ export default function Dominance() {
                     <img
                       src={coinData.large}
                       alt=""
-                      className="w-6 h-6 rounded-full mr-2"
+                      className="w-6 h-6 rounded mr-2"
                     />
                     <span className="text-gray-900 dark:text-gray-100">{coinData.name}</span>
                     <span className="text-gray-400 font-normal ml-1.5">{coinData.symbol}</span>
@@ -52,13 +52,13 @@ export default function Dominance() {
           [...Array(5).keys()].map(i => (
             <div key={i} className="my-1.5">
               <div className="flex items-center">
-                <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-6 h-6 rounded-full mr-2.5" />
-                <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-1/4 h-3 rounded" />
+                <div className="skeleton w-6 h-6 rounded mr-2.5" />
+                <div className="skeleton w-1/4 h-3 rounded" />
                 <span className="ml-auto">
-                  <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-8 h-3.5 rounded" />
+                  <div className="skeleton w-8 h-3.5 rounded" />
                 </span>
               </div>
-              <div className={`bg-gray-100 dark:bg-gray-800 animate-pulse w-${6 - i}/12 h-1 rounded mt-1.5`} />
+              <div className={`skeleton w-${6 - i}/12 h-1 rounded mt-1.5`} />
             </div>
           ))
         }

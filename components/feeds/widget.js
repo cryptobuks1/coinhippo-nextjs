@@ -71,7 +71,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
       <div className="flex items-start justify-start space-x-4 p-2">
         <div className="w-8 flex-shrink-0">
           {isSkeleton ?
-            <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-full h-8 shadow-lg rounded-full" />
+            <div className="skeleton w-full h-8 shadow-lg rounded-full" />
             :
             <img
               src={`/logos/api/${
@@ -89,7 +89,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
         <div className="w-full flex flex-col">
           <div className="flex items-center text-base font-medium">
             {isSkeleton ?
-              <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-3/4 h-4 rounded my-1.5" />
+              <div className="skeleton w-3/4 h-4 rounded my-1.5" />
               :
               feedType === 'fear_and_greed' ?
                 <><FaBitcoin size={24} className="text-yellow-500 mb-0.5 mr-2" /><span className="h-6">{getName(feedType)} Index</span></> :
@@ -128,7 +128,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
           </div>
           <div className="flex flex-row items-center text-gray-400 text-xs font-light mt-0.5">
             {isSkeleton ?
-              <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-2/3 h-3 rounded mb-3" />
+              <div className="skeleton w-2/3 h-3 rounded mb-3" />
               :
               feedType === 'fear_and_greed' ?
                 <><HiOutlineRefresh size={14} className="mb-1 mr-1" /><span className="h-5">{moment(data.CreatedAt * 1000).fromNow()} ({moment(data.CreatedAt * 1000).format('h:[00] A')})</span></> :
@@ -143,23 +143,23 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                 {feedType === 'fear_and_greed' ?
                   <>
                     <div className="flex items-center">
-                      <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-3/5 h-4 rounded" />
+                      <div className="skeleton w-3/5 h-4 rounded" />
                       <span className="ml-auto">
-                        <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-6 h-6 rounded-full" />
+                        <div className="skeleton w-6 h-6 rounded-full" />
                       </span>
                     </div>
-                    <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-5/6 h-3.5 rounded" />
+                    <div className="skeleton w-5/6 h-3.5 rounded" />
                   </> :
                 feedType === 'gas' ?
                   <>
-                    <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-5/6 h-3 rounded" />
+                    <div className="skeleton w-5/6 h-3 rounded" />
                     <div className="flex items-center py-2">
                       {[...Array(3).keys()].map(i => (
                         <div key={i} className="w-1/3 flex flex-col items-center justify-center">
                           <div className="h-6 mb-2">
-                            <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-6 h-6 rounded-full" />
+                            <div className="skeleton w-6 h-6 rounded-full" />
                           </div>
-                          <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-3/4 h-3 rounded" />
+                          <div className="skeleton w-3/4 h-3 rounded" />
                         </div>
                       ))}
                     </div>
@@ -169,11 +169,11 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                     <div className="w-full flex items-center mt-1">
                       <div className="w-full flex items-center font-semibold">
                         <div className="w-1/2 flex items-center mr-2">
-                          <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-8 h-8 rounded-full mr-2" />
-                          <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-1/3 h-3.5 rounded" />
+                          <div className="skeleton w-8 h-8 rounded mr-2" />
+                          <div className="skeleton w-1/3 h-3.5 rounded" />
                         </div>
                         <div className="w-1/2 flex items-center ml-auto">
-                          <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-1/2 h-4 rounded ml-auto" />
+                          <div className="skeleton w-1/2 h-4 rounded ml-auto" />
                         </div>
                       </div>
                     </div>
@@ -181,9 +181,9 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                       {[...Array(3).keys()].map(i => (
                         <div key={i} className="w-1/3 flex flex-col items-center justify-center">
                           <div className="h-6 mb-2">
-                            <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-6 h-6 rounded-full" />
+                            <div className="skeleton w-6 h-6 rounded" />
                           </div>
-                          <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-3/4 h-3 rounded" />
+                          <div className="skeleton w-3/4 h-3 rounded" />
                         </div>
                       ))}
                     </div>
@@ -194,17 +194,17 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                       <div key={i} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < 3 - 1 ? 'border-b border-gray-100 pb-4' : ''}`}>
                         <div className="flex items-center font-semibold">
                           <div className="w-1/2 flex items-center mr-2">
-                            <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-8 h-8 rounded-full mr-2" />
-                            <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-1/3 h-3.5 rounded" />
+                            <div className="skeleton w-8 h-8 rounded mr-2" />
+                            <div className="skeleton w-1/3 h-3.5 rounded" />
                           </div>
                           <div className="w-1/2 flex items-center ml-auto">
-                            <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-1/2 h-4 rounded ml-auto" />
+                            <div className="skeleton w-1/2 h-4 rounded ml-auto" />
                           </div>
                         </div>
                         <div className="flex items-center mt-1">
-                          <div className="w-1/2 bg-gray-100 dark:bg-gray-800 animate-pulse w-2/5 h-3 rounded mr-2" />
+                          <div className="w-1/2 skeleton w-2/5 h-3 rounded mr-2" />
                           <div className="w-1/2 flex items-center ml-auto">
-                            <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-2/5 h-3 rounded ml-auto" />
+                            <div className="skeleton w-2/5 h-3 rounded ml-auto" />
                           </div>
                         </div>
                       </div>
@@ -212,22 +212,22 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                   ['_bitcoin'].findIndex(market_type => feedType.endsWith(market_type)) > -1 ?
                     <>
                       <div className="flex items-start mb-4">
-                        <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-1/2 h-6 rounded" />
+                        <div className="skeleton w-1/2 h-6 rounded" />
                         <span className="w-1/2 flex items-start">
-                          <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-1/3 h-4 rounded ml-auto" />
+                          <div className="skeleton w-1/3 h-4 rounded ml-auto" />
                         </span>
                       </div>
                       <div className="w-full flex flex-col">
-                        <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-2/5 h-3 rounded" />
-                        <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-1/2 h-3 rounded mt-2" />
+                        <div className="skeleton w-2/5 h-3 rounded" />
+                        <div className="skeleton w-1/2 h-3 rounded mt-2" />
                       </div>
                     </>
                     : null
                   :
                   <>
-                    <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-full h-3.5 rounded" />
-                    <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-full h-3.5 rounded" />
-                    <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-3/4 h-3.5 rounded" />
+                    <div className="skeleton w-full h-3.5 rounded" />
+                    <div className="skeleton w-full h-3.5 rounded" />
+                    <div className="skeleton w-3/4 h-3.5 rounded" />
                   </>
                 }
               </div>
@@ -268,7 +268,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                           <img
                             src={fromExchangeData.large}
                             alt=""
-                            className="w-6 h-6 rounded-full"
+                            className="w-6 h-6 rounded"
                           />
                           :
                           <BsQuestionSquare size={20} className={`${txData.from_url ? '' : 'text-gray-300 dark:text-gray-500'}`} />
@@ -285,7 +285,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                           <img
                             src={toExchangeData.large}
                             alt=""
-                            className="w-6 h-6 rounded-full"
+                            className="w-6 h-6 rounded"
                           />
                           :
                           <BsQuestionSquare size={20} className={`${txData.to_url ? '' : 'text-gray-300 dark:text-gray-500'}`} />
@@ -303,7 +303,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                             <img
                               src={coinData.image || coinData.large || coinData.thumb}
                               alt=""
-                              className="w-8 h-8 rounded-full mr-2"
+                              className="w-8 h-8 rounded mr-2"
                             />
                           )}
                           <span className="text-sm font-semibold">{txData.symbol && txData.symbol.toUpperCase()}</span>
@@ -374,7 +374,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                           <img
                             src={coinData.image || coinData.large || coinData.thumb}
                             alt=""
-                            className="w-8 h-8 rounded-full mr-2"
+                            className="w-8 h-8 rounded mr-2"
                           />
                           <span className="text-base font-semibold">{coinData.name}</span>
                         </div>
@@ -398,7 +398,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                             <img
                               src={coinData.image || coinData.large || coinData.thumb}
                               alt=""
-                              className="w-6 h-6 rounded-full mr-2"
+                              className="w-6 h-6 rounded mr-2"
                             />
                             <span className={`${data.SortKey.endsWith('_trending') ? 'font-extrabold' : ''}`}>{coinData.symbol && coinData.symbol.toUpperCase()}</span>
                           </div>
@@ -437,7 +437,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
           </div>
           <div className="flex flex-wrap text-gray-400 text-sm font-light mt-2">
             {isSkeleton ?
-              <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-2/3 h-3 rounded mt-3 mb-1.5" />
+              <div className="skeleton w-2/3 h-3 rounded mt-3 mb-1.5" />
               :
               ['fear_and_greed', 'gas'].includes(feedType) ?
                 <><span className="h-6 mr-1">via</span><a href={json.url} target="_blank" rel="noopener noreferrer" className="font-semibold">{json.source_name}</a></> :

@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import AllCrypto from './all-crypto'
 import { FiSearch } from 'react-icons/fi'
-import { allCrypto, allCategories, trendingSearch } from '../../lib/api/coingecko'
-import { ALL_CRYPTO_DATA, TRENDING_DATA } from '../../reducers/types'
+import { allCrypto, allCategories, trendingSearch, exchangeRates } from '../../lib/api/coingecko'
+import { ALL_CRYPTO_DATA, TRENDING_DATA, EXCHANGE_RATES_DATA } from '../../reducers/types'
 
 export default function Search() {
   const dispatch = useDispatch()
@@ -80,6 +80,24 @@ export default function Search() {
     getTrendingSearch()
 
     const interval = setInterval(() => getTrendingSearch(), 5 * 60 * 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    const getExchangeRates = async () => {
+      const response = await exchangeRates()
+
+      if (response) {
+        dispatch({
+          type: EXCHANGE_RATES_DATA,
+          value: response.rates
+        })
+      }
+    }
+
+    getExchangeRates()
+
+    const interval = setInterval(() => getExchangeRates(), 5 * 60 * 1000)
     return () => clearInterval(interval)
   }, [])
 

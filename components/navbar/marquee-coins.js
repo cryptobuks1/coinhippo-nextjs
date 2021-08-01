@@ -37,12 +37,12 @@ const MarqueeCoins = ({ data }) => {
                           <img
                             src={item.image}
                             alt=""
-                            className="w-4 h-4 rounded-full mr-1"
+                            className="w-4 h-4 rounded mr-1"
                           />
                           <span>{item.symbol && item.symbol.toUpperCase()}{item.vs_currency !== vs_currency && (<span className="font-light">{item.vs_currency.toUpperCase()}</span>)}</span>
                         </div>
                         <div className={`${item.price_change_percentage_24h < 0 ? 'text-red-500 dark:text-red-400' : item.price_change_percentage_24h > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} font-medium ml-auto`}>
-                          {currency.symbol}{numberFormat(item.current_price, '0,0.00000000')}{!currency.symbol && <> {currency.id.toUpperCase()}</>}
+                          {currency.symbol}{numberFormat(item.current_price, '0,0.00000000')}{!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}
                         </div>
                       </div>
                       <div className={`w-full flex items-center font-normal ml-0.5 px-2 ${index && index % data.length === 0 ? 'pl-4 md:pl-8 pr-2 md:pr-3' : 'md:px-3'}`} style={{ fontSize: '.65rem' }}>

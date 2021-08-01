@@ -1,4 +1,6 @@
-.animate-pulse {
+.skeleton {
+  @apply bg-gray-100 dark:bg-gray-800;
+
   position: relative;
   overflow: hidden;
   background-color: #e2e8f0;

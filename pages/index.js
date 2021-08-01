@@ -48,7 +48,7 @@ export default function Index() {
 
   return (
     <>
-      <SectionTitle title="Overview" subtitle="Dashboard" />
+      <SectionTitle title="Overview" subtitle="Dashboard" className="mx-1" />
       <Global />
       <div className="w-full grid grid-flow-row grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
         <FearAndGreed data={fearAndGreedData} />

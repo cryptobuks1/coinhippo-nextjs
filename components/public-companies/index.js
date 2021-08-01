@@ -48,7 +48,7 @@ const PublicCompanies = ({ navigationData, navigationItemData }) => {
     router.push(navigationData.items[0].url)
   }
 
-  return treasuryData && coin_id === treasuryData.coin_id && (
+  return (!treasuryData || coin_id === treasuryData.coin_id) && (
     <div className="mx-1">
       <Summary data={treasuryData} navigationItemData={navigationItemData} />
       <Datatable
@@ -57,63 +57,123 @@ const PublicCompanies = ({ navigationData, navigationItemData }) => {
             Header: '#',
             accessor: 'i',
             Cell: props => (
-              <span className="text-gray-600 dark:text-gray-400">{props.value + 1}</span>
+              <div className="flex items-center justify-center text-gray-600 dark:text-gray-400">
+                {!props.row.original.skeleton ?
+                  props.value + 1
+                  :
+                  <div className="skeleton w-4 h-3 rounded" />
+                }
+              </div>
             ),
+            headerClassName: 'justify-center',
           },
           {
             Header: 'Company',
             accessor: 'name',
             Cell: props => (
               <div className="flex flex-col font-semibold">
-                {props.value}
-                <span className="text-gray-400 text-xs font-normal">
-                  <Badge size="sm" rounded color="bg-blue-500 text-white mr-1.5">{props.row.original.country}</Badge>
-                  {props.row.original.symbol}
-                </span>
+                {!props.row.original.skeleton ?
+                  <>
+                    {props.value}
+                    <span className="text-gray-400 text-xs font-normal">
+                      <Badge size="sm" rounded color="bg-blue-500 text-gray-100 dark:bg-blue-900 mr-1.5">{props.row.original.country}</Badge>
+                      {props.row.original.symbol}
+                    </span>
+                  </>
+                  :
+                  <div className="flex flex-col">
+                    <div className="skeleton w-24 h-4 rounded" />
+                    <span className="flex items-center mt-1">
+                      <div className="skeleton w-8 h-3.5 rounded mr-1.5" />
+                      <div className="skeleton w-16 h-3.5 rounded" />
+                    </span>
+                  </div>
+                }
               </div>
             ),
           },
           {
             Header: 'Total Holdings',
             accessor: 'total_holdings',
+            sortType: 'number',
             Cell: props => (
-              <span className="font-bold text-indigo-700 dark:text-indigo-300">
-                {numberFormat(props.value, '0,0')}{navigationItemData && navigationItemData.symbol && <> {navigationItemData.symbol.toUpperCase()}</>}
-              </span>
+              <div className="text-indigo-700 dark:text-indigo-300 font-bold text-right mr-2 lg:mr-4 xl:mr-8">
+                {!props.row.original.skeleton ?
+                  <>
+                    {numberFormat(props.value, '0,0')}
+                    {navigationItemData && navigationItemData.symbol && (<>&nbsp;{navigationItemData.symbol.toUpperCase()}</>)}
+                  </>
+                  :
+                  <div className="skeleton w-16 h-4 rounded ml-auto" />
+                }
+              </div>
             ),
+            headerClassName: 'justify-end text-right mr-2 lg:mr-4 xl:mr-8',
           },
           {
             Header: 'Entry Value (USD)',
             accessor: 'total_entry_value_usd',
+            sortType: 'number',
             Cell: props => (
-              <div className="flex flex-col font-medium">
-                {props.value ? `$${numberFormat(props.value, '0,0')}` : '-'}
-                <span className="text-gray-400 text-xs font-normal">{props.value && props.row.original.total_holdings ? `~ $${numberFormat(props.value / props.row.original.total_holdings, '0,0')}${navigationItemData && navigationItemData.symbol ? ` / ${navigationItemData.symbol.toUpperCase()}` : ''}` : '-'}</span>
+              <div className="flex flex-col font-medium text-right mr-2 lg:mr-4 xl:mr-8">
+                {!props.row.original.skeleton ?
+                  <>
+                    {props.value ? `$${numberFormat(props.value, '0,0')}` : '-'}
+                    <span className="text-gray-400 text-xs font-normal">{props.value && props.row.original.total_holdings ? `~ $${numberFormat(props.value / props.row.original.total_holdings, '0,0')}${navigationItemData && navigationItemData.symbol ? ` / ${navigationItemData.symbol.toUpperCase()}` : ''}` : '-'}</span>
+                  </>
+                  :
+                  <>
+                    <div className="skeleton w-24 h-3.5 rounded ml-auto" />
+                    <div className="skeleton w-20 h-3 rounded mt-1.5 ml-auto" />
+                  </>
+                }
               </div>
             ),
+            headerClassName: 'justify-end text-right mr-2 lg:mr-4 xl:mr-8',
           },
           {
             Header: 'Current Value (USD)',
             accessor: 'total_current_value_usd',
+            sortType: 'number',
             Cell: props => (
-              <div className={`flex flex-col font-semibold ${props.value && props.row.original.total_entry_value_usd ? props.value > props.row.original.total_entry_value_usd ? 'text-green-500' : props.value < props.row.original.total_entry_value_usd ? 'text-red-500' : 'text-gray-400' : ''}`}>
-                {props.value ? `$${numberFormat(props.value, '0,0')}` : '-'}
-                <span className="text-xs font-normal">{props.value && props.row.original.total_entry_value_usd ? `${numberFormat((props.value - props.row.original.total_entry_value_usd) * 100 / props.row.original.total_entry_value_usd, '+0,0.00')}%` : '-'}</span>
+              <div className={`flex flex-col ${props.value && props.row.original.total_entry_value_usd ? props.value > props.row.original.total_entry_value_usd ? 'text-green-500' : props.value < props.row.original.total_entry_value_usd ? 'text-red-500' : 'text-gray-400' : ''} font-semibold text-right mr-2 lg:mr-4 xl:mr-8`}>
+                {!props.row.original.skeleton ?
+                  <>
+                    {props.value ? `$${numberFormat(props.value, '0,0')}` : '-'}
+                    <span className="text-xs font-normal">{props.value && props.row.original.total_entry_value_usd ? `${numberFormat((props.value - props.row.original.total_entry_value_usd) * 100 / props.row.original.total_entry_value_usd, '+0,0.00')}%` : '-'}</span>
+                  </>
+                  :
+                  <>
+                    <div className="skeleton w-24 h-3.5 rounded ml-auto" />
+                    <div className="skeleton w-12 h-3 rounded mt-1.5 ml-auto" />
+                  </>
+                }
               </div>
             ),
+            headerClassName: 'justify-end text-right mr-2 lg:mr-4 xl:mr-8',
           },
           {
             Header: '% of Total Supply',
             accessor: 'percentage_of_total_supply',
+            sortType: 'number',
             Cell: props => (
               <div className="flex flex-col font-medium">
-                <span>{props.value ? `${numberFormat(props.value, '0,0.000')}%` : '-'}</span>
-                <ProgressBar width={props.value * 100 / (treasuryData.market_cap_dominance || _.sumBy(treasuryData.companies, 'percentage_of_total_supply'))} color="bg-yellow-500" className="h-1" />
+                {!props.row.original.skeleton ?
+                  <>
+                    <span>{props.value ? `${numberFormat(props.value, '0,0.000')}%` : '-'}</span>
+                    <ProgressBar width={props.value * 100 / (treasuryData.market_cap_dominance || _.sumBy(treasuryData.companies, 'percentage_of_total_supply'))} color="bg-yellow-500" className="h-1" />
+                  </>
+                  :
+                  <>
+                    <div className="skeleton w-10 h-3 rounded" />
+                    <div className={`skeleton w-${Math.floor((10 - props.row.original.i) / 3)}/12 h-1 rounded mt-1`} />
+                  </>
+                }
               </div>
             ),
           }
         ]}
-        data={treasuryData.companies.map((company, i) => { return { ...company, i } })}
+        data={treasuryData ? treasuryData.companies.map((company, i) => { return { ...company, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
         className="striped"
       />
     </div>

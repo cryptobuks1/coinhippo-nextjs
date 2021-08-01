@@ -1,23 +1,23 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import PublicCompanies from '../../components/public-companies'
+import Exchanges from '../../components/exchanges'
 import SectionTitle from '../../components/section-title'
 import { navigation } from '../../lib/menus'
 import { getName } from '../../lib/utils'
 
-export default function PublicCompaniesCoin() {
+export default function ExchangesIndex() {
   const router = useRouter()
   const { query, asPath } = { ...router }
-  const { coin_id } = { ...query }
+  const { exchange_type } = { ...query }
   const _asPath = asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath
 
   let navigationData, navigationItemData
 
   navigation.forEach(nav => {
-    if (nav.url === '/public-companies') navigationData = nav
+    if (nav.url === '/exchanges') navigationData = nav
     else if (nav.items) {
       nav.items.forEach(nav_1 => {
-        if (nav_1.url === '/public-companies') navigationData = nav_1
+        if (nav_1.url === '/exchanges') navigationData = nav_1
       })
     }
 
@@ -37,8 +37,8 @@ export default function PublicCompaniesCoin() {
   return (
     <>
       <SectionTitle
-        title="Public Companies"
-        subtitle={navigationItemData && navigationItemData.title ? navigationItemData.title : `${getName(coin_id)} Treasury`}
+        title="Exchanges by trading volume"
+        subtitle={navigationItemData && navigationItemData.title ? navigationItemData.title : getName(exchange_type)}
         right={navigationData && navigationData.items && (
           <div className="flex flex-wrap items-center ml-0 sm:ml-4 pr-1">
             {navigationData.items.map((item, i) => (
@@ -59,7 +59,7 @@ export default function PublicCompaniesCoin() {
         )}
         className="flex-col sm:flex-row items-start sm:items-center mx-1"
       />
-      <PublicCompanies navigationData={navigationData} navigationItemData={navigationItemData} />
+      <Exchanges navigationData={navigationData} navigationItemData={navigationItemData} />
     </>
   )
 }
