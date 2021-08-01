@@ -37,6 +37,8 @@
   }
   thead tr th {
     position: sticky;
+    position: -webkit-sticky;
+    top: 0;
   }
 }
 
@@ -45,6 +47,8 @@
     thead tr th {
       @apply border-gray-200;
       @apply text-gray-500;
+      background: color(theme('colors.gray.50') tint(3%));
+      border-color: color(theme('colors.gray.50') tint(3%));
     }
     tbody tr td {
       border-color: color(#fff shade(6%));

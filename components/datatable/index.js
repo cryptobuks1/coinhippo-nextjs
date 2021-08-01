@@ -62,33 +62,39 @@ export default function Datatable({ columns, data, rowSelectEnable, defaultPageS
     }
   )
 
+  const renderHead = () => {
+    return (
+      <thead>
+        {headerGroups.map(headerGroup => (
+          <tr { ...headerGroup.getHeaderGroupProps() }>
+            {headerGroup.headers.map(column => (
+              <th { ...column.getHeaderProps(column.getSortByToggleProps()) }>
+                <div className="flex flex-row items-center justify-start">
+                  <span>{column.render('Header')}</span>
+                  <span className="ml-auto">
+                    {column.isSorted ? (
+                      column.isSortedDesc ? (
+                        <FiChevronDown className="stroke-current text-2xs" />
+                      ) : (
+                        <FiChevronUp className="stroke-current text-2xs" />
+                      )
+                    ) : (
+                      ''
+                    )}
+                  </span>
+                </div>
+              </th>
+            ))}
+          </tr>
+        ))}
+      </thead>
+    )
+  }
+
   return (
     <>
       <table { ...getTableProps() } className={`table ${className}`}>
-        <thead>
-          {headerGroups.map(headerGroup => (
-            <tr { ...headerGroup.getHeaderGroupProps() }>
-              {headerGroup.headers.map(column => (
-                <th { ...column.getHeaderProps(column.getSortByToggleProps()) } className="dark:bg-transparent">
-                  <div className="flex flex-row items-center justify-start">
-                    <span>{column.render('Header')}</span>
-                    <span className="ml-auto">
-                      {column.isSorted ? (
-                        column.isSortedDesc ? (
-                          <FiChevronDown className="stroke-current text-2xs" />
-                        ) : (
-                          <FiChevronUp className="stroke-current text-2xs" />
-                        )
-                      ) : (
-                        ''
-                      )}
-                    </span>
-                  </div>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
+        {renderHead()}
         <tbody { ...getTableBodyProps() }>
           {page.map((row, i) => {
             prepareRow(row)

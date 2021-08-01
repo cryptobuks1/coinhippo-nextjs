@@ -78,7 +78,7 @@ export default function DropdownGas() {
           className={`bg-${color} w-5 h-5 absolute leading-none rounded-full text-white text-2xs font-semibold inline-flex items-center justify-center`}
           style={{ top: 4, right: -2 }}
         >
-          {gas_data.ProposeGasPrice}
+          {typeof gas_data.ProposeGasPrice === 'number' ? gas_data.ProposeGasPrice : '?'}
         </span>
       </button>
       <div

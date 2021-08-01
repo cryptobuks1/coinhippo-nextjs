@@ -10,7 +10,7 @@ const Gas = ({ data }) => {
         <span className="ml-auto" />
         <div className="flex items-center text-xs">
           <span className="text-gray-400 font-light mr-1">Block:</span>
-          <a href={`https://etherscan.io/block/${LastBlock}`} target="_blank" rel="noopener noreferrer" className="text-green-500">{LastBlock}</a>
+          <a href={`https://etherscan.io${typeof LastBlock === 'number' ? `/block/${LastBlock}` : ''}`} target="_blank" rel="noopener noreferrer" className="text-green-500">{typeof LastBlock === 'number' ? LastBlock : '?'}</a>
         </div>
       </div>
       <div className="flex flex-wrap text-center">
@@ -19,7 +19,7 @@ const Gas = ({ data }) => {
             key={i}
             className="dropdown-item w-1/3 h-20 flex flex-col items-center justify-center space-y-1"
           >
-            <span className="text-sm font-semibold">{item} Gwei</span>
+            <span className="text-sm font-semibold">{typeof item === 'number' ? item : '?'} Gwei</span>
             <span className="text-gray-400 text-xs font-light">{i === 0 ? 'Slow' : i === 1 ? 'Standard' : 'Fast'}</span>
           </div>
         ))}

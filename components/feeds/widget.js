@@ -92,7 +92,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
               <div className="bg-gray-100 dark:bg-gray-800 animate-pulse w-3/4 h-4 rounded my-1.5" />
               :
               feedType === 'fear_and_greed' ?
-                <><FaBitcoin size={24} className="text-yellow-500 mb-0.5 mr-2" /><span className="h-6">Fear & Greed Index</span></> :
+                <><FaBitcoin size={24} className="text-yellow-500 mb-0.5 mr-2" /><span className="h-6">{getName(feedType)} Index</span></> :
               feedType === 'gas' ?
                 <><FaGasPump size={18} className="text-gray-500 mr-3" /><span className="h-6">ETH Gas is {json.avgGas <= json.gas_gwei_threshold * 2 / 3 ? 'very low' : 'not high'}</span></> :
               feedType === 'news' ?
