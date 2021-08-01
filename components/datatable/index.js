@@ -1,4 +1,4 @@
-import { useEffect, forwardRef, useRef } from 'react'
+import { useState, useEffect, forwardRef, useRef } from 'react'
 import { PageWithText } from '../pagination'
 import { useTable, useSortBy, usePagination, useRowSelect } from 'react-table'
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi'
@@ -45,6 +45,7 @@ export default function Datatable({ columns, data, rowSelectEnable, defaultPageS
       data,
       initialState: { pageIndex: 0, pageSize: defaultPageSize || 10 },
       disableSortRemove: true,
+      stateReducer: (newState, action, prevState) => action.type.startsWith('reset') ? prevState : newState,
     },
     useSortBy,
     usePagination,
