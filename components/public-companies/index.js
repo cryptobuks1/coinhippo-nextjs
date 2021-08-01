@@ -64,7 +64,7 @@ const PublicCompanies = ({ navigationData, navigationItemData }) => {
             Cell: props => (
               <div className="flex items-center justify-center text-gray-600 dark:text-gray-400">
                 {!props.row.original.skeleton ?
-                  props.value + 1
+                  numberFormat(props.value + 1, '0,0')
                   :
                   <div className="skeleton w-4 h-3 rounded" />
                 }

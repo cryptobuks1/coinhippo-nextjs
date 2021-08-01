@@ -72,7 +72,7 @@ const FearAndGreed = ({ data }) => {
       </span>}
       description={<div className="mt-4 mb-2">
         {dayData ?
-          <div className="my-1.5 mx-4 md:mx-8 lg:mx-0 xl:mx-4">
+          <div className="my-1.5 mx-4 md:mx-8 lg:mx-8 xl:mx-4">
             <div className="flex items-center">
               <Circle size="lg" progress={dayData.value} color={progressColor} />
               <div className={`flex flex-col items-end text-${color} ml-auto`}>
@@ -95,7 +95,7 @@ const FearAndGreed = ({ data }) => {
             </div>
           </div>
           :
-          <div className="my-1.5 mx-4 md:mx-8 lg:mx-0 xl:mx-8">
+          <div className="my-1.5 mx-4 md:mx-8 lg:mx-8 xl:mx-8">
             <div className="flex items-center">
               <Circle size="lg" progress={0} color="transparent" />
               <div className={`flex flex-col items-end ml-auto`}>

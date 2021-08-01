@@ -7,7 +7,7 @@ import Datatable from '../../components/datatable'
 import { Badge } from '../../components/badges'
 import { ProgressBar } from '../../components/progress-bars'
 import _ from 'lodash'
-import { exchanges } from '../../lib/api/coingecko'
+import { exchanges, derivativesExchanges } from '../../lib/api/coingecko'
 import { navigation, currencies } from '../../lib/menus'
 import useMountedRef from '../../lib/mountedRef'
 import { getName, numberFormat } from '../../lib/utils'
@@ -35,19 +35,21 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
   useEffect(() => {
     const getExchanges = async () => {
       let data = null
+
       for (let i = 0; i < all_crypto_data && all_crypto_data.exchanges ? Math.ceil(all_crypto_data.exchanges.length / per_page) : 10; i++) {
-        const response = await exchanges({ per_page, page: i + 1 })
+        const response = await (exchange_type === 'derivatives' ? derivativesExchanges({ per_page, page: i + 1 }) : exchanges({ per_page, page: i + 1 }))
 
         if (Array.isArray(response)) {
           data = (
             _.orderBy(
               _.uniqBy(_.concat(data || [], response), 'id')
-              .filter(exchangeData => !exchange_type || exchangeData.exchange_type === exchange_type || (exchangeData.exchange_type === 'decentralized' && exchange_type === 'dex'))
+              .filter(exchangeData => !exchange_type || exchangeData.exchange_type === exchange_type || (exchangeData.exchange_type === 'decentralized' && exchange_type === 'dex') || exchange_type === 'derivatives')
               .map(exchangeData => {
                 return {
                   ...exchangeData,
                   trade_volume_24h_btc: typeof exchangeData.trade_volume_24h_btc === 'string' ? Number(exchangeData.trade_volume_24h_btc) : typeof exchangeData.trade_volume_24h_btc === 'number' ? exchangeData.trade_volume_24h_btc : -1,
                   trust_score: typeof exchangeData.trust_score === 'string' ? Number(exchangeData.trust_score) : typeof exchangeData.trust_score === 'number' ? exchangeData.trust_score : -1,
+                  open_interest_btc: typeof exchangeData.open_interest_btc === 'string' ? Number(exchangeData.open_interest_btc) : typeof exchangeData.open_interest_btc === 'number' ? exchangeData.open_interest_btc : -1,
                 }
               })
               , [exchange_type ? 'trade_volume_24h_btc' : 'trust_score'], ['desc']
@@ -102,7 +104,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
             Cell: props => (
               <div className="flex items-center justify-center text-gray-600 dark:text-gray-400">
                 {!props.row.original.skeleton ?
-                  props.value + 1
+                  numberFormat(props.value + 1, '0,0')
                   :
                   <div className="skeleton w-4 h-3 rounded" />
                 }
@@ -151,6 +153,43 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
                   </span>
                 </div>
             ),
+          },
+          {
+            Header: '24h Open Interest',
+            accessor: 'open_interest_btc',
+            sortType: 'number',
+            Cell: props => (
+              <div className="flex flex-col font-semibold text-right mr-2 lg:mr-4 xl:mr-8">
+                {!props.row.original.skeleton ?
+                  <>
+                    {props.value > -1 ?
+                      <>
+                        {(exchange_rates_data ? currency : currencyBTC).symbol}
+                        {numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data.btc.value : 1), `0,0${props.value < 1 ? '.000' : ''}`)}
+                        {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<>&nbsp;{(exchange_rates_data ? currency : currencyBTC).id.toUpperCase()}</>)}
+                      </>
+                      :
+                      '-'
+                    }
+                    {exchange_rates_data && vs_currency !== 'btc' && (
+                      <span className="text-gray-400 text-xs font-medium">
+                        {props.value > -1 ?
+                          <>{numberFormat(props.value, `0,0${props.value < 1 ? '.000' : ''}`)}&nbsp;BTC</>
+                          :
+                          '-'
+                        }
+                      </span>
+                    )}
+                  </>
+                  :
+                  <>
+                    <div className="skeleton w-28 h-4 rounded ml-auto" />
+                    <div className="skeleton w-16 h-3 rounded mt-2 ml-auto" />
+                  </>
+                }
+              </div>
+            ),
+            headerClassName: 'justify-end text-right mr-2 lg:mr-4 xl:mr-8',
           },
           {
             Header: '24h Volume',
@@ -210,6 +249,34 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
             ),
           },
           {
+            Header: 'Perpetual Pairs',
+            accessor: 'number_of_perpetual_pairs',
+            Cell: props => (
+              <div className="text-gray-700 dark:text-gray-300 font-medium text-right mr-2 lg:mr-4 xl:mr-8">
+                {!props.row.original.skeleton ?
+                  numberFormat(props.value, '0,0')
+                  :
+                  <div className="skeleton w-4 h-3 rounded ml-auto" />
+                }
+              </div>
+            ),
+            headerClassName: 'justify-end text-right mr-2 lg:mr-4 xl:mr-8',
+          },
+          {
+            Header: 'Futures Pairs',
+            accessor: 'number_of_futures_pairs',
+            Cell: props => (
+              <div className="text-gray-700 dark:text-gray-300 font-medium text-right mr-2 lg:mr-4 xl:mr-8">
+                {!props.row.original.skeleton ?
+                  numberFormat(props.value, '0,0')
+                  :
+                  <div className="skeleton w-4 h-3 rounded ml-auto" />
+                }
+              </div>
+            ),
+            headerClassName: 'justify-end text-right mr-2 lg:mr-4 xl:mr-8',
+          },
+          {
             Header: 'Confidence',
             accessor: 'trust_score',
             sortType: 'number',
@@ -262,7 +329,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
             ),
             headerClassName: 'justify-end text-right mr-2 lg:mr-4 xl:mr-8',
           },
-        ]}
+        ].filter(column => !((exchange_type === 'derivatives' ? ['trust_score'] : ['open_interest_btc', 'number_of_perpetual_pairs', 'number_of_futures_pairs']).includes(column.accessor)))}
         data={exchangesData ? exchangesData.data.map((exchangeData, i) => { return { ...exchangeData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
         defaultPageSize={pathname.endsWith('/[exchange_type]') ? 50 : 100}
         className="striped"
