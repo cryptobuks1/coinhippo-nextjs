@@ -60,12 +60,12 @@ export default function TopMover() {
           <IoTrendingDown size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
         }
       </span>}
-      description={<div className="mt-1.5">
+      description={<div className="mt-3.5">
         {coinsData ?
           _.slice(_.orderBy(coinsData, ['price_change_percentage_24h'], [sortDirection]), 0, 5).map((coinData, i) => {
             const currency = currencies[currencies.findIndex(c => c.id === coinData.vs_currency)] || currencies[0]
             return (
-              <div key={i} className="my-0.5">
+              <div key={i} className={`mt-${i > 0 ? 2 : 0}`}>
                 <div className="flex items-center text-sm">
                   <Link href={`/coin${coinData ? `/${coinData.id}` : 's'}`}>
                     <a className="flex items-center mr-2">
@@ -97,17 +97,17 @@ export default function TopMover() {
           })
           :
           [...Array(5).keys()].map(i => (
-            <div key={i} className="my-0.5">
+            <div key={i} className={`mt-${i > 0 ? 3 : 0}`}>
               <div className="flex items-center">
-                <div className="skeleton w-5 h-5 rounded mr-1" />
-                <div className="skeleton w-1/4 h-3 rounded" />
+                <div className="skeleton w-5 h-5 rounded mr-1.5" />
+                <div className="skeleton w-28 h-3.5 rounded" />
                 <span className="ml-auto">
                   <div className="skeleton w-12 h-3.5 rounded" />
                 </span>
               </div>
-              <div className="flex items-center my-1 ml-0.5">
-                <div className="skeleton w-4 h-2.5 rounded mr-1" />
-                <div className="skeleton w-2/5 h-2.5 rounded" />
+              <div className="flex items-center mt-1 ml-0.5">
+                <div className="skeleton w-4 h-3 rounded mr-1.5" />
+                <div className="skeleton w-20 h-3 rounded" />
                 <span className="ml-auto">
                   <div className="skeleton w-8 h-3 rounded" />
                 </span>

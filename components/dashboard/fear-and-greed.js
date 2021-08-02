@@ -70,7 +70,7 @@ const FearAndGreed = ({ data }) => {
         Fear & Greed Index
         <VscDashboard size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
       </span>}
-      description={<div className="mt-4 mb-2">
+      description={<div className="mt-9 mb-6">
         {dayData ?
           <div className="my-1.5 mx-4 md:mx-8 lg:mx-8 xl:mx-4">
             <div className="flex items-center">
