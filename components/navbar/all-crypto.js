@@ -47,7 +47,7 @@ const AllCrypto = ({ data, trendingData, inputSearch, handleDropdownClick }) => 
                 <span className="w-full flex items-center text-xs">
                   <span className="font-semibold">
                     {item.name}
-                    {item.symbol && (<span className="uppercase text-gray-400 font-light ml-1">{item.symbol}</span>)}
+                    {item.symbol && (<span className="uppercase text-gray-400 font-normal ml-1">{item.symbol}</span>)}
                   </span>
                   <span className="uppercase text-gray-400 font-semibold ml-auto">{typeof item.market_cap_rank === 'number' ? `#${item.market_cap_rank}` : item.market_type}</span>
                 </span>

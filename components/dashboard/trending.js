@@ -51,7 +51,7 @@ export default function Trending() {
           _.slice(coinsData, 0, 5).map((coinData, i) => {
             const currency = currencies[currencies.findIndex(c => c.id === coinData.vs_currency)] || currencies[0]
             return (
-              <div key={i} className={`mt-${i > 0 ? 2 : 0}`}>
+              <div key={i} className={`${i < 2 ? `bg-yellow-${i < 1 ? 100 : 50} dark:bg-gray-${i < 1 ? 700 : 800} rounded pt-1 px-1` : ''} mt-${i > 0 ? i < 2 ? 1 : 2 : 0}`}>
                 <div className="flex items-center text-sm">
                   <Link href={`/coin${coinData ? `/${coinData.id}` : 's'}`}>
                     <a className="flex items-center mr-2">
@@ -71,7 +71,7 @@ export default function Trending() {
                 <div className="w-full flex items-center font-normal ml-0.5" style={{ fontSize: '.65rem' }}>
                   <div className="text-gray-600 dark:text-gray-400 mr-2">
                     <span className="text-gray-600 dark:text-gray-400 font-semibold mr-1">#{numberFormat(coinData.market_cap_rank, '0,0')}</span>
-                    <span className="text-gray-500 dark:text-gray-500 font-medium mr-1">MCap:</span>{currency.symbol}{numberFormat(coinData.market_cap, '0,0.00000000')}{!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}
+                    <span className="text-gray-500 dark:text-gray-300 font-medium mr-1">MCap:</span>{currency.symbol}{numberFormat(coinData.market_cap, '0,0.00000000')}{!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}
                   </div>
                   <div className={`flex items-center ${coinData.price_change_percentage_24h < 0 ? 'text-red-500 dark:text-red-400' : coinData.price_change_percentage_24h > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} ml-auto`}>
                     {numberFormat(coinData.price_change_percentage_24h / 100, '+0,0.00%')}
