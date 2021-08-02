@@ -81,7 +81,7 @@ const PublicCompanies = ({ navigationData, navigationItemData }) => {
                   <>
                     {props.value}
                     <span className="text-gray-400 text-xs font-normal">
-                      <Badge size="sm" rounded color="bg-blue-500 text-gray-100 dark:bg-blue-900 mr-1.5">{props.row.original.country}</Badge>
+                      <Badge size="sm" rounded color="bg-blue-500 text-gray-100 dark:bg-blue-700 mr-1.5">{props.row.original.country}</Badge>
                       {props.row.original.symbol}
                     </span>
                   </>

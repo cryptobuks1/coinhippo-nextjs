@@ -126,7 +126,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                 : null
             }
           </div>
-          <div className="flex flex-row items-center text-gray-400 text-xs font-light mt-0.5">
+          <div className="flex flex-row items-center text-gray-500 text-xs font-normal mt-0.5">
             {isSkeleton ?
               <div className="skeleton w-2/3 h-3 rounded mb-3" />
               :
@@ -191,7 +191,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                 feedType.startsWith('markets') ?
                   ['_ath', '_atl', '_marketcap', '_trending', '_defi', '_nfts', '_fomo', '_panic'].findIndex(market_type => feedType.endsWith(market_type)) > -1 ?
                     [...Array(3).keys()].map(i => (
-                      <div key={i} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < 3 - 1 ? 'border-b border-gray-100 pb-4' : ''}`}>
+                      <div key={i} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < 3 - 1 ? 'border-b border-gray-100 pb-3' : ''}`}>
                         <div className="flex items-center font-semibold">
                           <div className="w-1/2 flex items-center mr-2">
                             <div className="skeleton w-8 h-8 rounded mr-2" />
@@ -310,13 +310,13 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                         </div>
                         <div className="flex flex-col items-end ml-auto">
                           <div className="text-sm font-semibold">{numberFormat(txData.amount, '0,0')} {txData.symbol && txData.symbol.toUpperCase()}</div>
-                          <div className="text-xs font-light">${numberFormat(txData.amount_usd, '0,0')}</div>
+                          <div className="text-xs font-normal">${numberFormat(txData.amount_usd, '0,0')}</div>
                         </div>
                       </div>
                       <div className="flex items-start mt-3 mb-2">
                         {['burn', 'transfer'].includes(txData.transaction_type) && (
                           <div className="w-2/5 flex flex-col items-start">
-                            <span className="text-gray-400 dark:text-gray-300 text-xs font-light">From</span>
+                            <span className="text-gray-400 dark:text-gray-300 text-xs font-normal">From</span>
                             {txData.from_url ?
                               <a href={txData.from_url} target="_blank" rel="noopener noreferrer">
                                 {fromComponent}
@@ -351,7 +351,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                         </div>
                         {txData.transaction_type !== 'burn' && (
                           <div className="w-2/5 flex flex-col items-end">
-                            <span className="text-gray-400 dark:text-gray-300 text-xs font-light">To</span>
+                            <span className="text-gray-400 dark:text-gray-300 text-xs font-nomal">To</span>
                             {txData.to_url ?
                               <a href={txData.to_url} target="_blank" rel="noopener noreferrer" className="text-right">
                                 {toComponent}
@@ -380,7 +380,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                         </div>
                         <div className={`flex items-start text-${coinData.price_change_percentage_24h < 0 ? 'red' : coinData.price_change_percentage_24h > 0 ? 'green' : 'gray'}-500 text-3xl font-semibold my-2`}>
                           <span className="mr-2">${numberFormat(data.SortKey.endsWith('_ath') ? coinData.high_price : data.SortKey.endsWith('_atl') ? coinData.low_price : coinData.current_price, '0,0.00000000')}</span>
-                          <span className="flex items-start text-sm font-light mt-0.5 ml-auto">
+                          <span className="flex items-start text-sm font-normal mt-0.5 ml-auto">
                             {numberFormat(coinData.price_change_percentage_24h / 100, '+0,0.00%')}
                             {coinData.price_change_percentage_24h < 0 ? <FiArrowDown size={18} className="ml-0.5" /> : coinData.price_change_percentage_24h > 0 ? <FiArrowUp size={18} className="ml-0.5" /> : null}
                           </span>
@@ -392,7 +392,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                       </div>
                     )) :
                     json.map((coinData, i) => (
-                      <div key={coinData.id} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < json.length - 1 ? 'border-b border-gray-100 pb-4' : ''}`}>
+                      <div key={coinData.id} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < json.length - 1 ? 'border-b border-gray-100 pb-3' : ''}`}>
                         <div className="flex items-center text-sm font-semibold">
                           <div className="flex items-center mr-2">
                             <img
@@ -407,7 +407,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                             {coinData.price_change_percentage_24h < 0 ? <FiArrowDown size={16} className="mb-0.5 ml-0.5" /> : coinData.price_change_percentage_24h > 0 ? <FiArrowUp size={16} className="mb-0.5 ml-0.5" /> : null}
                           </div>
                         </div>
-                        <div className="flex items-center text-xs font-light mt-1">
+                        <div className="flex items-center text-xs font-normal mt-1">
                           <div className="text-gray-400 dark:text-gray-500 mr-2"><span className="text-gray-600 dark:text-gray-400 font-semibold mr-1.5">#{numberFormat(coinData.market_cap_rank, '0,0')}</span>{coinData.name}</div>
                           <div className={`text-${coinData.price_change_percentage_24h < 0 ? 'red' : coinData.price_change_percentage_24h > 0 ? 'green' : 'gray'}-500 ${data.SortKey.endsWith('_marketcap') ? 'font-extrabold' : ''} ml-auto`}>
                             {numberFormat(coinData.price_change_percentage_24h / 100, '+0,0.00%')}
@@ -420,7 +420,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                     <div key={coinData.id}>
                       <div className={`flex items-start text-${coinData.price_change_percentage_24h < 0 ? 'red' : coinData.price_change_percentage_24h > 0 ? 'green' : 'gray'}-500 text-3xl font-semibold my-2`}>
                         <span className="mr-2">${numberFormat(coinData.current_price, '0,0')}</span>
-                        <span className="flex items-start text-sm font-light mt-0.5 ml-auto">
+                        <span className="flex items-start text-sm font-normal mt-0.5 ml-auto">
                           {numberFormat(coinData.price_change_percentage_24h / 100, '+0,0.00%')}
                           {coinData.price_change_percentage_24h < 0 ? <FiArrowDown size={18} className="ml-0.5" /> : coinData.price_change_percentage_24h > 0 ? <FiArrowUp size={18} className="ml-0.5" /> : null}
                         </span>
@@ -435,7 +435,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                 : null
             }
           </div>
-          <div className="flex flex-wrap text-gray-400 text-sm font-light mt-2">
+          <div className="flex flex-wrap text-gray-400 text-sm font-normal mt-2">
             {isSkeleton ?
               <div className="skeleton w-2/3 h-3 rounded mt-3 mb-1.5" />
               :

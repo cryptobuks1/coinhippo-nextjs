@@ -132,7 +132,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
                     </span>
                     <span className="mt-1">
                       {props.row.original.country && (
-                        <Badge size="sm" rounded color="bg-blue-500 text-gray-100 dark:bg-blue-900 mr-1.5">{props.row.original.country}</Badge>
+                        <Badge size="sm" rounded color="bg-blue-500 text-gray-100 dark:bg-blue-700 mr-1.5">{props.row.original.country}</Badge>
                       )}
                       {props.row.original.year_established && (
                         <Badge size="sm" rounded color="bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200">{props.row.original.year_established}</Badge>
@@ -313,7 +313,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
               <div className="flex items-center justify-end mr-2 lg:mr-4 xl:mr-8">
                 {!props.row.original.skeleton ?
                   props.value ?
-                    <a href={props.value} target="_blank" rel="noopener noreferrer" className="btn btn-raised min-w-max btn-rounded bg-indigo-500 hover:bg-indigo-600 text-white hover:text-gray-50 text-xs text-right my-1 p-2">
+                    <a href={props.value} target="_blank" rel="noopener noreferrer" className="btn btn-raised min-w-max btn-rounded bg-indigo-600 hover:bg-indigo-700 text-white hover:text-gray-50 text-xs text-right my-1 p-2">
                       Start Trading
                     </a>
                     :
@@ -331,7 +331,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
           },
         ].filter(column => !((exchange_type === 'derivatives' ? ['trust_score'] : ['open_interest_btc', 'number_of_perpetual_pairs', 'number_of_futures_pairs']).includes(column.accessor)))}
         data={exchangesData ? exchangesData.data.map((exchangeData, i) => { return { ...exchangeData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
-        defaultPageSize={pathname.endsWith('/[exchange_type]') ? 50 : 100}
+        defaultPageSize={pathname.endsWith('/[exchange_type]') ? 25 : 50}
         className="striped"
       />
     </div>
