@@ -351,7 +351,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                         </div>
                         {txData.transaction_type !== 'burn' && (
                           <div className="w-2/5 flex flex-col items-end">
-                            <span className="text-gray-400 dark:text-gray-300 text-xs font-nomal">To</span>
+                            <span className="text-gray-400 dark:text-gray-300 text-xs font-normal">To</span>
                             {txData.to_url ?
                               <a href={txData.to_url} target="_blank" rel="noopener noreferrer" className="text-right">
                                 {toComponent}

@@ -19,7 +19,7 @@ const high_threshold = 8
 const Exchanges = ({ navigationData, navigationItemData }) => {
   const { preferences, data } = useSelector(state => ({ preferences: state.preferences, data: state.data }), shallowEqual)
   const { vs_currency } = { ...preferences }
-  const { all_crypto_data, exchange_rates_data } = { ...data }
+  const { exchange_rates_data } = { ...data }
   const currency = currencies[currencies.findIndex(c => c.id === vs_currency)] || currencies[0]
   const currencyBTC = currencies[currencies.findIndex(c => c.id === 'btc')]
 
@@ -36,7 +36,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
     const getExchanges = async () => {
       let data = null
 
-      for (let i = 0; i < all_crypto_data && all_crypto_data.exchanges ? Math.ceil(all_crypto_data.exchanges.length / per_page) : 10; i++) {
+      for (let i = 0; i < 10; i++) {
         const response = await (exchange_type === 'derivatives' ? derivativesExchanges({ per_page, page: i + 1 }) : exchanges({ per_page, page: i + 1 }))
 
         if (Array.isArray(response)) {
@@ -51,8 +51,8 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
                   trust_score: typeof exchangeData.trust_score === 'string' ? Number(exchangeData.trust_score) : typeof exchangeData.trust_score === 'number' ? exchangeData.trust_score : -1,
                   open_interest_btc: typeof exchangeData.open_interest_btc === 'string' ? Number(exchangeData.open_interest_btc) : typeof exchangeData.open_interest_btc === 'number' ? exchangeData.open_interest_btc : -1,
                 }
-              })
-              , [exchange_type ? 'trade_volume_24h_btc' : 'trust_score'], ['desc']
+              }),
+              [exchange_type ? 'trade_volume_24h_btc' : 'trust_score'], ['desc']
             )
           )
 
@@ -101,18 +101,33 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
           <>
             <span className="text-gray-400 dark:text-gray-600 font-normal mr-2 sm:mr-4">
               Exchanges:&nbsp;
-              <span className="text-gray-700 dark:text-gray-300 font-medium">{exchangesData.data.length}</span>
+              <span className="text-gray-700 dark:text-gray-300 font-medium">{numberFormat(exchangesData.data.length, '0,0')}</span>
             </span>
+            {exchange_type === 'derivatives' && (
+              <span className="flex flex-wrap items-center justify-end text-gray-400 dark:text-gray-600 font-normal mr-2 sm:mr-4">
+                Open&nbsp;Interest:&nbsp;
+                <span className="text-gray-700 dark:text-gray-300 font-medium mr-0.5 sm:mr-1">
+                  {(exchange_rates_data ? currency : currencyBTC).symbol}
+                  {numberFormat(_.sumBy(exchangesData.data.filter(exchangeData => exchangeData.open_interest_btc > 0), 'open_interest_btc') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), '0,0')}
+                  {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<>&nbsp;{(exchange_rates_data ? currency : currencyBTC).id.toUpperCase()}</>)}
+                </span>
+                {exchange_rates_data && vs_currency !== currencyBTC.id && (
+                  <div className="text-gray-400 dark:text-gray-600 text-xs font-medium">
+                    ({numberFormat(_.sumBy(exchangesData.data.filter(exchangeData => exchangeData.open_interest_btc > 0), 'open_interest_btc'), '0,0')}&nbsp;{currencyBTC.id.toUpperCase()})
+                  </div>
+                )}
+              </span>
+            )}
             <span className="flex flex-wrap items-center justify-end text-gray-400 dark:text-gray-600 font-normal">
               24h&nbsp;Vol:&nbsp;
               <span className="text-gray-700 dark:text-gray-300 font-medium mr-0.5 sm:mr-1">
                 {(exchange_rates_data ? currency : currencyBTC).symbol}
-                {numberFormat(_.sumBy(exchangesData.data.filter(exchangeData => exchangeData.trade_volume_24h_btc > 0), 'trade_volume_24h_btc') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data.btc.value : 1), '0,0')}
+                {numberFormat(_.sumBy(exchangesData.data.filter(exchangeData => exchangeData.trade_volume_24h_btc > 0), 'trade_volume_24h_btc') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), '0,0')}
                 {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<>&nbsp;{(exchange_rates_data ? currency : currencyBTC).id.toUpperCase()}</>)}
               </span>
-              {exchange_rates_data && vs_currency !== 'btc' && (
+              {exchange_rates_data && vs_currency !== currencyBTC.id && (
                 <div className="text-gray-400 dark:text-gray-600 text-xs font-medium">
-                  ({numberFormat(_.sumBy(exchangesData.data.filter(exchangeData => exchangeData.trade_volume_24h_btc > 0), 'trade_volume_24h_btc'), '0,0')}&nbsp;BTC)
+                  ({numberFormat(_.sumBy(exchangesData.data.filter(exchangeData => exchangeData.trade_volume_24h_btc > 0), 'trade_volume_24h_btc'), '0,0')}&nbsp;{currencyBTC.id.toUpperCase()})
                 </div>
               )}
             </span>
@@ -129,6 +144,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
           {
             Header: '#',
             accessor: 'i',
+            sortType: 'number',
             Cell: props => (
               <div className="flex items-center justify-center text-gray-600 dark:text-gray-400">
                 {!props.row.original.skeleton ?
@@ -171,7 +187,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
                 :
                 <div className="flex flex-col">
                   <div className="flex items-center">
-                    <div className="skeleton w-6 h-6 rounded mr-2.5" />
+                    <div className="skeleton w-6 h-6 rounded mr-2" />
                     <div className="skeleton w-24 h-4 rounded" />
                   </div>
                   <div className="skeleton w-20 h-3 rounded mt-1" />
@@ -185,7 +201,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
           {
             Header: '24h Open Interest',
             accessor: 'open_interest_btc',
-            sortType: 'number',
+            sortType: (rowA, rowB) => rowA.original.open_interest_btc > rowB.original.open_interest_btc ? 1 : -1,
             Cell: props => (
               <div className="flex flex-col font-semibold text-right mr-2 lg:mr-4 xl:mr-8">
                 {!props.row.original.skeleton ?
@@ -193,16 +209,16 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
                     {props.value > -1 ?
                       <>
                         {(exchange_rates_data ? currency : currencyBTC).symbol}
-                        {numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data.btc.value : 1), `0,0${props.value < 1 ? '.000' : ''}`)}
+                        {numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}
                         {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<>&nbsp;{(exchange_rates_data ? currency : currencyBTC).id.toUpperCase()}</>)}
                       </>
                       :
                       '-'
                     }
-                    {exchange_rates_data && vs_currency !== 'btc' && (
+                    {exchange_rates_data && vs_currency !== currencyBTC.id && (
                       <span className="text-gray-400 text-xs font-medium">
                         {props.value > -1 ?
-                          <>{numberFormat(props.value, `0,0${props.value < 1 ? '.000' : ''}`)}&nbsp;BTC</>
+                          <>{numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}&nbsp;{currencyBTC.id.toUpperCase()}</>
                           :
                           '-'
                         }
@@ -222,7 +238,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
           {
             Header: '24h Volume',
             accessor: 'trade_volume_24h_btc',
-            sortType: 'number',
+            sortType: (rowA, rowB) => rowA.original.trade_volume_24h_btc > rowB.original.trade_volume_24h_btc ? 1 : -1,
             Cell: props => (
               <div className="flex flex-col font-semibold text-right mr-2 lg:mr-4 xl:mr-8">
                 {!props.row.original.skeleton ?
@@ -230,16 +246,16 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
                     {props.value > -1 ?
                       <>
                         {(exchange_rates_data ? currency : currencyBTC).symbol}
-                        {numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data.btc.value : 1), `0,0${props.value < 1 ? '.000' : ''}`)}
+                        {numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}
                         {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<>&nbsp;{(exchange_rates_data ? currency : currencyBTC).id.toUpperCase()}</>)}
                       </>
                       :
                       '-'
                     }
-                    {exchange_rates_data && vs_currency !== 'btc' && (
+                    {exchange_rates_data && vs_currency !== currencyBTC.id && (
                       <span className="text-gray-400 text-xs font-medium">
                         {props.value > -1 ?
-                          <>{numberFormat(props.value, `0,0${props.value < 1 ? '.000' : ''}`)}&nbsp;BTC</>
+                          <>{numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}&nbsp;{currencyBTC.id.toUpperCase()}</>
                           :
                           '-'
                         }
@@ -259,12 +275,12 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
           {
             Header: 'Market Share',
             accessor: 'market_share',
-            sortType: 'number',
+            sortType: (rowA, rowB) => rowA.original.trade_volume_24h_btc > rowB.original.trade_volume_24h_btc ? 1 : -1,
             Cell: props => (
               <div className="flex flex-col text-gray-600 dark:text-gray-400 font-normal">
                 {!props.row.original.skeleton ?
                   <>
-                    <span>{props.value > -1 ? `${numberFormat(props.value * 100, `0,0.000${props.value < 0.00001 ? '000' : ''}`)}%` : '-'}</span>
+                    <span>{props.value > -1 ? `${numberFormat(props.value * 100, `0,0.000${Math.abs(props.value * 100) < 0.001 ? '000' : ''}`)}%` : '-'}</span>
                     <ProgressBar width={props.value > -1 ? props.value * 100 : 0} color="bg-yellow-500" className="h-1" />
                   </>
                   :
@@ -279,6 +295,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
           {
             Header: 'Perpetual Pairs',
             accessor: 'number_of_perpetual_pairs',
+            sortType: (rowA, rowB) => rowA.original.number_of_perpetual_pairs > rowB.original.number_of_perpetual_pairs ? 1 : -1,
             Cell: props => (
               <div className="text-gray-700 dark:text-gray-300 font-medium text-right mr-2 lg:mr-4 xl:mr-8">
                 {!props.row.original.skeleton ?
@@ -293,6 +310,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
           {
             Header: 'Futures Pairs',
             accessor: 'number_of_futures_pairs',
+            sortType: (rowA, rowB) => rowA.original.number_of_futures_pairs > rowB.original.number_of_futures_pairs ? 1 : -1,
             Cell: props => (
               <div className="text-gray-700 dark:text-gray-300 font-medium text-right mr-2 lg:mr-4 xl:mr-8">
                 {!props.row.original.skeleton ?
@@ -307,7 +325,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
           {
             Header: 'Confidence',
             accessor: 'trust_score',
-            sortType: 'number',
+            sortType: (rowA, rowB) => rowA.original.trust_score > rowB.original.trust_score ? 1 : -1,
             Cell: props => {
               const color = props.value <= low_threshold ? 'red-600' :
                 props.value >= high_threshold ? 'green-500' :
@@ -359,7 +377,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
           },
         ].filter(column => !((exchange_type === 'derivatives' ? ['trust_score'] : ['open_interest_btc', 'number_of_perpetual_pairs', 'number_of_futures_pairs']).includes(column.accessor)))}
         data={exchangesData ? exchangesData.data.map((exchangeData, i) => { return { ...exchangeData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
-        defaultPageSize={pathname.endsWith('/[exchange_type]') ? 25 : 50}
+        defaultPageSize={pathname.endsWith('/[exchange_type]') ? 50 : 100}
         className="striped"
       />
     </div>

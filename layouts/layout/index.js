@@ -34,7 +34,7 @@ export default function Layout({ children, noSiderbar }) {
         })
       }
     }
-  }, [])
+  }, [vs_currency, background])
 
   const headMeta = meta(asPath)
 

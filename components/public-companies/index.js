@@ -61,6 +61,7 @@ const PublicCompanies = ({ navigationData, navigationItemData }) => {
           {
             Header: '#',
             accessor: 'i',
+            sortType: 'number',
             Cell: props => (
               <div className="flex items-center justify-center text-gray-600 dark:text-gray-400">
                 {!props.row.original.skeleton ?
@@ -100,7 +101,7 @@ const PublicCompanies = ({ navigationData, navigationItemData }) => {
           {
             Header: 'Total Holdings',
             accessor: 'total_holdings',
-            sortType: 'number',
+            sortType: (rowA, rowB) => rowA.original.total_holdings > rowB.original.total_holdings ? 1 : -1,
             Cell: props => (
               <div className="text-indigo-700 dark:text-indigo-300 font-bold text-right mr-2 lg:mr-4 xl:mr-8">
                 {!props.row.original.skeleton ?
@@ -118,7 +119,7 @@ const PublicCompanies = ({ navigationData, navigationItemData }) => {
           {
             Header: 'Entry Value (USD)',
             accessor: 'total_entry_value_usd',
-            sortType: 'number',
+            sortType: (rowA, rowB) => rowA.original.total_entry_value_usd > rowB.original.total_entry_value_usd ? 1 : -1,
             Cell: props => (
               <div className="flex flex-col font-medium text-right mr-2 lg:mr-4 xl:mr-8">
                 {!props.row.original.skeleton ?
@@ -139,7 +140,7 @@ const PublicCompanies = ({ navigationData, navigationItemData }) => {
           {
             Header: 'Current Value (USD)',
             accessor: 'total_current_value_usd',
-            sortType: 'number',
+            sortType: (rowA, rowB) => rowA.original.total_current_value_usd > rowB.original.total_current_value_usd ? 1 : -1,
             Cell: props => (
               <div className={`flex flex-col ${props.value && props.row.original.total_entry_value_usd ? props.value > props.row.original.total_entry_value_usd ? 'text-green-500' : props.value < props.row.original.total_entry_value_usd ? 'text-red-500' : 'text-gray-400' : ''} font-semibold text-right mr-2 lg:mr-4 xl:mr-8`}>
                 {!props.row.original.skeleton ?
@@ -160,7 +161,7 @@ const PublicCompanies = ({ navigationData, navigationItemData }) => {
           {
             Header: '% of Total Supply',
             accessor: 'percentage_of_total_supply',
-            sortType: 'number',
+            sortType: (rowA, rowB) => rowA.original.percentage_of_total_supply > rowB.original.percentage_of_total_supply ? 1 : -1,
             Cell: props => (
               <div className="flex flex-col font-medium">
                 {!props.row.original.skeleton ?
