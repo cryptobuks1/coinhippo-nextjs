@@ -78,7 +78,7 @@ export default function FeedsIndex() {
         title={<><span className="mr-1.5">{moment().format('MMM D, YYYY')}</span><span className="absolute inline-flex items-center">{background === 'dark' ? <FiClock size={16} className="mr-1" /> : <FcClock size={16} className="mr-0.5" />}{moment().format('LT')}</span></>}
         subtitle="Latest Feeds"
         right={
-          <div className="flex flex-wrap items-center ml-0 sm:ml-4 px-1">
+          <div className="flex flex-wrap items-center ml-0 sm:ml-4 pr-1">
             {isSkeleton ?
               [...Array(3).keys()].map(i => (
                 <div key={i} className={`skeleton w-20 h-8 rounded mr-${i < 3 - 1 ? 2 : 0}`} />

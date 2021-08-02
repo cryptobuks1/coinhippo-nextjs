@@ -67,7 +67,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
     : false
 
   return (
-    <Widget className={`${isInterested ? 'shadow border-yellow-400 dark:border-yellow-600' : ''}`}>
+    <Widget className={`${isInterested ? 'shadow border border-yellow-400 dark:border-yellow-600' : ''}`}>
       <div className="flex items-start justify-start space-x-4 p-2">
         <div className="w-8 flex-shrink-0">
           {isSkeleton ?

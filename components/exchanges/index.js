@@ -96,6 +96,34 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
 
   return (!exchangesData || exchange_type === exchangesData.exchange_type) && (
     <div className="mx-1">
+      <div className="flex items-start mb-3 ml-0.5">
+        {exchangesData ?
+          <>
+            <span className="text-gray-400 dark:text-gray-600 font-normal mr-2 sm:mr-4">
+              Exchanges:&nbsp;
+              <span className="text-gray-700 dark:text-gray-300 font-medium">{exchangesData.data.length}</span>
+            </span>
+            <span className="flex flex-wrap items-center justify-end text-gray-400 dark:text-gray-600 font-normal">
+              24h&nbsp;Vol:&nbsp;
+              <span className="text-gray-700 dark:text-gray-300 font-medium mr-0.5 sm:mr-1">
+                {(exchange_rates_data ? currency : currencyBTC).symbol}
+                {numberFormat(_.sumBy(exchangesData.data.filter(exchangeData => exchangeData.trade_volume_24h_btc > 0), 'trade_volume_24h_btc') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data.btc.value : 1), '0,0')}
+                {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<>&nbsp;{(exchange_rates_data ? currency : currencyBTC).id.toUpperCase()}</>)}
+              </span>
+              {exchange_rates_data && vs_currency !== 'btc' && (
+                <div className="text-gray-400 dark:text-gray-600 text-xs font-medium">
+                  ({numberFormat(_.sumBy(exchangesData.data.filter(exchangeData => exchangeData.trade_volume_24h_btc > 0), 'trade_volume_24h_btc'), '0,0')}&nbsp;BTC)
+                </div>
+              )}
+            </span>
+          </>
+          :
+          <>
+            <div className="skeleton w-24 h-4 rounded mr-3 sm:mr-6 mb-0.5" />
+            <div className="skeleton w-48 h-4 rounded mb-0.5" />
+          </>
+        }
+      </div>
       <Datatable
         columns={[
           {

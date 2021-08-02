@@ -51,7 +51,7 @@ export default function Trending() {
           _.slice(coinsData, 0, 5).map((coinData, i) => {
             const currency = currencies[currencies.findIndex(c => c.id === coinData.vs_currency)] || currencies[0]
             return (
-              <div key={i} className={`${i < 2 ? `bg-yellow-${i < 1 ? 100 : 50} dark:bg-gray-${i < 1 ? 700 : 800} rounded pt-1 px-1` : ''} mt-${i > 0 ? i < 2 ? 1 : 2 : 0}`}>
+              <div key={i} className={`${i < 3 ? `bg-yellow-${i < 1 ? 200 : i < 2 ? 100 : 50} dark:bg-indigo-${i < 1 ? 700 : i < 2 ? 800 : 900} rounded pt-1 px-1` : ''} mt-${i > 0 ? i < 3 ? 1 : 2 : 0}`}>
                 <div className="flex items-center text-sm">
                   <Link href={`/coin${coinData ? `/${coinData.id}` : 's'}`}>
                     <a className="flex items-center mr-2">

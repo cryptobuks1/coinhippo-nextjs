@@ -37,7 +37,7 @@ export default function ExchangesIndex() {
   return (
     <>
       <SectionTitle
-        title="Exchanges by trading volume"
+        title="Top Exchanges by Trading Volume"
         subtitle={navigationItemData && navigationItemData.title ? navigationItemData.title : getName(exchange_type)}
         right={navigationData && navigationData.items && (
           <div className="flex flex-wrap items-center ml-0 sm:ml-4 pr-1">

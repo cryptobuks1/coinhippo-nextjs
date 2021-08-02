@@ -21,27 +21,27 @@ const Global = ({ bitcoin }) => {
       <Link href="/coin/bitcoin">
         <a>
           <Widget
-            title={<span className="uppercase text-xs">Bitcoin</span>}
-            description={<span className="text-base md:text-xs">
+            title={<span className="uppercase text-yellow-500 dark:text-gray-100 font-semibold text-xs">Bitcoin</span>}
+            description={<span className="text-base md:text-sm">
               {bitcoin ?
                 <div className={`h-5 flex items-center ${bitcoin.usd_24h_change < 0 ? 'text-red-500 dark:text-red-400' : bitcoin.usd_24h_change > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} font-bold`}>
                   <span className="mr-1.5">{currency.symbol}{numberFormat(bitcoin[vs_currency], '0,0')}{!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}</span>
-                  <span className="font-normal">{numberFormat(bitcoin.usd_24h_change / 100, '+0,0.00%')}</span>
-                  {bitcoin.usd_24h_change < 0 ? <FiArrowDown size={10} className="mb-0.5" /> : bitcoin.usd_24h_change > 0 ? <FiArrowUp size={10} className="mb-0.5" /> : null}
+                  <span className="text-xs font-normal">{numberFormat(bitcoin.usd_24h_change / 100, '+0,0.00%')}</span>
+                  {bitcoin.usd_24h_change < 0 ? <FiArrowDown size={12} className="ml-0.5" /> : bitcoin.usd_24h_change > 0 ? <FiArrowUp size={12} className="ml-0.5" /> : null}
                 </div>
                 :
                 <div className="skeleton w-12 h-4 rounded mt-1" />
               }
             </span>}
             right={<FaBitcoin size={24} className="stroke-current text-yellow-500" />}
-            className="p-3 lg:p-2 xl:p-3"
+            className="bg-gradient-to-r from-gray-100 to-gray-100 dark:from-gray-800 dark:to-gray-800 p-3 lg:p-2 xl:p-3"
           />
         </a>
       </Link>
       <Link href="/coins">
         <a>
           <Widget
-            title={<span className="uppercase text-xs">Cryptos</span>}
+            title={<span className="uppercase text-gray-500 dark:text-gray-300 text-xs">Cryptos</span>}
             description={<span className="text-base md:text-xs">
               {global_data ?
                 numberFormat(global_data.active_cryptocurrencies, '0,0')
@@ -50,14 +50,14 @@ const Global = ({ bitcoin }) => {
               }
             </span>}
             right={<GiCoins size={24} className="stroke-current text-gray-500 dark:text-gray-400" />}
-            className="p-3 lg:p-2 xl:p-3"
+            className="bg-gradient-to-r from-gray-50 to-white dark:from-gray-900 dark:to-gray-900 p-3 lg:p-2 xl:p-3"
           />
         </a>
       </Link>
       <Link href="/exchanges">
         <a>
           <Widget
-            title={<span className="uppercase text-xs">Exchanges</span>}
+            title={<span className="uppercase text-gray-500 dark:text-gray-300 text-xs">Exchanges</span>}
             description={<span className="text-base md:text-xs">
               {all_crypto_data ?
                 numberFormat(all_crypto_data.exchanges && all_crypto_data.exchanges.length, '0,0')
@@ -66,14 +66,14 @@ const Global = ({ bitcoin }) => {
               }
             </span>}
             right={<RiExchangeBoxLine size={24} className="stroke-current text-gray-500 dark:text-gray-400" />}
-            className="p-3 lg:p-2 xl:p-3"
+            className="bg-gradient-to-r from-gray-50 to-white dark:from-gray-900 dark:to-gray-900 p-3 lg:p-2 xl:p-3"
           />
         </a>
       </Link>
       <Link href="/coins">
         <a>
           <Widget
-            title={<div className="h-5 flex items-center uppercase text-xs">
+            title={<div className="h-5 flex items-center uppercase text-gray-500 dark:text-gray-300 text-xs">
               Market Cap
               {global_data && (
                 <div className={`flex items-center ${global_data.market_cap_change_percentage_24h_usd < 0 ? 'text-red-500 dark:text-red-400' : global_data.market_cap_change_percentage_24h_usd > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} font-medium ml-1`}>
@@ -94,14 +94,14 @@ const Global = ({ bitcoin }) => {
               }
             </span>}
             right={<AiOutlineStock size={24} className="stroke-current text-gray-500 dark:text-gray-400" />}
-            className="p-3 lg:p-2 xl:p-3"
+            className="bg-gradient-to-r from-gray-50 to-white dark:from-gray-900 dark:to-gray-900 p-3 lg:p-2 xl:p-3"
           />
         </a>
       </Link>
       <Link href="/coins/high-volume">
         <a>
           <Widget
-            title={<span className="uppercase text-xs">24h Volume</span>}
+            title={<span className="uppercase text-gray-500 dark:text-gray-300 text-xs">24h Volume</span>}
             description={<span className="text-base md:text-xs">
               {global_data ?
                 <>
@@ -114,7 +114,7 @@ const Global = ({ bitcoin }) => {
               }
             </span>}
             right={<AiOutlineBarChart size={24} className="stroke-current text-gray-500 dark:text-gray-400" />}
-            className="p-3 lg:p-2 xl:p-3"
+            className="bg-gradient-to-r from-gray-50 to-white dark:from-gray-900 dark:to-gray-900 p-3 lg:p-2 xl:p-3"
           />
         </a>
       </Link>

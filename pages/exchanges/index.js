@@ -36,7 +36,7 @@ export default function ExchangesIndex() {
   return (
     <>
       <SectionTitle
-        title="Exchanges by confidence"
+        title="Top Exchanges by Confidence"
         subtitle="Spot"
         right={navigationData && navigationData.items && (
           <div className="flex flex-wrap items-center ml-0 sm:ml-4 pr-1">

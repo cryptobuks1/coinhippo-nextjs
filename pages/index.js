@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import Global from '../components/dashboard/global'
@@ -6,8 +7,11 @@ import Dominance from '../components/dashboard/dominance'
 import TopMovers from '../components/dashboard/top-movers'
 import Trending from '../components/dashboard/trending'
 import SectionTitle from '../components/section-title'
+import { Badge } from '../components/badges'
+import { TiArrowRight } from 'react-icons/ti'
 import { cryptoGlobal, simplePrice } from '../lib/api/coingecko'
 import FearAndGreedAPI from '../lib/api/fear-and-greed'
+import { navigation } from '../lib/menus'
 import useMountedRef from '../lib/mountedRef'
 import { getName } from '../lib/utils'
 import { GLOBAL_DATA } from '../reducers/types'
@@ -73,7 +77,26 @@ export default function Index() {
 
   return (
     <>
-      <SectionTitle title="Overview" subtitle="Dashboard" className="mx-1" />
+      <SectionTitle
+        title="Overview"
+        subtitle="Dashboard"
+        right={<div className="flex flex-wrap items-center ml-0 sm:ml-4">
+          {navigation.filter(item => item.index_shortcut || item.items.findIndex(_item => _item.index_shortcut || _item.items.findIndex(__item => __item.index_shortcut) > -1) > -1)
+            .flatMap(item => item.index_shortcut ? item : item.items.flatMap(_item => _item.index_shortcut ? _item : _item.items.filter(__item => __item.index_shortcut)))
+            .map((navigationItemData, i) => (
+              <Link key={i} href={navigationItemData.url}>
+                <a>
+                  <Badge size="sm" rounded color="bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 border-0 text-blue-500 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-300 font-normal mt-1 mr-1 py-1 pl-1.5 pr-1">
+                    {navigationItemData.index_shortcut}
+                    <TiArrowRight size={16} className="transform -rotate-45" />
+                  </Badge>
+                </a>
+              </Link>
+            ))
+          }
+        </div>}
+        className="flex-col sm:flex-row items-start sm:items-center mx-1"
+      />
       <Global bitcoin={bitcoin} />
       <div className="w-full grid grid-flow-row grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-2 xl:gap-4 mb-4 lg:mb-2 xl:mb-4">
         <FearAndGreed data={fearAndGreedData} />
