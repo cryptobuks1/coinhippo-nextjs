@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { useSelector, shallowEqual } from 'react-redux'
 import PropTypes from 'prop-types'
 import Widget from '../widget'
+import Image from '../image'
 import FearAndGreed from '../feeds/fear-and-greed'
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi'
 import { FaBitcoin, FaGasPump, FaYoutube, FaPodcast, FaRegNewspaper, FaBookDead, FaCoins, FaSearch, FaRegGrinStars, FaUserNinja } from 'react-icons/fa'
@@ -265,10 +266,12 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                     <>
                       <div className="h-6 mt-2 mb-1">
                         {fromExchangeData && fromExchangeData.large ?
-                          <img
+                          <Image
                             src={fromExchangeData.large}
                             alt=""
-                            className="w-6 h-6 rounded"
+                            width={24}
+                            height={24}
+                            className="rounded"
                           />
                           :
                           <BsQuestionSquare size={20} className={`${txData.from_url ? '' : 'text-gray-300 dark:text-gray-500'}`} />
@@ -282,10 +285,12 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                     <>
                       <div className="h-6 flex justify-end mt-2 mb-1">
                         {toExchangeData && toExchangeData.large ?
-                          <img
+                          <Image
                             src={toExchangeData.large}
                             alt=""
-                            className="w-6 h-6 rounded"
+                            width={24}
+                            height={24}
+                            className="rounded"
                           />
                           :
                           <BsQuestionSquare size={20} className={`${txData.to_url ? '' : 'text-gray-300 dark:text-gray-500'}`} />
@@ -298,12 +303,14 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                   return (
                     <div key={txData.key} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < json.length - 1 ? 'border-b border-gray-100 pb-2' : ''}`}>
                       <div className="flex items-center mt-1">
-                        <div className="flex items-center mr-2">
+                        <div className="flex items-center space-x-2 mr-2">
                           {coinData && (
-                            <img
+                            <Image
                               src={coinData.image || coinData.large || coinData.thumb}
                               alt=""
-                              className="w-8 h-8 rounded mr-2"
+                              width={32}
+                              height={32}
+                              className="rounded"
                             />
                           )}
                           <span className="text-sm font-semibold">{txData.symbol && txData.symbol.toUpperCase()}</span>
@@ -370,11 +377,13 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                   json.length === 1 ?
                     json.map(coinData => (
                       <div key={coinData.id}>
-                        <div className="flex items-center mr-2">
-                          <img
+                        <div className="flex items-center space-x-2 mr-2">
+                          <Image
                             src={coinData.image || coinData.large || coinData.thumb}
                             alt=""
-                            className="w-8 h-8 rounded mr-2"
+                            width={32}
+                            height={32}
+                            className="rounded"
                           />
                           <span className="text-base font-semibold">{coinData.name}</span>
                         </div>
@@ -394,11 +403,13 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                     json.map((coinData, i) => (
                       <div key={coinData.id} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < json.length - 1 ? 'border-b border-gray-100 pb-3' : ''}`}>
                         <div className="flex items-center text-sm font-semibold">
-                          <div className="flex items-center mr-2">
-                            <img
+                          <div className="flex items-center space-x-2 mr-2">
+                            <Image
                               src={coinData.image || coinData.large || coinData.thumb}
                               alt=""
-                              className="w-6 h-6 rounded mr-2"
+                              width={24}
+                              height={24}
+                              className="rounded"
                             />
                             <span className={`${data.SortKey.endsWith('_trending') ? 'font-extrabold' : ''}`}>{coinData.symbol && coinData.symbol.toUpperCase()}</span>
                           </div>

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { useSelector, shallowEqual } from 'react-redux'
 import Widget from '../widget'
+import Image from '../image'
 import { ProgressBar } from '../progress-bars'
 import { AiOutlinePieChart } from 'react-icons/ai'
 import { BiPieChartAlt } from 'react-icons/bi'
@@ -35,18 +36,22 @@ export default function Dominance() {
               <div key={i} className={`mt-${i > 0 ? 2 : 0}`}>
                 <div className="flex items-center">
                   <Link href={`/coin${coinData ? `/${coinData.id}` : 's'}`}>
-                    <a className="flex items-center">
+                    <a className="flex items-center space-x-2">
                       {!coinData.large && coinData.name === 'Others' ?
-                        <BiPieChartAlt size={24} className="stroke-current text-gray-400 mr-2" />
+                        <BiPieChartAlt size={24} className="stroke-current text-gray-400" />
                         :
-                        <img
+                        <Image
                           src={coinData.large}
                           alt=""
-                          className="w-6 h-6 rounded mr-2"
+                          width={24}
+                          height={24}
+                          className="rounded"
                         />
                       }
-                      <span className="text-gray-900 dark:text-gray-100">{coinData.name}</span>
-                      <span className="text-gray-400 font-normal ml-1.5">{coinData.symbol}</span>
+                      <div>
+                        <span className="text-gray-900 dark:text-gray-100">{coinData.name}</span>
+                        <span className="text-gray-400 font-normal ml-1.5">{coinData.symbol}</span>
+                      </div>
                     </a>
                   </Link>
                   <span className="text-gray-500 dark:text-gray-300 text-xs font-normal ml-auto">

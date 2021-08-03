@@ -1,23 +1,24 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import Derivatives from '../../components/derivatives'
+import Coins from '../../components/coins'
 import SectionTitle from '../../components/section-title'
 import Image from '../../components/image'
 import { navigation } from '../../lib/menus'
 import { getName } from '../../lib/utils'
 
-export default function DerivativesIndex() {
+export default function CoinType() {
   const router = useRouter()
-  const { asPath } = { ...router }
+  const { query, asPath } = { ...router }
+  const { coin_type } = { ...query }
   const _asPath = asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath
 
   let navigationData, navigationItemData
 
   navigation.forEach(nav => {
-    if (nav.url === '/derivatives') navigationData = nav
+    if (nav.url === '/coins/categories') navigationData = nav
     else if (nav.items) {
       nav.items.forEach(nav_1 => {
-        if (nav_1.url === '/derivatives') navigationData = nav_1
+        if (nav_1.url === '/coins/categories') navigationData = nav_1
       })
     }
 
@@ -37,8 +38,8 @@ export default function DerivativesIndex() {
   return (
     <>
       <SectionTitle
-        title="Top Derivatives Contract by Open Interest"
-        subtitle="Perpetuals"
+        title="Top Cryptocurrency Prices by Market Capitalization"
+        subtitle={navigationItemData && navigationItemData.title ? navigationItemData.title : getName(coin_type)}
         right={navigationData && navigationData.items && (
           <div className="flex flex-wrap items-center ml-0 sm:ml-4 pr-1">
             {navigationData.items.map((item, i) => (
@@ -61,7 +62,7 @@ export default function DerivativesIndex() {
         )}
         className="flex-col sm:flex-row items-start sm:items-center mx-1"
       />
-      <Derivatives />
+      <Coins navigationData={navigationData} navigationItemData={navigationItemData} />
     </>
   )
 }

@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import Currencies from './currencies'
@@ -39,10 +40,11 @@ export default function DropdownCurrency() {
         className="w-8 h-16 flex items-center justify-center"
       >
         {currency.image ?
-          <img
+          <Image
             src={currency.image}
-            alt={currency.id.toUpperCase()}
-            className="w-6 h-6 rounded-full"
+            alt=""
+            width={24}
+            height={24}
           />
           :
           <span className={`${currency.background} w-6 h-6 rounded-full flex items-center justify-center text-white text-sm`}>

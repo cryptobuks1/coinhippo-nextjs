@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import Widget from '../widget'
+import Image from '../image'
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi'
 import { AiOutlineFire } from 'react-icons/ai'
 import _ from 'lodash'
@@ -41,7 +41,7 @@ export default function Trending() {
     <Widget
       title={<span className="uppercase flex items-center">
         <a href="https://coingecko.com/discover" target="_blank" rel="noopener noreferrer" className="flex items-center">
-          <Image src="/logos/api/coingecko.png" alt="" width={24} height={24} className="my-auto" />
+          <Image src="/logos/api/coingecko.png" alt="" width={24} height={24} />
           <span className="text-gray-500 ml-2">Trending Search</span>
         </a>
         <AiOutlineFire size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
@@ -54,14 +54,18 @@ export default function Trending() {
               <div key={i} className={`${i < 3 ? `bg-yellow-${i < 1 ? 200 : i < 2 ? 100 : 50} dark:bg-indigo-${i < 1 ? 700 : i < 2 ? 800 : 900} rounded pt-1 px-1` : ''} mt-${i > 0 ? i < 3 ? 1 : 2 : 0}`}>
                 <div className="flex items-center text-sm">
                   <Link href={`/coin${coinData ? `/${coinData.id}` : 's'}`}>
-                    <a className="flex items-center mr-2">
-                      <img
+                    <a className="flex items-center space-x-1 mr-2">
+                      <Image
                         src={coinData.large}
                         alt=""
-                        className="w-5 h-5 rounded mr-1"
+                        width={20}
+                        height={20}
+                        className="rounded"
                       />
-                      <span className="text-gray-900 dark:text-gray-100">{coinData.name}</span>
-                      <span className="text-gray-400 font-normal ml-1">{coinData.symbol && coinData.symbol.toUpperCase()}</span>
+                      <span>
+                        <span className="text-gray-900 dark:text-gray-100">{coinData.name}</span>
+                        <span className="text-gray-400 font-normal ml-1">{coinData.symbol && coinData.symbol.toUpperCase()}</span>
+                      </span>
                     </a>
                   </Link>
                   <span className={`${coinData.price_change_percentage_24h < 0 ? 'text-red-500 dark:text-red-400' : coinData.price_change_percentage_24h > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} text-xs font-medium text-right ml-auto`}>

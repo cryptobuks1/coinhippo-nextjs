@@ -85,6 +85,22 @@ button {
   }
 }
 
+.coin-column {
+  div {
+    min-width: 1.5rem;
+  }
+
+  img {
+    height: auto !important;
+    min-height: 1rem !important;
+  }
+}
+
+.image-logo img {
+  height: auto !important;
+  min-height: 1rem !important;
+}
+
 /**
  * hide scrollbars
  */

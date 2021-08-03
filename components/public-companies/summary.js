@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import Widget from '../widget'
+import Image from '../image'
 import { BiBuildings, BiDollarCircle } from 'react-icons/bi'
 import { AiOutlinePieChart } from 'react-icons/ai'
 import _ from 'lodash'
@@ -32,10 +33,12 @@ const Summary = ({ data, navigationItemData }) => {
           }
         </span>}
         right={navigationItemData && navigationItemData.image && (
-          <img
+          <Image
             src={navigationItemData.image}
             alt=""
-            className="w-8 h-8 rounded"
+            width={32}
+            height={32}
+            className="rounded"
           />
         )}
       />

@@ -4,9 +4,9 @@ export default function ErrorPage() {
   return (
     <div className="w-full max-w-xl flex flex-col text-center mx-2 md:mx-auto">
       <img
-        className="w-auto h-64 sm:h-40 lg:h-64 object-contain mb-8 sm:mb-4 lg:mb-8"
         src="/images/illustration.svg"
         alt="404"
+        className="w-auto h-64 sm:h-40 lg:h-64 object-contain mb-8 sm:mb-4 lg:mb-8"
       />
       <h1 className="text-6xl text-blue-500 mb-4">404</h1>
 

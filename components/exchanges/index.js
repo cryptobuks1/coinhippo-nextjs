@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import PropTypes from 'prop-types'
 import Datatable from '../../components/datatable'
+import Image from '../../components/image'
 import { Badge } from '../../components/badges'
 import { ProgressBar } from '../../components/progress-bars'
 import _ from 'lodash'
@@ -163,13 +164,15 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
               !props.row.original.skeleton ?
                 <Link href={`/exchange${props.row.original.id ? `/${props.row.original.id}` : 's'}`}>
                   <a className="flex flex-col font-semibold">
-                    <div className="flex items-center">
-                      <img
+                    <div className="flex items-center space-x-2">
+                      <Image
                         src={props.row.original.image}
                         alt=""
-                        className="w-6 h-6 rounded mr-2"
+                        width={24}
+                        height={24}
+                        className="rounded"
                       />
-                      {props.value}
+                      <span>{props.value}</span>
                     </div>
                     <span className="text-gray-400 text-xs font-normal">
                       {getName(props.row.original.exchange_type)}
@@ -228,7 +231,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
                   :
                   <>
                     <div className="skeleton w-28 h-4 rounded ml-auto" />
-                    <div className="skeleton w-16 h-3 rounded mt-2 ml-auto" />
+                    <div className="skeleton w-16 h-3.5 rounded mt-2 ml-auto" />
                   </>
                 }
               </div>
@@ -265,7 +268,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
                   :
                   <>
                     <div className="skeleton w-28 h-4 rounded ml-auto" />
-                    <div className="skeleton w-16 h-3 rounded mt-2 ml-auto" />
+                    <div className="skeleton w-16 h-3.5 rounded mt-2 ml-auto" />
                   </>
                 }
               </div>

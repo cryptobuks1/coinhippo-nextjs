@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import PropTypes from 'prop-types'
+import Image from '../image'
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi'
 import PageVisibility from 'react-page-visibility'
 import Ticker from 'react-ticker'
@@ -38,11 +39,13 @@ const MarqueeCoins = ({ data }) => {
                   <Link key={index} href={`/coin${item.id ? `/${item.id}` : 's'}`}>
                     <a>
                       <div className={`h-5 w-full flex items-center text-xs font-semibold mt-0.5 px-2 ${index && index % data.length === 0 ? 'pl-4 md:pl-8 pr-2 md:pr-3' : 'md:px-3'}`}>
-                        <div className="flex items-center mr-2">
-                          <img
+                        <div className="flex items-center space-x-1 mr-2">
+                          <Image
                             src={item.image}
                             alt=""
-                            className="w-4 h-4 rounded mr-1"
+                            width={16}
+                            height={16}
+                            className="rounded"
                           />
                           <span>{item.symbol && item.symbol.toUpperCase()}{item.vs_currency !== vs_currency && (<span className="font-light">{item.vs_currency.toUpperCase()}</span>)}</span>
                         </div>

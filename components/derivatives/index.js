@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import PropTypes from 'prop-types'
 import Datatable from '../../components/datatable'
+import Image from '../../components/image'
 import { Badge } from '../../components/badges'
 import _ from 'lodash'
 import { derivatives } from '../../lib/api/coingecko'
@@ -30,7 +31,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
   const mountedRef = useMountedRef()
 
   useEffect(() => {
-    const getExchanges = async () => {
+    const getDerivatives = async () => {
       const response = await derivatives({ derivative_type: 'unexpired' })
 
       if (Array.isArray(response)) {
@@ -56,8 +57,11 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
     }
 
     if (!pathname.endsWith('/[derivative_type]') || (derivative_type && navigationData.items.findIndex(item => item.url === _asPath) > -1)) {
-      getExchanges()
+      getDerivatives()
     }
+
+    const interval = setInterval(() => getDerivatives(), 5 * 60 * 1000)
+    return () => clearInterval(interval)
   }, [derivative_type])
 
   if (!navigationData) {
@@ -150,13 +154,15 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
                   {all_crypto_data && !props.row.original.skeleton ?
                     <Link href={`/exchange${exchangeData && exchangeData.id ? `/${exchangeData.id}` : 's/derivatives'}`}>
                       <a className="flex flex-col text-blue-600 dark:text-blue-400 text-xs font-normal">
-                        <div className="flex items-center">
-                          <img
+                        <div className="flex items-center space-x-2">
+                          <Image
                             src={exchangeData && exchangeData.image}
                             alt=""
-                            className="w-6 h-6 rounded mr-2"
+                            width={24}
+                            height={24}
+                            className="rounded"
                           />
-                          {props.value}
+                          <span>{props.value}</span>
                         </div>
                         <span className="text-gray-400 text-xs font-normal">
                           {getName(exchangeData.exchange_type)}
@@ -220,7 +226,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
                   :
                   <>
                     <div className="skeleton w-28 h-4 rounded ml-auto" />
-                    <div className="skeleton w-16 h-3 rounded mt-2 ml-auto" />
+                    <div className="skeleton w-16 h-3.5 rounded mt-2 ml-auto" />
                   </>
                 }
               </div>
@@ -338,7 +344,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
                   :
                   <>
                     <div className="skeleton w-28 h-4 rounded ml-auto" />
-                    <div className="skeleton w-16 h-3 rounded mt-2 ml-auto" />
+                    <div className="skeleton w-16 h-3.5 rounded mt-2 ml-auto" />
                   </>
                 }
               </div>
@@ -375,7 +381,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
                   :
                   <>
                     <div className="skeleton w-28 h-4 rounded ml-auto" />
-                    <div className="skeleton w-16 h-3 rounded mt-2 ml-auto" />
+                    <div className="skeleton w-16 h-3.5 rounded mt-2 ml-auto" />
                   </>
                 }
               </div>

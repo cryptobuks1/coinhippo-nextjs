@@ -13,8 +13,8 @@ const refresh_rate_second = 15
 
 export default function DropdownGas() {
   const dispatch = useDispatch()
-  const { data } = useSelector(state => ({ data: state.data }), shallowEqual)
-  const { gas_data } = { ...data }
+  const { externalData } = useSelector(state => ({ externalData: state.externalData }), shallowEqual)
+  const { gas_data } = { ...externalData }
 
   const [hidden, setHidden] = useState(true)
   const [secondUntilRefresh, setSecondUntilRefresh] = useState(refresh_rate_second)

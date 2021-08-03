@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import PropTypes from 'prop-types'
+import Image from '../image'
 import _ from 'lodash'
 
 const AllCrypto = ({ data, trendingData, inputSearch, handleDropdownClick }) => {
@@ -7,7 +8,7 @@ const AllCrypto = ({ data, trendingData, inputSearch, handleDropdownClick }) => 
 
   if (allCryptoData) {
     Object.keys(allCryptoData).forEach(genre => {
-      allCryptoData[genre] = allCryptoData[genre] && _.orderBy(allCryptoData[genre].filter(item => inputSearch && item).map(item => {
+      allCryptoData[genre] = allCryptoData[genre] && Array.isArray(allCryptoData[genre]) && _.orderBy(allCryptoData[genre].filter(item => inputSearch && item).map(item => {
         return { ...item, scores: ['symbol', 'name', 'id'].map(field => item[field] && item[field].toLowerCase().includes(inputSearch.toLowerCase()) ? inputSearch.length > 1 ? (typeof item.market_cap_rank === 'number' ? item.market_cap_rank <= 10 ? 10 : item.market_cap_rank <= 20 ? 4 : item.market_cap_rank <= 50 ? 2 : 1 : 1) * (inputSearch.length / item[field].length) : .5 : -1) }
       }).map(item => {return { ...item, max_score: _.max(item.scores) }}).filter(item => item.max_score > 3 / 10), ['max_score', 'market_cap_rank'], ['desc', 'asc']).filter((item, i) => i < 100)
 
@@ -30,7 +31,7 @@ const AllCrypto = ({ data, trendingData, inputSearch, handleDropdownClick }) => 
       {allCryptoData && Object.keys(allCryptoData).map((genre, i) => (
         <div key={i}>
           <div className={`dropdown-title ${genre === 'trending' ? 'dropdown-title-trending' : ''} flex items-center`}>{genre === 'trending' && (<span className="text-lg mr-2">🔥</span>)}{genre}</div>
-          {allCryptoData[genre].map((item, j) => (
+          {Array.isArray(allCryptoData[genre]) && allCryptoData[genre].map((item, j) => (
             <Link
               key={j}
               href={`/${genre === 'exchanges' ? 'exchange' : genre === 'categories' ? 'coins' : 'coin'}/${genre === 'categories' && item.category_id ? item.category_id : item.id}`}
@@ -38,10 +39,12 @@ const AllCrypto = ({ data, trendingData, inputSearch, handleDropdownClick }) => 
             >
               <a className="dropdown-item w-full flex items-center justify-start text-sm space-x-2 p-2">
                 {item.large && (
-                  <img
+                  <Image
                     src={item.large}
                     alt=""
-                    className="w-6 h-6 rounded"
+                    width={24}
+                    height={24}
+                    className="rounded"
                   />
                 )}
                 <span className="w-full flex items-center text-xs">

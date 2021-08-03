@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { currencies } from '../../lib/menus'
@@ -24,10 +25,11 @@ const Currencies = ({ handleDropdownClick }) => {
             className="dropdown-item w-1/2 flex items-center justify-start text-sm space-x-2 p-2"
           >
             {item.image ?
-              <img
+              <Image
                 src={item.image}
                 alt=""
-                className="w-4 h-4 rounded-full"
+                width={16}
+                height={16}
               />
               :
               <span className={`${item.background} w-4 h-4 rounded-full flex items-center justify-center text-white text-xs`}>
