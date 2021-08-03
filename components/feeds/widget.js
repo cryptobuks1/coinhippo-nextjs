@@ -316,7 +316,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                           <span className="text-sm font-semibold">{txData.symbol && txData.symbol.toUpperCase()}</span>
                         </div>
                         <div className="flex flex-col items-end ml-auto">
-                          <div className="text-sm font-semibold">{numberFormat(txData.amount, '0,0')} {txData.symbol && txData.symbol.toUpperCase()}</div>
+                          <div className="uppercase text-sm font-semibold">{numberFormat(txData.amount, '0,0')} {txData.symbol}</div>
                           <div className="text-xs font-normal">${numberFormat(txData.amount_usd, '0,0')}</div>
                         </div>
                       </div>
@@ -411,7 +411,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                               height={24}
                               className="rounded"
                             />
-                            <span className={`${data.SortKey.endsWith('_trending') ? 'font-extrabold' : ''}`}>{coinData.symbol && coinData.symbol.toUpperCase()}</span>
+                            <span className={`uppercase ${data.SortKey.endsWith('_trending') ? 'font-extrabold' : ''}`}>{coinData.symbol}</span>
                           </div>
                           <div className={`flex items-center text-${coinData.price_change_percentage_24h < 0 ? 'red' : coinData.price_change_percentage_24h > 0 ? 'green' : 'gray'}-500 ${['_ath', '_atl'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ? 'font-extrabold' : 'font-medium'} ml-auto`}>
                             ${numberFormat(data.SortKey.endsWith('_ath') ? coinData.high_price : data.SortKey.endsWith('_atl') ? coinData.low_price : coinData.current_price, '0,0.00000000')}
@@ -460,7 +460,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                 ['_ath', '_atl', '_marketcap', '_trending', '_defi', '_nfts', '_fomo', '_panic', '_bitcoin'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ?
                   <>
                     {json.map((coinData, i) => <Link key={i} href={`/coin${coinData ? `/${coinData.id}` : 's'}`}><a className="font-semibold mr-1">#{coinData && coinData.name}</a></Link>)}
-                    {json.length < 2 && json.map((coinData, i) => <Link key={i} href={`/coin${coinData ? `/${coinData.id}` : 's'}`}><a className="font-semibold mr-1">${coinData && coinData.symbol && coinData.symbol.toUpperCase()}</a></Link>)}
+                    {json.length < 2 && json.map((coinData, i) => <Link key={i} href={`/coin${coinData ? `/${coinData.id}` : 's'}`}><a className="uppercase font-semibold mr-1">${coinData && coinData.symbol}</a></Link>)}
                     {json.length > 1 && ['_ath', '_atl', '_trending', '_bitcoin'].findIndex(market_type => data.SortKey.endsWith(market_type)) < 0 && (
                       <Link href={`/coins${data.SortKey.endsWith('_defi') ? '/decentralized-finance-defi' : data.SortKey.endsWith('_nfts') ? '/non-fungible-tokens-nft' : ''}`}><a className="font-semibold">#{data.SortKey.endsWith('_defi') ? getName('defi') : data.SortKey.endsWith('_nfts') ? 'NFTs' : 'Market'}</a></Link>
                     )}

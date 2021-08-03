@@ -21,7 +21,7 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   )
 })
 
-export default function Datatable({ columns, data, rowSelectEnable, defaultPageSize, className = '' }) {
+export default function Datatable({ columns, data, rowSelectEnable, defaultPageSize, pagination, className = '' }) {
   const tableRef = useRef()
 
   const {
@@ -104,68 +104,70 @@ export default function Datatable({ columns, data, rowSelectEnable, defaultPageS
           })}
         </tbody>
       </table>
-      <div className="flex flex-col sm:flex-row items-center justify-between my-4">   
-        <select
-          value={pageSize}
-          onChange={e => setPageSize(Number(e.target.value))}
-          className="form-select dark:bg-gray-800 outline-none dark:border-gray-800 shadow-none focus:shadow-none text-xs"
-        >
-          {[10, 25, 50, 100].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select>
-
-        <span className="my-2 sm:my-0">
-          Page <span className="font-bold">{pageIndex + 1}</span> of <span className="font-bold">{pageOptions.length}</span>
-        </span>
-
-        <div className="pagination flex flex-wrap items-center justify-end">
-          {pageIndex !== 0 && (
-            <PageWithText
-              onClick={() => {
-                gotoPage(0)
-                tableRef.current.scrollIntoView() 
-              }}
-            >
-              First
-            </PageWithText>
-          )}
-          {canPreviousPage && (
-            <PageWithText
-              onClick={() => {
-                previousPage()
-                tableRef.current.scrollIntoView() 
-              }}
-            >
-              Previous
-            </PageWithText>
-          )}
-          {canNextPage && (
-            <PageWithText
-              disabled={!canNextPage}
-              onClick={() => {
-                nextPage()
-                tableRef.current.scrollIntoView() 
-              }}
-            >
-              Next
-            </PageWithText>
-          )}
-          {pageIndex !== pageCount - 1 && (
-            <PageWithText
-              disabled={!canNextPage}
-              onClick={() => {
-                gotoPage(pageCount - 1)
-                tableRef.current.scrollIntoView() 
-              }}
-            >
-              Last
-            </PageWithText>
-          )}
+      {pagination ?
+        pagination
+        :
+        <div className="flex flex-col sm:flex-row items-center justify-between my-4">
+          <select
+            value={pageSize}
+            onChange={event => setPageSize(Number(event.target.value))}
+            className="form-select dark:bg-gray-800 outline-none dark:border-gray-800 shadow-none focus:shadow-none text-xs"
+          >
+            {[10, 25, 50, 100].map(pageSize => (
+              <option key={pageSize} value={pageSize}>
+                Show {pageSize}
+              </option>
+            ))}
+          </select>
+          <span className="my-2 sm:my-0">
+            Page <span className="font-bold">{pageIndex + 1}</span> of <span className="font-bold">{pageOptions.length}</span>
+          </span>
+          <div className="pagination flex flex-wrap items-center justify-end">
+            {pageIndex !== 0 && (
+              <PageWithText
+                onClick={() => {
+                  gotoPage(0)
+                  tableRef.current.scrollIntoView() 
+                }}
+              >
+                First
+              </PageWithText>
+            )}
+            {canPreviousPage && (
+              <PageWithText
+                onClick={() => {
+                  previousPage()
+                  tableRef.current.scrollIntoView() 
+                }}
+              >
+                Previous
+              </PageWithText>
+            )}
+            {canNextPage && (
+              <PageWithText
+                disabled={!canNextPage}
+                onClick={() => {
+                  nextPage()
+                  tableRef.current.scrollIntoView() 
+                }}
+              >
+                Next
+              </PageWithText>
+            )}
+            {pageIndex !== pageCount - 1 && (
+              <PageWithText
+                disabled={!canNextPage}
+                onClick={() => {
+                  gotoPage(pageCount - 1)
+                  tableRef.current.scrollIntoView() 
+                }}
+              >
+                Last
+              </PageWithText>
+            )}
+          </div>
         </div>
-      </div>
+      }
     </>
   )
 }

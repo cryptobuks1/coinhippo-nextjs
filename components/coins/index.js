@@ -12,7 +12,9 @@ import _ from 'lodash'
 import { coinsMarkets, categoriesMarkets } from '../../lib/api/coingecko'
 import { navigation, currencies } from '../../lib/menus'
 import useMountedRef from '../../lib/mountedRef'
-import { getName, numberFormat } from '../../lib/utils'
+import { numberFormat } from '../../lib/utils'
+
+const per_page = 100
 
 const Coins = ({ navigationData, navigationItemData }) => {
   const { preferences, data } = useSelector(state => ({ preferences: state.preferences, data: state.data }), shallowEqual)
@@ -35,52 +37,78 @@ const Coins = ({ navigationData, navigationItemData }) => {
 
   useEffect(() => {
     const getCoins = async () => {
-      const response = await (coin_type === 'categories' ?
-        categoriesMarkets({ vs_currency })
-        :
-        coinsMarkets({ vs_currency, category: coin_type && !(['high-volume'].includes(coin_type)) ? coin_type : undefined, order: ['high-volume'].includes(coin_type) ? 'volume_desc' : 'market_cap_desc', page, price_change_percentage: /*'1h*,*/'24h,7d,30d' })
-      )
+      let data
 
-      if (Array.isArray(response)) {
+      for (let i = 0; i < (coin_type && !(['high-volume'].includes(coin_type)) ? 10 : 1); i++) {
+        const response = await (coin_type === 'categories' ?
+          categoriesMarkets({ vs_currency })
+          :
+          coinsMarkets({ vs_currency, category: coin_type && !(['high-volume'].includes(coin_type)) ? coin_type : undefined, order: ['high-volume'].includes(coin_type) ? 'volume_desc' : 'market_cap_desc', per_page, page: coin_type && !(['high-volume'].includes(coin_type)) ? i + 1 : page, price_change_percentage: /*'1h*,*/'24h,7d,30d' })
+        )
+
+        if (Array.isArray(response)) {
+          data = (
+            _.orderBy(
+              _.uniqBy(_.concat(data || [], response), 'id')
+              .map(coinData => {
+                return {
+                  ...coinData,
+                  market_cap_rank: typeof coinData.market_cap_rank === 'string' ? Number(coinData.market_cap_rank) : typeof coinData.market_cap_rank === 'number' ? coinData.market_cap_rank : Number.MAX_SAFE_INTEGER,
+                  current_price: typeof coinData.current_price === 'string' ? Number(coinData.current_price) : typeof coinData.current_price === 'number' ? coinData.current_price : -1,
+                  // price_change_percentage_1h_in_currency: typeof coinData.price_change_percentage_1h_in_currency === 'string' ? Number(coinData.price_change_percentage_1h_in_currency) : typeof coinData.price_change_percentage_1h_in_currency === 'number' ? coinData.price_change_percentage_1h_in_currency : Number.MIN_SAFE_INTEGER,
+                  price_change_percentage_24h_in_currency: typeof coinData.price_change_percentage_24h_in_currency === 'string' ? Number(coinData.price_change_percentage_24h_in_currency) : typeof coinData.price_change_percentage_24h_in_currency === 'number' ? coinData.price_change_percentage_24h_in_currency : Number.MIN_SAFE_INTEGER,
+                  price_change_percentage_7d_in_currency: typeof coinData.price_change_percentage_7d_in_currency === 'string' ? Number(coinData.price_change_percentage_7d_in_currency) : typeof coinData.price_change_percentage_7d_in_currency === 'number' ? coinData.price_change_percentage_7d_in_currency : Number.MIN_SAFE_INTEGER,
+                  price_change_percentage_30d_in_currency: typeof coinData.price_change_percentage_30d_in_currency === 'string' ? Number(coinData.price_change_percentage_30d_in_currency) : typeof coinData.price_change_percentage_30d_in_currency === 'number' ? coinData.price_change_percentage_30d_in_currency : Number.MIN_SAFE_INTEGER,
+                  roi: {
+                    ...coinData.roi,
+                    times: coinData.roi ? coinData.roi.times : coinData.atl !== 0 ? (coinData.current_price - coinData.atl) / coinData.atl : null,
+                    currency: coinData.roi && coinData.roi.currency ? coinData.roi.currency : vs_currency,
+                    percentage: coinData.roi ? coinData.roi.percentage : coinData.atl !== 0 ? (coinData.current_price - coinData.atl) * 100 / coinData.atl : null,
+                    from: !coinData.roi ? 'atl' : null,
+                  },
+                  market_cap: typeof coinData.market_cap === 'string' ? Number(coinData.market_cap) : typeof coinData.market_cap === 'number' ? coinData.market_cap : -1,
+                  market_cap_change_24h: typeof coinData.market_cap_change_24h === 'string' ? Number(coinData.market_cap_change_24h) : typeof coinData.market_cap_change_24h === 'number' ? coinData.market_cap_change_24h : Number.MIN_SAFE_INTEGER,
+                  fully_diluted_valuation: typeof coinData.fully_diluted_valuation === 'string' ? Number(coinData.fully_diluted_valuation) : typeof coinData.fully_diluted_valuation === 'number' ? coinData.fully_diluted_valuation : (coinData.current_price * (coinData.max_supply || coinData.total_supply || coinData.circulating_supply)) || -1,
+                  circulating_supply: typeof coinData.circulating_supply === 'string' ? Number(coinData.circulating_supply) : typeof coinData.circulating_supply === 'number' ? coinData.circulating_supply : -1,
+                  total_volume: typeof coinData.total_volume === 'string' ? Number(coinData.total_volume) : typeof coinData.total_volume === 'number' ? coinData.total_volume : -1,
+                  volume_24h: typeof coinData.volume_24h === 'string' ? Number(coinData.volume_24h) : typeof coinData.volume_24h === 'number' ? coinData.volume_24h : -1,
+                }
+              }),
+              [['high-volume'].includes(coin_type) ? 'total_volume' : ['categories'].includes(coin_type) ? 'market_cap' : 'market_cap_rank'], ['desc']
+            )
+          )
+
+          if (response.length < per_page) {
+            break
+          }
+        }
+      }
+
+      if (data) {
+        data = data.map(coinData => {
+          return {
+            ...coinData,
+            market_share: coinData.volume_24h > -1 ? coinData.volume_24h / _.sumBy(data.filter(_coinData => _coinData.volume_24h > 0), 'volume_24h') : -1,
+          }
+        })
+
         if (mountedRef.current) {
-          let data;
-
-          data = response.map(coinData => {
-            return {
-              ...coinData,
-              market_cap_rank: typeof coinData.market_cap_rank === 'string' ? Number(coinData.market_cap_rank) : typeof coinData.market_cap_rank === 'number' ? coinData.market_cap_rank : -1,
-              current_price: typeof coinData.current_price === 'string' ? Number(coinData.current_price) : typeof coinData.current_price === 'number' ? coinData.current_price : -1,
-              // price_change_percentage_1h_in_currency: typeof coinData.price_change_percentage_1h_in_currency === 'string' ? Number(coinData.price_change_percentage_1h_in_currency) : typeof coinData.price_change_percentage_1h_in_currency === 'number' ? coinData.price_change_percentage_1h_in_currency : Number.MIN_SAFE_INTEGER,
-              price_change_percentage_24h_in_currency: typeof coinData.price_change_percentage_24h_in_currency === 'string' ? Number(coinData.price_change_percentage_24h_in_currency) : typeof coinData.price_change_percentage_24h_in_currency === 'number' ? coinData.price_change_percentage_24h_in_currency : Number.MIN_SAFE_INTEGER,
-              price_change_percentage_7d_in_currency: typeof coinData.price_change_percentage_7d_in_currency === 'string' ? Number(coinData.price_change_percentage_7d_in_currency) : typeof coinData.price_change_percentage_7d_in_currency === 'number' ? coinData.price_change_percentage_7d_in_currency : Number.MIN_SAFE_INTEGER,
-              price_change_percentage_30d_in_currency: typeof coinData.price_change_percentage_30d_in_currency === 'string' ? Number(coinData.price_change_percentage_30d_in_currency) : typeof coinData.price_change_percentage_30d_in_currency === 'number' ? coinData.price_change_percentage_30d_in_currency : Number.MIN_SAFE_INTEGER,
-              roi: { ...coinData.roi, times: coinData.roi ? coinData.roi.times : coinData.atl_change_percentage / 100, currency: coinData.roi ? coinData.roi.currency : vs_currency, percentage: coinData.roi ? coinData.roi.percentage : coinData.atl_change_percentage},
-              market_cap: typeof coinData.market_cap === 'string' ? Number(coinData.market_cap) : typeof coinData.market_cap === 'number' ? coinData.market_cap : -1,
-              market_cap_change_24h: typeof coinData.market_cap_change_24h === 'string' ? Number(coinData.market_cap_change_24h) : typeof coinData.market_cap_change_24h === 'number' ? coinData.market_cap_change_24h : Number.MIN_SAFE_INTEGER,
-              fully_diluted_valuation: typeof coinData.fully_diluted_valuation === 'string' ? Number(coinData.fully_diluted_valuation) : typeof coinData.fully_diluted_valuation === 'number' ? coinData.fully_diluted_valuation : (coinData.current_price * (coinData.max_supply || coinData.total_supply || coinData.circulating_supply)) || -1,
-              circulating_supply: typeof coinData.circulating_supply === 'string' ? Number(coinData.circulating_supply) : typeof coinData.circulating_supply === 'number' ? coinData.circulating_supply : -1,
-              total_volume: typeof coinData.total_volume === 'string' ? Number(coinData.total_volume) : typeof coinData.total_volume === 'number' ? coinData.total_volume : -1,
-              volume_24h: typeof coinData.volume_24h === 'string' ? Number(coinData.volume_24h) : typeof coinData.volume_24h === 'number' ? coinData.volume_24h : -1,
-            }
-          }),
-
-          data = data.map(coinData => {
-            return { ...coinData, market_share: coinData.volume_24h > -1 ? coinData.volume_24h / _.sumBy(data.filter(_coinData => _coinData.volume_24h > 0), 'volume_24h') : -1 }
-          })
-
-          setCoinsData({
-            data,
-            coin_type,
-            vs_currency
-          })
+          setCoinsData({ data, coin_type, vs_currency })
         }
       }
     }
 
-    if ((pathname.endsWith('/coins') || (coin_type && (
-      (navigationData.items.findIndex(item => item.url === _asPath) > -1) ||
-      (all_crypto_data && all_crypto_data.categories && all_crypto_data.categories.findIndex(categoryData => categoryData.category_id === coin_type) > -1)
-    ))) && (coin_type === 'categories' || page > -1)) {
+    if (all_crypto_data && (coin_type === 'categories' || page > -1) &&
+      (
+        (
+          pathname.endsWith('/coins') ||
+          (coin_type && (
+            (navigationData.items.findIndex(item => item.url === _asPath) > -1) ||
+            (all_crypto_data.categories && all_crypto_data.categories.findIndex(categoryData => categoryData.category_id === coin_type) > -1)
+          ))
+        )
+      )
+    ) {
       getCoins()
     }
 
@@ -122,7 +150,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
             Cell: props => (
               <div className="flex items-center justify-center text-gray-600 dark:text-gray-400">
                 {!props.row.original.skeleton ?
-                  props.value > -1 ?
+                  (coin_type === 'categories' ? props.value > -1 : props.value < Number.MAX_SAFE_INTEGER) ?
                     numberFormat(props.value + (coin_type === 'categories' ? 1 : 0), '0,0')
                     :
                     '-'
@@ -139,7 +167,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
             Cell: props => (
               !props.row.original.skeleton ?
                 <Link href={`/coin${props.row.original.id ? `${coin_type === 'categories' ? 's' : ''}/${props.row.original.id}` : 's'}`}>
-                  <a className="flex flex-col whitespace-pre-wrap text-blue-600 dark:text-blue-400 font-semibold" style={{ maxWidth: '10rem' }}>
+                  <a className="flex flex-col whitespace-pre-wrap text-blue-600 dark:text-blue-400 font-semibold" style={{ maxWidth: coin_type === 'categories' ? 'unset' : '10rem' }}>
                     <div className="coin-column flex items-center space-x-2">
                       {coin_type !== 'categories' && (
                         <Image
@@ -152,7 +180,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
                       )}
                       <span className="space-x-1">
                         <span>{props.value}</span>
-                        {props.row.original.symbol && (<span className="uppercase text-gray-400 font-normal">{props.row.original.symbol}</span>)}
+                        {props.row.original.symbol && (<span className={`uppercase text-gray-400 font-normal ${props.row.original.symbol.length > 5 ? 'break-all' : ''}`}>{props.row.original.symbol}</span>)}
                       </span>
                     </div>
                   </a>
@@ -299,12 +327,21 @@ const Coins = ({ navigationData, navigationItemData }) => {
           {
             Header: 'ROI',
             accessor: 'roi.times',
-            sortType: (rowA, rowB) => rowA.original.roi.times > rowB.original.roi.times ? 1 : -1,
+            sortType: (rowA, rowB) => (rowA.original.roi ? rowA.original.roi.times : null) > (rowB.original.roi ? rowB.original.roi.times : null) ? 1 : -1,
             Cell: props => (
-              <div className={`${props.value < 1 ? 'text-red-500 dark:text-red-400' : props.value > 1 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} text-xs font-medium text-right`}>
+              <div className={`${props.value < 0 ? 'text-red-500 dark:text-red-400' : props.value > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} text-xs font-medium text-right`}>
                 {!props.row.original.skeleton ?
                   typeof props.value === 'number' ?
-                    `${numberFormat(props.value, `0,0.000${Math.abs(props.value) < 0.001 ? '000' : ''}`)}x`
+                    <>
+                      <span>{numberFormat(props.value, `+0,0.000${Math.abs(props.value) < 0.001 ? '000' : ''}`)}x</span>
+                      <div className="text-gray-400 dark:text-gray-600 font-light" style={{ fontSize: '.65rem' }}>
+                        {props.row.original.roi.from ?
+                          <>from <span className="uppercase font-medium">{props.row.original.roi.from}</span></>
+                          :
+                          <>in <span className="uppercase font-medium">{props.row.original.roi.currency}</span></>
+                        }
+                      </div>
+                    </>
                     :
                     '-'
                   :
@@ -513,9 +550,10 @@ const Coins = ({ navigationData, navigationItemData }) => {
             ),
             headerClassName: 'justify-end text-right',
           },
-        ].filter(column => !((coin_type === 'categories' ? ['current_price', 'price_change_percentage_1h_in_currency', 'price_change_percentage_24h_in_currency', 'price_change_percentage_7d_in_currency', 'price_change_percentage_30d_in_currency', 'roi', 'fully_diluted_valuation', 'total_volume', 'circulating_supply'] : ['market_cap_change_24h', 'volume_24h', 'market_share']).includes(column.accessor)))}
-        data={coinsData && coinsData.vs_currency === vs_currency ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
+        ].filter(column => !((coin_type === 'categories' ? ['current_price', 'price_change_percentage_1h_in_currency', 'price_change_percentage_24h_in_currency', 'price_change_percentage_7d_in_currency', 'price_change_percentage_30d_in_currency', 'roi.times', 'fully_diluted_valuation', 'total_volume', 'circulating_supply'] : ['market_cap_change_24h', 'volume_24h', 'market_share']).includes(column.accessor)))}
+        data={coinsData && coinsData.vs_currency === vs_currency ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => {return { i, skeleton: true } })}
         defaultPageSize={100}
+        pagination={!(coin_type && !(['high-volume'].includes(coin_type))) && (<></>)}
         className={`${coin_type === 'categories' ? 'striped' : ''}`}
       />
     </div>

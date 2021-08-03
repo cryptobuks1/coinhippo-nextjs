@@ -35,7 +35,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
 
   useEffect(() => {
     const getExchanges = async () => {
-      let data = null
+      let data
 
       for (let i = 0; i < 10; i++) {
         const response = await (exchange_type === 'derivatives' ? derivativesExchanges({ per_page, page: i + 1 }) : exchanges({ per_page, page: i + 1 }))

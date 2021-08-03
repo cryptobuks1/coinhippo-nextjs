@@ -26,13 +26,23 @@ export default function Search() {
         return false
       }
       setHidden(!hidden)
+      setInputSearch('')
     }
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [hidden, buttonRef, dropdownRef])
 
-  const handleDropdownClick = () => setHidden(!hidden)
+  const handleDropdownClick = () => {
+    if (hidden) {
+      setHidden(!hidden)
+    }
+  }
+
+  const handleSelect = () => {
+    setHidden(true)
+    setInputSearch('')
+  }
 
   useEffect(() => {
     const getAllCrypto = async () => {
@@ -106,6 +116,7 @@ export default function Search() {
       <div className="relative">
         <input
           ref={buttonRef}
+          value={inputSearch}
           onClick={handleDropdownClick}
           onChange={event => {
             setInputSearch(event.target.value)
@@ -125,7 +136,7 @@ export default function Search() {
           className={`dropdown ${hidden ? '' : 'open'} absolute top-0 left-0 md:left-8 mt-12`}
         >
           <div className="dropdown-content w-64 bottom-start">
-            <AllCrypto data={all_crypto_data} trendingData={trending_data} inputSearch={inputSearch} handleDropdownClick={handleDropdownClick} />
+            <AllCrypto data={all_crypto_data} trendingData={trending_data} inputSearch={inputSearch} handleSelect={handleSelect} />
           </div>
         </div>
       </div>

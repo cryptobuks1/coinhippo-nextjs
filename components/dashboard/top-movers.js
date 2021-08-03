@@ -79,7 +79,7 @@ export default function TopMover() {
                       />
                       <div>
                         <span className="text-gray-900 dark:text-gray-100">{coinData.name}</span>
-                        <span className="text-gray-400 font-normal ml-1">{coinData.symbol && coinData.symbol.toUpperCase()}</span>
+                        <span className="uppercase text-gray-400 font-normal ml-1">{coinData.symbol}</span>
                       </div>
                     </a>
                   </Link>
