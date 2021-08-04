@@ -374,12 +374,12 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
               <div className="flex items-center justify-end mr-2 lg:mr-4 xl:mr-8">
                 {!props.row.original.skeleton ?
                   props.value ?
-                    <a href={props.value} target="_blank" rel="noopener noreferrer" className="btn btn-raised min-w-max btn-rounded bg-indigo-600 hover:bg-indigo-700 text-white hover:text-gray-50 text-xs text-right my-1 p-2">
+                    <a href={props.value} target="_blank" rel="noopener noreferrer" className="btn btn-raised min-w-max btn-rounded bg-indigo-600 hover:bg-indigo-700 text-white hover:text-gray-50 text-xs my-1 p-2">
                       Start Trading
                     </a>
                     :
                     <Link href={`/exchange${props.row.original.id ? `/${props.row.original.id}` : 's'}`}>
-                      <a className="btn btn-raised min-w-max btn-rounded bg-gray-50 hover:bg-gray-100 text-gray-700 hover:text-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-gray-100 text-xs text-right my-1 p-2">
+                      <a className="btn btn-raised min-w-max btn-rounded bg-gray-50 hover:bg-gray-100 text-gray-700 hover:text-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-gray-100 text-xs my-1 p-2">
                         See More
                       </a>
                     </Link>

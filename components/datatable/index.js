@@ -1,5 +1,5 @@
 import { useState, useEffect, forwardRef, useRef } from 'react'
-import { PageWithText } from '../pagination'
+import { PageWithText, Pagination } from '../pagination'
 import { useTable, useSortBy, usePagination, useRowSelect } from 'react-table'
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi'
 
@@ -117,6 +117,7 @@ export default function Datatable({ columns, data, rowSelectEnable, defaultPageS
         :
         <div className="flex flex-col sm:flex-row items-center justify-between my-4">
           <select
+            disabled={loading}
             value={pageSize}
             onChange={event => setPageSize(Number(event.target.value))}
             className="form-select dark:bg-gray-800 outline-none dark:border-gray-800 shadow-none focus:shadow-none text-xs"
@@ -127,54 +128,74 @@ export default function Datatable({ columns, data, rowSelectEnable, defaultPageS
               </option>
             ))}
           </select>
-          <span className="my-2 sm:my-0">
-            Page <span className="font-bold">{pageIndex + 1}</span> of <span className="font-bold">{pageOptions.length}</span>
-          </span>
+          {pageCount <= 10 && (
+            <span className="my-2 sm:my-0">
+              Page <span className="font-bold">{pageIndex + 1}</span> of <span className="font-bold">{pageOptions.length}</span>
+            </span>
+          )}
           <div className="pagination flex flex-wrap items-center justify-end">
-            {pageIndex !== 0 && (
-              <PageWithText
-                disabled={loading}
-                onClick={() => {
-                  gotoPage(0)
-                  tableRef.current.scrollIntoView() 
-                }}
-              >
-                First
-              </PageWithText>
-            )}
-            {canPreviousPage && (
-              <PageWithText
-                disabled={loading}
-                onClick={() => {
-                  previousPage()
-                  tableRef.current.scrollIntoView() 
-                }}
-              >
-                Previous
-              </PageWithText>
-            )}
-            {canNextPage && (
-              <PageWithText
-                disabled={!canNextPage || loading}
-                onClick={() => {
-                  nextPage()
-                  tableRef.current.scrollIntoView() 
-                }}
-              >
-                Next
-              </PageWithText>
-            )}
-            {pageIndex !== pageCount - 1 && (
-              <PageWithText
-                disabled={!canNextPage || loading}
-                onClick={() => {
-                  gotoPage(pageCount - 1)
-                  tableRef.current.scrollIntoView() 
-                }}
-              >
-                Last
-              </PageWithText>
-            )}
+            {pageCount > 10 ?
+              <div className="flex flex-col sm:flex-row items-center justify-center mt-2 sm:mt-0">
+                <Pagination
+                  disabled={loading}
+                  active={pageIndex + 1}
+                  items={[...Array(pageCount).keys()]}
+                  previous="Previous"
+                  next="Next"
+                  onClick={_page => {
+                    gotoPage(_page - 1)
+                    tableRef.current.scrollIntoView() 
+                  }}
+                />
+              </div>
+              :
+              <>
+                {pageIndex !== 0 && (
+                  <PageWithText
+                    disabled={loading}
+                    onClick={() => {
+                      gotoPage(0)
+                      tableRef.current.scrollIntoView() 
+                    }}
+                  >
+                    First
+                  </PageWithText>
+                )}
+                {canPreviousPage && (
+                  <PageWithText
+                    disabled={loading}
+                    onClick={() => {
+                      previousPage()
+                      tableRef.current.scrollIntoView() 
+                    }}
+                  >
+                    Previous
+                  </PageWithText>
+                )}
+                {canNextPage && (
+                  <PageWithText
+                    disabled={!canNextPage || loading}
+                    onClick={() => {
+                      nextPage()
+                      tableRef.current.scrollIntoView() 
+                    }}
+                  >
+                    Next
+                  </PageWithText>
+                )}
+                {pageIndex !== pageCount - 1 && (
+                  <PageWithText
+                    disabled={!canNextPage || loading}
+                    onClick={() => {
+                      gotoPage(pageCount - 1)
+                      tableRef.current.scrollIntoView() 
+                    }}
+                  >
+                    Last
+                  </PageWithText>
+                )}
+              </>
+            }
           </div>
         </div>
       }

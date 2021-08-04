@@ -77,6 +77,7 @@ export const Pagination = ({
   onClick,
   disabled = false,
 }) => {
+  console.log(active)
   previous = active - 1 > 0 && previous
   next = active + 1 <= items.length && next
 
