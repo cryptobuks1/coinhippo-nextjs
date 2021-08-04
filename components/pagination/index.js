@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 
 export const PageWithText = ({
-  activeClassNames = 'btn btn-default bg-blue-500 hover:bg-blue-600 text-white',
+  activeClassNames = 'btn btn-default bg-indigo-500 hover:bg-indigo-600 text-white',
   inactiveClassNames = 'btn btn-default bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white',
   children,
   active = false,
@@ -22,8 +22,8 @@ export const PageWithText = ({
 }
 
 export const Page = ({
-  activeClassNames = 'btn btn-circle bg-blue-500 hover:bg-blue-600 text-white',
-  inactiveClassNames = 'btn btn-circle bg-transparent hover:bg-gray-200 text-gray-900 dark:text-white',
+  activeClassNames = 'btn btn-circle bg-indigo-600 hover:bg-indigo-500 text-white',
+  inactiveClassNames = 'btn btn-circle bg-transparent hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white',
   children,
   active = false,
   onClick
@@ -45,7 +45,7 @@ export const Page = ({
 export const Pages = ({ items, active, onClick }) => (
   <>
     {items.map(i => (
-      <Page key={i} onClick={onClick} active={i + 1 === 5 ? true : false}>
+      <Page key={i} onClick={() => onClick(i + 1)} active={i + 1 === active}>
         {i + 1}
       </Page>
     ))}
@@ -68,17 +68,17 @@ export const Pagination = ({
   if (icons) {
     return (
       <div className="pagination flex flex-wrap items-center justify-start space-x-2">
-        {previous && <Page onClick={onClick}>{previous}</Page>}
+        {previous && <Page onClick={() => onClick(active - 1)}>{previous}</Page>}
         <Pages active={active} items={items} onClick={onClick} />
-        {next && <Page onClick={onClick}>{next}</Page>}
+        {next && <Page onClick={() => onClick(active + 1)}>{next}</Page>}
       </div>
     )
   }
   return (
     <div className="pagination flex flex-wrap items-center justify-start space-x-2">
-      {previous && <PageWithText onClick={onClick}>{previous}</PageWithText>}
+      {previous && <PageWithText onClick={() => onClick(active - 1)}>{previous}</PageWithText>}
       <Pages active={active} items={items} onClick={onClick} />
-      {next && <PageWithText onClick={onClick}>{next}</PageWithText>}
+      {next && <PageWithText onClick={() => onClick(active + 1)}>{next}</PageWithText>}
     </div>
   )
 }

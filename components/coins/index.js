@@ -13,7 +13,7 @@ import _ from 'lodash'
 import { coinsMarkets, categoriesMarkets } from '../../lib/api/coingecko'
 import { navigation, currencies } from '../../lib/menus'
 import useMountedRef from '../../lib/mountedRef'
-import { numberFormat } from '../../lib/utils'
+import { generateUrl, numberFormat } from '../../lib/utils'
 
 const Coins = ({ navigationData, navigationItemData }) => {
   const { preferences, data } = useSelector(state => ({ preferences: state.preferences, data: state.data }), shallowEqual)
@@ -30,14 +30,14 @@ const Coins = ({ navigationData, navigationItemData }) => {
   coin_type = coin_type === 'coins' ? '' : coin_type
   page = coin_type !== 'categories' ? !isNaN(page) && Number(page) > 0 ? Number(page) : typeof page === 'undefined' ? 1 : -1 : -1
 
+  const per_page = coin_type && !(['high-volume'].includes(coin_type)) ? 50 : 100
+
   const [coinsData, setCoinsData] = useState(null)
 
   const mountedRef = useMountedRef()
 
   useEffect(() => {
     const getCoins = async () => {
-      const per_page = coin_type && !(['high-volume'].includes(coin_type)) ? 50 : 100
-
       let data
 
       for (let i = 0; i < (coin_type && !(['high-volume', 'categories'].includes(coin_type)) ? 10 : 1); i++) {
@@ -99,7 +99,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
         })
 
         if (mountedRef.current) {
-          setCoinsData({ data, coin_type, vs_currency })
+          setCoinsData({ data, coin_type, vs_currency, page })
         }
       }
     }
@@ -120,7 +120,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
 
     const interval = setInterval(() => getCoins(), 3 * 60 * 1000)
     return () => clearInterval(interval)
-  }, [all_crypto_data, vs_currency, page, coin_type])
+  }, [all_crypto_data, vs_currency, coin_type, page])
 
   if (!navigationData) {
     navigation.forEach(nav => {
@@ -149,7 +149,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
     <div className="mx-1">
       {pathname.endsWith('/[coin_type]') && (
         <div className="flex flex-col sm:flex-row items-start space-y-1 sm:space-y-0 space-x-0 sm:space-x-4 mb-2 ml-0.5">
-          {coinsData && coinsData.vs_currency === vs_currency && coin_type === coinsData.coin_type ?
+          {coinsData && coinsData.vs_currency === vs_currency && coin_type === coinsData.coin_type && page === coinsData.page ?
             <>
               <span className="flex items-center space-x-1">
                 <span className="text-gray-400 dark:text-gray-600 font-normal">Coins:</span>
@@ -615,16 +615,16 @@ const Coins = ({ navigationData, navigationItemData }) => {
             headerClassName: 'justify-end text-right',
           },
         ].filter(column => !((coin_type === 'categories' ? ['current_price', 'price_change_percentage_1h_in_currency', 'price_change_percentage_24h_in_currency', 'price_change_percentage_7d_in_currency', 'price_change_percentage_30d_in_currency', 'roi.times', 'fully_diluted_valuation', 'total_volume', 'circulating_supply'] : ['market_cap_change_24h', 'volume_24h', 'market_share']).includes(column.accessor)))}
-        data={coinsData && coinsData.vs_currency === vs_currency && coin_type === coinsData.coin_type ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => {return { i, skeleton: true } })}
+        data={coinsData && coinsData.vs_currency === vs_currency && coin_type === coinsData.coin_type && page === coinsData.page ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => {return { i, skeleton: true } })}
         defaultPageSize={100}
         pagination={!(coin_type && !(['high-volume'].includes(coin_type))) && (
           <div className="flex flex-col sm:flex-row items-center justify-center my-4">
             <Pagination
-              items={Array.from(Array(10).keys())}
+              items={[...Array(Math.ceil((all_crypto_data && all_crypto_data.coins ? all_crypto_data.coins.length : 7500) / per_page)).keys()]}
               active={page}
               previous="Previous"
               next="Next"
-              onClick={() => null}
+              onClick={_page => router.push(generateUrl(_asPath, { ...query, page: _page }))}
             />
           </div>
         )}
