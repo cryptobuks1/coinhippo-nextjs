@@ -22,11 +22,11 @@ const Summary = ({ data, navigationItemData }) => {
       />
       <Widget
         title={<span className="uppercase">Total Holdings</span>}
-        description={<span className="text-xl">
+        description={<span className="text-xl space-x-1">
           {data ?
             <>
-              {numberFormat(data.total_holdings, '0,0')}
-              {navigationItemData && navigationItemData.symbol && (<>&nbsp;{navigationItemData.symbol.toUpperCase()}</>)}
+              <span>{numberFormat(data.total_holdings, '0,0')}</span>
+              {navigationItemData && (<span className="uppercase">{navigationItemData.symbol}</span>)}
             </>
             :
             <div className="skeleton w-24 h-6 rounded mt-1" />

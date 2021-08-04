@@ -47,10 +47,12 @@ const MarqueeCoins = ({ data }) => {
                             height={16}
                             className="rounded"
                           />
-                          <span>{item.symbol && item.symbol.toUpperCase()}{item.vs_currency !== vs_currency && (<span className="font-light">{item.vs_currency.toUpperCase()}</span>)}</span>
+                          <span className="uppercase">{item.symbol}{item.vs_currency !== vs_currency && (<span className="font-light">{item.vs_currency}</span>)}</span>
                         </div>
-                        <div className={`${item.price_change_percentage_24h < 0 ? 'text-red-500 dark:text-red-400' : item.price_change_percentage_24h > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} font-medium ml-auto`}>
-                          {currency.symbol}{numberFormat(item.current_price, '0,0.00000000')}{!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}
+                        <div className={`${item.price_change_percentage_24h < 0 ? 'text-red-500 dark:text-red-400' : item.price_change_percentage_24h > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} font-medium space-x-1 ml-auto`}>
+                          {currency.symbol}
+                          <span>{numberFormat(item.current_price, '0,0.00000000')}</span>
+                          {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
                         </div>
                       </div>
                       <div className={`w-full flex items-center font-normal ml-0.5 px-2 ${index && index % data.length === 0 ? 'pl-4 md:pl-8 pr-2 md:pr-3' : 'md:px-3'}`} style={{ fontSize: '.65rem' }}>

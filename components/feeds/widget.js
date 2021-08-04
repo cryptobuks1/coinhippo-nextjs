@@ -313,7 +313,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
                               className="rounded"
                             />
                           )}
-                          <span className="text-sm font-semibold">{txData.symbol && txData.symbol.toUpperCase()}</span>
+                          <span className="uppercase text-sm font-semibold">{txData.symbol}</span>
                         </div>
                         <div className="flex flex-col items-end ml-auto">
                           <div className="uppercase text-sm font-semibold">{numberFormat(txData.amount, '0,0')} {txData.symbol}</div>

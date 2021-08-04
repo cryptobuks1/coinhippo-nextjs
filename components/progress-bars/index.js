@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
 
 export const ProgressBar = ({ width, color, backgroundClassName = '', className = '' }) => {
+  width = width < 0 ? 0 : width > 100 ? 100 : width
+
   return (
     <div className={`w-full h-1 relative flex flex-row items-center text-xs text-center ${backgroundClassName}`}>
       <div className={`w-full h-1 top-0 left-0 ${color} ${className}`} style={{ width: `${width}%` }} />
@@ -15,6 +17,8 @@ ProgressBar.propTypes = {
 }
 
 export const ProgressBarWithText = ({ width, color, text, backgroundClassName = '', className = '' }) => {
+  width = width < 0 ? 0 : width > 100 ? 100 : width
+
   return (
     <div className={`w-full ${backgroundClassName.includes('h-') ? '' : 'h-4'} ${backgroundClassName.includes('bg-') ? '' : 'bg-gray-50 dark:bg-gray-800'} relative flex flex-row items-center text-xs text-center ${backgroundClassName}`}>
       <div className={`w-full absolute top-0 text-white ${color} ${className}`} style={{ width: `${width}%` }}>

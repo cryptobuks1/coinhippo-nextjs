@@ -50,7 +50,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
                   volume_24h: typeof derivativeData.volume_24h === 'string' ? Number(derivativeData.volume_24h) : typeof derivativeData.volume_24h === 'number' ? derivativeData.volume_24h : -1,
                 }
               }),
-            derivative_type
+            derivative_type,
           })
         }
       }
@@ -82,36 +82,42 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
 
   return (!derivativesData || derivative_type === derivativesData.derivative_type) && (
     <div className="mx-1">
-      <div className="flex items-start mb-3 ml-0.5">
+      <div className="flex flex-col sm:flex-row items-start space-y-1 sm:space-y-0 space-x-0 sm:space-x-4 mb-2 ml-0.5">
         {derivativesData ?
           <>
-            <span className="text-gray-400 dark:text-gray-600 font-normal mr-2 sm:mr-4">
-              Contracts:&nbsp;
+            <span className="flex items-center space-x-1">
+              <span className="text-gray-400 dark:text-gray-600 font-normal">Contracts:</span>
               <span className="text-gray-700 dark:text-gray-300 font-medium">{numberFormat(derivativesData.data.length, '0,0')}</span>
             </span>
-            <span className="flex flex-wrap items-center justify-end text-gray-400 dark:text-gray-600 font-normal mr-2 sm:mr-4">
-              Open&nbsp;Interest:&nbsp;
-              <span className="text-gray-700 dark:text-gray-300 font-medium mr-0.5 sm:mr-1">
+            <span className="flex flex-wrap items-center justify-start sm:justify-end space-x-1">
+              <span className="text-gray-400 dark:text-gray-600 font-normal">Open Interest:</span>
+              <span className="text-gray-700 dark:text-gray-300 font-medium space-x-1">
                 {(exchange_rates_data ? currency : currencyUSD).symbol}
-                {numberFormat(_.sumBy(derivativesData.data.filter(derivativeData => derivativeData.open_interest > 0), 'open_interest') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1), '0,0')}
-                {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<>&nbsp;{(exchange_rates_data ? currency : currencyUSD).id.toUpperCase()}</>)}
+                <span>{numberFormat(_.sumBy(derivativesData.data.filter(derivativeData => derivativeData.open_interest > 0), 'open_interest') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1), '0,0')}</span>
+                {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyUSD).id}</span>)}
               </span>
               {exchange_rates_data && vs_currency !== currencyUSD.id && (
-                <div className="text-gray-400 dark:text-gray-600 text-xs font-medium">
-                  ({numberFormat(_.sumBy(derivativesData.data.filter(derivativeData => derivativeData.open_interest > 0), 'open_interest'), '0,0')}&nbsp;{currencyUSD.id.toUpperCase()})
+                <div className="text-gray-400 dark:text-gray-600 text-xs font-medium space-x-1">
+                  (
+                  <span>{numberFormat(_.sumBy(derivativesData.data.filter(derivativeData => derivativeData.open_interest > 0), 'open_interest'), '0,0')}</span>
+                  <span className="uppercase">{currencyUSD.id}</span>
+                  )
                 </div>
               )}
             </span>
-            <span className="flex flex-wrap items-center justify-end text-gray-400 dark:text-gray-600 font-normal">
-              24h&nbsp;Vol:&nbsp;
-              <span className="text-gray-700 dark:text-gray-300 font-medium mr-0.5 sm:mr-1">
+            <span className="flex flex-wrap items-center justify-start sm:justify-end space-x-1">
+              <span className="text-gray-400 dark:text-gray-600 font-normal">24h Vol:</span>
+              <span className="text-gray-700 dark:text-gray-300 font-medium space-x-1">
                 {(exchange_rates_data ? currency : currencyUSD).symbol}
-                {numberFormat(_.sumBy(derivativesData.data.filter(derivativeData => derivativeData.volume_24h > 0), 'volume_24h') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1), '0,0')}
-                {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<>&nbsp;{(exchange_rates_data ? currency : currencyUSD).id.toUpperCase()}</>)}
+                <span>{numberFormat(_.sumBy(derivativesData.data.filter(derivativeData => derivativeData.volume_24h > 0), 'volume_24h') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1), '0,0')}</span>
+                {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyUSD).id}</span>)}
               </span>
               {exchange_rates_data && vs_currency !== currencyUSD.id && (
-                <div className="text-gray-400 dark:text-gray-600 text-xs font-medium">
-                  ({numberFormat(_.sumBy(derivativesData.data.filter(derivativeData => derivativeData.volume_24h > 0), 'volume_24h'), '0,0')}&nbsp;{currencyUSD.id.toUpperCase()})
+                <div className="text-gray-400 dark:text-gray-600 text-xs font-medium space-x-1">
+                  (
+                  <span>{numberFormat(_.sumBy(derivativesData.data.filter(derivativeData => derivativeData.volume_24h > 0), 'volume_24h'), '0,0')}</span>
+                  <span className="uppercase">{currencyUSD.id}</span>
+                  )
                 </div>
               )}
             </span>
@@ -205,18 +211,21 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
                 {!props.row.original.skeleton ?
                   <>
                     {props.value > -1 ?
-                      <>
+                      <span className="space-x-1">
                         {(exchange_rates_data ? currency : currencyUSD).symbol}
-                        {numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1), '0,0.00000000')}
-                        {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<>&nbsp;{(exchange_rates_data ? currency : currencyUSD).id.toUpperCase()}</>)}
-                      </>
+                        <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1), '0,0.00000000')}</span>
+                        {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<span className="uppercase">(exchange_rates_data ? currency : currencyUSD).id}</span>)}
+                      </span>
                       :
                       '-'
                     }
                     {exchange_rates_data && vs_currency !== currencyUSD.id && (
-                      <span className="text-gray-400 text-xs font-medium">
+                      <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
-                          <>{numberFormat(props.value, '0,0.00000000')}&nbsp;{currencyUSD.id.toUpperCase()}</>
+                          <>
+                            <span>{numberFormat(props.value, '0,0.00000000')}</span>
+                            <span className="uppercase">{currencyUSD.id}</span>
+                          </>
                           :
                           '-'
                         }
@@ -300,7 +309,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
             headerClassName: 'justify-end text-right mr-2',
           },
           {
-            Header: 'Funding Rate',
+            Header: (<span style={{ fontSize: '.65rem' }}>Funding Rate</span>),
             accessor: 'funding_rate',
             sortType: (rowA, rowB) => rowA.original.funding_rate > rowB.original.funding_rate ? 1 : -1,
             Cell: props => (
@@ -315,7 +324,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
             headerClassName: 'justify-end text-right mr-2',
           },
           {
-            Header: '24h Open Interest',
+            Header: (<span style={{ fontSize: '.65rem' }}>24h Open Interest</span>),
             accessor: 'open_interest',
             sortType: (rowA, rowB) => rowA.original.open_interest > rowB.original.open_interest ? 1 : -1,
             Cell: props => (
@@ -323,18 +332,21 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
                 {!props.row.original.skeleton ?
                   <>
                     {props.value > -1 ?
-                      <>
+                      <span className="space-x-1">
                         {(exchange_rates_data ? currency : currencyUSD).symbol}
-                        {numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1)) < 1 ? '.000' : ''}`)}
-                        {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<>&nbsp;{(exchange_rates_data ? currency : currencyUSD).id.toUpperCase()}</>)}
-                      </>
+                        <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
+                        {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyUSD).id}</span>)}
+                      </span>
                       :
                       '-'
                     }
                     {exchange_rates_data && vs_currency !== currencyUSD.id && (
-                      <span className="text-gray-400 text-xs font-medium">
+                      <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
-                          <>{numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}&nbsp;{currencyUSD.id.toUpperCase()}</>
+                          <>
+                            <span>{numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}</span>
+                            <span className="uppercase">{currencyUSD.id}</span>
+                          </>
                           :
                           '-'
                         }
@@ -352,7 +364,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
             headerClassName: 'justify-end text-right mr-2',
           },
           {
-            Header: '24h Volume',
+            Header: (<span style={{ fontSize: '.65rem' }}>24h Volume</span>),
             accessor: 'volume_24h',
             sortType: (rowA, rowB) => rowA.original.volume_24h > rowB.original.volume_24h ? 1 : -1,
             Cell: props => (
@@ -360,18 +372,21 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
                 {!props.row.original.skeleton ?
                   <>
                     {props.value > -1 ?
-                      <>
+                      <span className="space-x-1">
                         {(exchange_rates_data ? currency : currencyUSD).symbol}
-                        {numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1)) < 1 ? '.000' : ''}`)}
-                        {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<>&nbsp;{(exchange_rates_data ? currency : currencyUSD).id.toUpperCase()}</>)}
-                      </>
+                        <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
+                        {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyUSD).id}</span>)}
+                      </span>
                       :
                       '-'
                     }
                     {exchange_rates_data && vs_currency !== currencyUSD.id && (
-                      <span className="text-gray-400 text-xs font-medium">
+                      <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
-                          <>{numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}&nbsp;{currencyUSD.id.toUpperCase()}</>
+                          <>
+                            <span>{numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}</span>
+                            <span className="uppercase">{currencyUSD.id}</span>
+                          </>
                           :
                           '-'
                         }

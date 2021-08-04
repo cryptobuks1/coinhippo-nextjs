@@ -103,11 +103,11 @@ const PublicCompanies = ({ navigationData, navigationItemData }) => {
             accessor: 'total_holdings',
             sortType: (rowA, rowB) => rowA.original.total_holdings > rowB.original.total_holdings ? 1 : -1,
             Cell: props => (
-              <div className="text-indigo-700 dark:text-indigo-300 font-bold text-right mr-2 lg:mr-4 xl:mr-8">
+              <div className="text-indigo-700 dark:text-indigo-300 font-bold text-right space-x-1 mr-2 lg:mr-4 xl:mr-8">
                 {!props.row.original.skeleton ?
                   <>
-                    {numberFormat(props.value, '0,0')}
-                    {navigationItemData && navigationItemData.symbol && (<>&nbsp;{navigationItemData.symbol.toUpperCase()}</>)}
+                    <span>{numberFormat(props.value, '0,0')}</span>
+                    {navigationItemData && (<span className="uppercase">{navigationItemData.symbol}</span>)}
                   </>
                   :
                   <div className="skeleton w-16 h-4 rounded ml-auto" />

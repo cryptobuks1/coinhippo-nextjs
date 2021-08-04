@@ -7,14 +7,13 @@ import Datatable from '../../components/datatable'
 import Image from '../../components/image'
 import { Badge } from '../../components/badges'
 import { ProgressBar, ProgressBarWithText } from '../../components/progress-bars'
+import { Pagination } from '../../components/pagination'
 import { MdArrowDropUp } from 'react-icons/md'
 import _ from 'lodash'
 import { coinsMarkets, categoriesMarkets } from '../../lib/api/coingecko'
 import { navigation, currencies } from '../../lib/menus'
 import useMountedRef from '../../lib/mountedRef'
 import { numberFormat } from '../../lib/utils'
-
-const per_page = 100
 
 const Coins = ({ navigationData, navigationItemData }) => {
   const { preferences, data } = useSelector(state => ({ preferences: state.preferences, data: state.data }), shallowEqual)
@@ -37,13 +36,20 @@ const Coins = ({ navigationData, navigationItemData }) => {
 
   useEffect(() => {
     const getCoins = async () => {
+      const per_page = coin_type && !(['high-volume'].includes(coin_type)) ? 50 : 100
+
       let data
 
-      for (let i = 0; i < (coin_type && !(['high-volume'].includes(coin_type)) ? 10 : 1); i++) {
+      for (let i = 0; i < (coin_type && !(['high-volume', 'categories'].includes(coin_type)) ? 10 : 1); i++) {
         const response = await (coin_type === 'categories' ?
           categoriesMarkets({ vs_currency })
           :
-          coinsMarkets({ vs_currency, category: coin_type && !(['high-volume'].includes(coin_type)) ? coin_type : undefined, order: ['high-volume'].includes(coin_type) ? 'volume_desc' : 'market_cap_desc', per_page, page: coin_type && !(['high-volume'].includes(coin_type)) ? i + 1 : page, price_change_percentage: /*'1h*,*/'24h,7d,30d' })
+          coinsMarkets({ vs_currency,
+            category: coin_type && !(['high-volume'].includes(coin_type)) ? coin_type : undefined,
+            order: ['high-volume'].includes(coin_type) ? 'volume_desc' : 'market_cap_desc',
+            per_page,
+            page: coin_type && !(['high-volume'].includes(coin_type)) ? i + 1 : page, price_change_percentage: /*'1h*,*/'24h,7d,30d' }
+          )
         )
 
         if (Array.isArray(response)) {
@@ -74,7 +80,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
                   volume_24h: typeof coinData.volume_24h === 'string' ? Number(coinData.volume_24h) : typeof coinData.volume_24h === 'number' ? coinData.volume_24h : -1,
                 }
               }),
-              [['high-volume'].includes(coin_type) ? 'total_volume' : ['categories'].includes(coin_type) ? 'market_cap' : 'market_cap_rank'], ['desc']
+              [['high-volume'].includes(coin_type) ? 'total_volume' : ['categories'].includes(coin_type) ? 'market_cap' : 'market_cap_rank'], [['high-volume', 'categories'].includes(coin_type) ? 'desc' : 'asc']
             )
           )
 
@@ -141,6 +147,55 @@ const Coins = ({ navigationData, navigationItemData }) => {
 
   return (!coinsData || coin_type === coinsData.coin_type) && (
     <div className="mx-1">
+      {pathname.endsWith('/[coin_type]') && (
+        <div className="flex flex-col sm:flex-row items-start space-y-1 sm:space-y-0 space-x-0 sm:space-x-4 mb-2 ml-0.5">
+          {coinsData && coinsData.vs_currency === vs_currency ?
+            <>
+              <span className="flex items-center space-x-1">
+                <span className="text-gray-400 dark:text-gray-600 font-normal">Coins:</span>
+                <span className="text-gray-700 dark:text-gray-300 font-medium">{numberFormat(coinsData.data.length, '0,0')}</span>
+              </span>
+              <span className="flex flex-wrap items-center justify-start sm:justify-end space-x-1">
+                <span className="text-gray-400 dark:text-gray-600 font-normal">Market Cap:</span>
+                <span className="text-gray-700 dark:text-gray-300 font-medium space-x-1">
+                  {(exchange_rates_data ? currency : currencyBTC).symbol}
+                  <span>{numberFormat(_.sumBy(coinsData.data.filter(coinData => coinData.market_cap > 0), 'market_cap') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), '0,0')}</span>
+                  {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyBTC).id}</span>)}
+                </span>
+                {exchange_rates_data && vs_currency !== currencyBTC.id && (
+                  <div className="text-gray-400 dark:text-gray-600 text-xs font-medium space-x-1">
+                    (
+                    <span>{numberFormat(_.sumBy(coinsData.data.filter(coinData => coinData.market_cap > 0), 'market_cap'), '0,0')}</span>
+                    <span className="uppercase">{currencyBTC.id}</span>
+                    )
+                  </div>
+                )}
+              </span>
+              <span className="flex flex-wrap items-center justify-start sm:justify-end space-x-1">
+                <span className="text-gray-400 dark:text-gray-600 font-normal">24h Vol:</span>
+                <span className="text-gray-700 dark:text-gray-300 font-medium space-x-1">
+                  {(exchange_rates_data ? currency : currencyBTC).symbol}
+                  <span>{numberFormat(_.sumBy(coinsData.data.filter(coinData => coinData.total_volume > 0), 'total_volume') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), '0,0')}</span>
+                  {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyBTC).id}</span>)}
+                </span>
+                {exchange_rates_data && vs_currency !== currencyBTC.id && (
+                  <div className="text-gray-400 dark:text-gray-600 text-xs font-medium space-x-1">
+                    (
+                    <span>{numberFormat(_.sumBy(coinsData.data.filter(coinData => coinData.total_volume > 0), 'total_volume'), '0,0')}</span>
+                    <span className="uppercase">{currencyBTC.id}</span>
+                    )
+                  </div>
+                )}
+              </span>
+            </>
+            :
+            <>
+              <div className="skeleton w-24 h-4 rounded mr-3 sm:mr-6 mb-0.5" />
+              <div className="skeleton w-48 h-4 rounded mb-0.5" />
+            </>
+          }
+        </div>
+      )}
       <Datatable
         columns={[
           {
@@ -202,26 +257,26 @@ const Coins = ({ navigationData, navigationItemData }) => {
             accessor: 'current_price',
             sortType: (rowA, rowB) => rowA.original.current_price > rowB.original.current_price ? 1 : -1,
             Cell: props => (
-              <div className="flex flex-col font-semibold text-right ml-auto" style={{ minWidth: '7.5rem' }}>
+              <div className="flex flex-col font-semibold text-left sm:text-right ml-0 sm:ml-auto" style={{ minWidth: '7.5rem' }}>
                 {!props.row.original.skeleton ?
                   <>
                     {props.value > -1 ?
                       <>
-                        <span>
+                        <span className="space-x-1">
                           {currency.symbol}
-                          {numberFormat(props.value, '0,0.00000000')}
-                          {!(currency.symbol) && (<>&nbsp;{currency.id.toUpperCase()}</>)}
+                          <span>{numberFormat(props.value, '0,0.00000000')}</span>
+                          {!(currency.symbol) && (<span className="uppercase">{currency.id}</span>)}
                         </span>
                         <div className="flex items-center">
-                          <span className="text-gray-400 dark:text-gray-500 font-normal" style={{ fontSize: '.65rem' }}>
+                          <span className="text-gray-400 dark:text-gray-500 font-normal space-x-1" style={{ fontSize: '.65rem' }}>
                             {currency.symbol}
-                            {numberFormat(props.row.original.low_24h, '0,0.00000000')}
-                            {!(currency.symbol) && (<>&nbsp;{currency.id.toUpperCase()}</>)}
+                            <span>{numberFormat(props.row.original.low_24h, '0,0.00000000')}</span>
+                            {!(currency.symbol) && (<span className="uppercase">{currency.id}</span>)}
                           </span>
-                          <span className="text-gray-400 dark:text-gray-500 font-normal ml-auto" style={{ fontSize: '.65rem' }}>
+                          <span className="text-gray-400 dark:text-gray-500 font-normal space-x-1 ml-auto" style={{ fontSize: '.65rem' }}>
                             {currency.symbol}
-                            {numberFormat(props.row.original.high_24h, '0,0.00000000')}
-                            {!(currency.symbol) && (<>&nbsp;{currency.id.toUpperCase()}</>)}
+                            <span>{numberFormat(props.row.original.high_24h, '0,0.00000000')}</span>
+                            {!(currency.symbol) && (<span className="uppercase">{currency.id}</span>)}
                           </span>
                         </div>
                         <div className="mb-1">
@@ -240,7 +295,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
                   </>
                   :
                   <>
-                    <div className="skeleton w-20 h-4 rounded ml-auto" />
+                    <div className="skeleton w-20 h-4 rounded ml-0 sm:ml-auto" />
                     <div className="flex items-center mt-2">
                       <div className="skeleton w-8 h-3 rounded" />
                       <div className="skeleton w-8 h-3 rounded ml-auto" />
@@ -250,7 +305,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
                 }
               </div>
             ),
-            headerClassName: 'justify-end text-right',
+            headerClassName: 'justify-start sm:justify-end text-left sm:text-right',
           },
           // {
           //   Header: '1h',
@@ -360,18 +415,21 @@ const Coins = ({ navigationData, navigationItemData }) => {
                 {!props.row.original.skeleton ?
                   <>
                     {props.value > -1 ?
-                      <>
+                      <span className="space-x-1">
                         {currency.symbol}
-                        {numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}
-                        {!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}
-                      </>
+                        <span>{numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}</span>
+                        {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
+                      </span>
                       :
                       '-'
                     }
                     {exchange_rates_data && vs_currency !== currencyBTC.id && (
-                      <span className="text-gray-400 text-xs font-medium">
+                      <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
-                          <>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[vs_currency].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}&nbsp;{currencyBTC.id.toUpperCase()}</>
+                          <>
+                            <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[vs_currency].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
+                            <span className="uppercase">{currencyBTC.id}</span>
+                          </>
                           :
                           '-'
                         }
@@ -407,7 +465,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
             headerClassName: 'justify-end text-right mr-2',
           },
           {
-            Header: <span style={{ fontSize: '.65rem' }}>Fully Diluted MCap</span>,
+            Header: (<span style={{ fontSize: '.65rem' }}>Fully Diluted MCap</span>),
             accessor: 'fully_diluted_valuation',
             sortType: (rowA, rowB) => rowA.original.fully_diluted_valuation > rowB.original.fully_diluted_valuation ? 1 : -1,
             Cell: props => (
@@ -415,18 +473,21 @@ const Coins = ({ navigationData, navigationItemData }) => {
                 {!props.row.original.skeleton ?
                   <>
                     {props.value > -1 ?
-                      <>
+                      <span className="space-x-1">
                         {currency.symbol}
-                        {numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}
-                        {!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}
-                      </>
+                        <span>{numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}</span>
+                        {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
+                      </span>
                       :
                       '-'
                     }
                     {exchange_rates_data && vs_currency !== currencyBTC.id && (
-                      <span className="text-gray-400 text-xs font-medium">
+                      <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
-                          <>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[vs_currency].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}&nbsp;{currencyBTC.id.toUpperCase()}</>
+                          <>
+                            <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[vs_currency].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
+                            <span className="uppercase">{currencyBTC.id}</span>
+                          </>
                           :
                           '-'
                         }
@@ -452,18 +513,21 @@ const Coins = ({ navigationData, navigationItemData }) => {
                 {!props.row.original.skeleton ?
                   <>
                     {props.value > -1 ?
-                      <>
+                      <span className="space-x-1">
                         {currency.symbol}
-                        {numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}
-                        {!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}
-                      </>
+                        <span>{numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}</span>
+                        {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
+                      </span>
                       :
                       '-'
                     }
                     {exchange_rates_data && vs_currency !== currencyBTC.id && (
-                      <span className="text-gray-400 text-xs font-medium">
+                      <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
-                          <>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[vs_currency].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}&nbsp;{currencyBTC.id.toUpperCase()}</>
+                          <>
+                            <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[vs_currency].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
+                            <span className="uppercase">{currencyBTC.id}</span>
+                          </>
                           :
                           '-'
                         }
@@ -501,7 +565,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
             ),
           },
           {
-            Header: <span style={{ fontSize: '.65rem' }}>Circulating Supply</span>,
+            Header: (<span style={{ fontSize: '.65rem' }}>Circulating Supply</span>),
             accessor: 'circulating_supply',
             sortType: (rowA, rowB) => rowA.original.circulating_supply > rowB.original.circulating_supply ? 1 : -1,
             Cell: props => (
@@ -553,7 +617,17 @@ const Coins = ({ navigationData, navigationItemData }) => {
         ].filter(column => !((coin_type === 'categories' ? ['current_price', 'price_change_percentage_1h_in_currency', 'price_change_percentage_24h_in_currency', 'price_change_percentage_7d_in_currency', 'price_change_percentage_30d_in_currency', 'roi.times', 'fully_diluted_valuation', 'total_volume', 'circulating_supply'] : ['market_cap_change_24h', 'volume_24h', 'market_share']).includes(column.accessor)))}
         data={coinsData && coinsData.vs_currency === vs_currency ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => {return { i, skeleton: true } })}
         defaultPageSize={100}
-        pagination={!(coin_type && !(['high-volume'].includes(coin_type))) && (<></>)}
+        pagination={!(coin_type && !(['high-volume'].includes(coin_type))) && (
+          <div className="flex flex-col sm:flex-row items-center justify-center my-4">
+            <Pagination
+              items={Array.from(Array(10).keys())}
+              active={page}
+              previous="Previous"
+              next="Next"
+              onClick={() => null}
+            />
+          </div>
+        )}
         className={`${coin_type === 'categories' ? 'striped' : ''}`}
       />
     </div>

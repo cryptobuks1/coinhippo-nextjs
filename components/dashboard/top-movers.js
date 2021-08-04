@@ -83,14 +83,21 @@ export default function TopMover() {
                       </div>
                     </a>
                   </Link>
-                  <span className={`${coinData.price_change_percentage_24h < 0 ? 'text-red-500 dark:text-red-400' : coinData.price_change_percentage_24h > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} text-xs font-medium text-right ml-auto`}>
-                    {currency.symbol}{numberFormat(coinData.current_price, '0,0.00000000')}{!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}
+                  <span className={`${coinData.price_change_percentage_24h < 0 ? 'text-red-500 dark:text-red-400' : coinData.price_change_percentage_24h > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} text-xs font-medium text-right space-x-1 ml-auto`}>
+                    {currency.symbol}
+                    <span>{numberFormat(coinData.current_price, '0,0.00000000')}</span>
+                    {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
                   </span>
                 </div>
                 <div className="w-full flex items-center font-normal ml-0.5" style={{ fontSize: '.65rem' }}>
                   <div className="text-gray-600 dark:text-gray-400 mr-2">
                     <span className="text-gray-600 dark:text-gray-400 font-semibold mr-1">#{numberFormat(coinData.market_cap_rank, '0,0')}</span>
-                    <span className="text-gray-500 dark:text-gray-300 font-medium mr-1">MCap:</span>{currency.symbol}{numberFormat(coinData.market_cap, '0,0.00000000')}{!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}
+                    <span className="text-gray-500 dark:text-gray-300 font-medium mr-1">MCap:</span>
+                    <span className="space-x-1">
+                      {currency.symbol}
+                      <span>{numberFormat(coinData.market_cap, '0,0.00000000')}</span>
+                      {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
+                    </span>
                   </div>
                   <div className={`flex items-center ${coinData.price_change_percentage_24h < 0 ? 'text-red-500 dark:text-red-400' : coinData.price_change_percentage_24h > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} font-extrabold ml-auto`}>
                     {numberFormat(coinData.price_change_percentage_24h / 100, '+0,0.00%')}

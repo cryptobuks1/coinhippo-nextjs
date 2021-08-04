@@ -25,9 +25,13 @@ const Global = ({ bitcoin }) => {
             description={<span className="text-base md:text-sm">
               {bitcoin ?
                 <div className={`h-5 flex items-center ${bitcoin.usd_24h_change < 0 ? 'text-red-500 dark:text-red-400' : bitcoin.usd_24h_change > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} font-bold`}>
-                  <span className="mr-1.5">{currency.symbol}{numberFormat(bitcoin[vs_currency], '0,0')}{!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}</span>
-                  <span className="text-xs font-normal">{numberFormat(bitcoin.usd_24h_change / 100, '+0,0.00%')}</span>
-                  {bitcoin.usd_24h_change < 0 ? <FiArrowDown size={12} className="ml-0.5" /> : bitcoin.usd_24h_change > 0 ? <FiArrowUp size={12} className="ml-0.5" /> : null}
+                  <span className="space-x-1 mr-1.5">
+                    {currency.symbol}
+                    <span>{numberFormat(bitcoin[vs_currency], '0,0')}</span>
+                    {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
+                  </span>
+                  <span className="text-xs font-normal">{numberFormat(bitcoin.usd_24h_change, '+0,0.000')}%</span>
+                  {bitcoin.usd_24h_change < 0 ? <FiArrowDown size={12} className="ml-0.5 mb-0.5" /> : bitcoin.usd_24h_change > 0 ? <FiArrowUp size={12} className="ml-0.5 mb-0.5" /> : null}
                 </div>
                 :
                 <div className="skeleton w-12 h-4 rounded mt-1" />
@@ -77,17 +81,17 @@ const Global = ({ bitcoin }) => {
               Market Cap
               {global_data && (
                 <div className={`flex items-center ${global_data.market_cap_change_percentage_24h_usd < 0 ? 'text-red-500 dark:text-red-400' : global_data.market_cap_change_percentage_24h_usd > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} font-medium ml-1`}>
-                  {numberFormat(global_data.market_cap_change_percentage_24h_usd / 100, '+0,0.00%')}
+                  {numberFormat(global_data.market_cap_change_percentage_24h_usd, '+0,0.000')}%
                   {global_data.market_cap_change_percentage_24h_usd < 0 ? <FiArrowDown size={12} className="mb-0.5" /> : global_data.market_cap_change_percentage_24h_usd > 0 ? <FiArrowUp size={12} className="mb-0.5" /> : null}
                 </div>
               )}
             </div>}
-            description={<span className="text-base md:text-xs">
+            description={<span className="text-base space-x-1 md:text-xs">
               {global_data ?
                 <>
                   {currency.symbol}
-                  {numberFormat(global_data.total_market_cap && global_data.total_market_cap[vs_currency], '0,0')}
-                  {!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}
+                  <span>{numberFormat(global_data.total_market_cap && global_data.total_market_cap[vs_currency], '0,0')}</span>
+                  {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
                 </>
                 :
                 <div className="skeleton w-16 h-4 rounded mt-1" />
@@ -102,12 +106,12 @@ const Global = ({ bitcoin }) => {
         <a>
           <Widget
             title={<span className="uppercase text-gray-500 dark:text-gray-300 text-xs">24h Volume</span>}
-            description={<span className="text-base md:text-xs">
+            description={<span className="text-base space-x-1 md:text-xs">
               {global_data ?
                 <>
                   {currency.symbol}
-                  {numberFormat(global_data.total_volume && global_data.total_volume[vs_currency], '0,0')}
-                  {!currency.symbol && (<>&nbsp;{currency.id.toUpperCase()}</>)}
+                  <span>{numberFormat(global_data.total_volume && global_data.total_volume[vs_currency], '0,0')}</span>
+                  {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
                 </>
                 :
                 <div className="skeleton w-16 h-4 rounded mt-1" />

@@ -97,38 +97,44 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
 
   return (!exchangesData || exchange_type === exchangesData.exchange_type) && (
     <div className="mx-1">
-      <div className="flex items-start mb-3 ml-0.5">
+      <div className="flex flex-col sm:flex-row items-start space-y-1 sm:space-y-0 space-x-0 sm:space-x-4 mb-2 ml-0.5">
         {exchangesData ?
           <>
-            <span className="text-gray-400 dark:text-gray-600 font-normal mr-2 sm:mr-4">
-              Exchanges:&nbsp;
+            <span className="flex items-center space-x-1">
+              <span className="text-gray-400 dark:text-gray-600 font-normal">Exchanges:</span>
               <span className="text-gray-700 dark:text-gray-300 font-medium">{numberFormat(exchangesData.data.length, '0,0')}</span>
             </span>
             {exchange_type === 'derivatives' && (
-              <span className="flex flex-wrap items-center justify-end text-gray-400 dark:text-gray-600 font-normal mr-2 sm:mr-4">
-                Open&nbsp;Interest:&nbsp;
-                <span className="text-gray-700 dark:text-gray-300 font-medium mr-0.5 sm:mr-1">
+              <span className="flex flex-wrap items-center justify-start sm:justify-end space-x-1">
+                <span className="text-gray-400 dark:text-gray-600 font-normal">Open Interest:</span>
+                <span className="text-gray-700 dark:text-gray-300 font-medium space-x-1">
                   {(exchange_rates_data ? currency : currencyBTC).symbol}
-                  {numberFormat(_.sumBy(exchangesData.data.filter(exchangeData => exchangeData.open_interest_btc > 0), 'open_interest_btc') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), '0,0')}
-                  {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<>&nbsp;{(exchange_rates_data ? currency : currencyBTC).id.toUpperCase()}</>)}
+                  <span>{numberFormat(_.sumBy(exchangesData.data.filter(exchangeData => exchangeData.open_interest_btc > 0), 'open_interest_btc') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), '0,0')}</span>
+                  {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyBTC).id}</span>)}
                 </span>
                 {exchange_rates_data && vs_currency !== currencyBTC.id && (
-                  <div className="text-gray-400 dark:text-gray-600 text-xs font-medium">
-                    ({numberFormat(_.sumBy(exchangesData.data.filter(exchangeData => exchangeData.open_interest_btc > 0), 'open_interest_btc'), '0,0')}&nbsp;{currencyBTC.id.toUpperCase()})
+                  <div className="text-gray-400 dark:text-gray-600 text-xs font-medium space-x-1">
+                    (
+                    <span>{numberFormat(_.sumBy(exchangesData.data.filter(exchangeData => exchangeData.open_interest_btc > 0), 'open_interest_btc'), '0,0')}</span>
+                    <span className="uppercase">{currencyBTC.id}</span>
+                    )
                   </div>
                 )}
               </span>
             )}
-            <span className="flex flex-wrap items-center justify-end text-gray-400 dark:text-gray-600 font-normal">
-              24h&nbsp;Vol:&nbsp;
-              <span className="text-gray-700 dark:text-gray-300 font-medium mr-0.5 sm:mr-1">
+            <span className="flex flex-wrap items-center justify-start sm:justify-end space-x-1">
+              <span className="text-gray-400 dark:text-gray-600 font-normal">24h Vol:</span>
+              <span className="text-gray-700 dark:text-gray-300 font-medium space-x-1">
                 {(exchange_rates_data ? currency : currencyBTC).symbol}
-                {numberFormat(_.sumBy(exchangesData.data.filter(exchangeData => exchangeData.trade_volume_24h_btc > 0), 'trade_volume_24h_btc') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), '0,0')}
-                {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<>&nbsp;{(exchange_rates_data ? currency : currencyBTC).id.toUpperCase()}</>)}
+                <span>{numberFormat(_.sumBy(exchangesData.data.filter(exchangeData => exchangeData.trade_volume_24h_btc > 0), 'trade_volume_24h_btc') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), '0,0')}</span>
+                {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyBTC).id}</span>)}
               </span>
               {exchange_rates_data && vs_currency !== currencyBTC.id && (
-                <div className="text-gray-400 dark:text-gray-600 text-xs font-medium">
-                  ({numberFormat(_.sumBy(exchangesData.data.filter(exchangeData => exchangeData.trade_volume_24h_btc > 0), 'trade_volume_24h_btc'), '0,0')}&nbsp;{currencyBTC.id.toUpperCase()})
+                <div className="text-gray-400 dark:text-gray-600 text-xs font-medium space-x-1">
+                  (
+                  <span>{numberFormat(_.sumBy(exchangesData.data.filter(exchangeData => exchangeData.trade_volume_24h_btc > 0), 'trade_volume_24h_btc'), '0,0')}</span>
+                  <span className="uppercase">{currencyBTC.id}</span>
+                  )
                 </div>
               )}
             </span>
@@ -210,18 +216,21 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
                 {!props.row.original.skeleton ?
                   <>
                     {props.value > -1 ?
-                      <>
+                      <span className="space-x-1">
                         {(exchange_rates_data ? currency : currencyBTC).symbol}
-                        {numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}
-                        {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<>&nbsp;{(exchange_rates_data ? currency : currencyBTC).id.toUpperCase()}</>)}
-                      </>
+                        <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
+                        {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyBTC).id}</span>)}
+                      </span>
                       :
                       '-'
                     }
                     {exchange_rates_data && vs_currency !== currencyBTC.id && (
-                      <span className="text-gray-400 text-xs font-medium">
+                      <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
-                          <>{numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}&nbsp;{currencyBTC.id.toUpperCase()}</>
+                          <>
+                            <span>{numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}</span>
+                            <span className="uppercase">{currencyBTC.id}</span>
+                          </>
                           :
                           '-'
                         }
@@ -247,18 +256,21 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
                 {!props.row.original.skeleton ?
                   <>
                     {props.value > -1 ?
-                      <>
+                      <span className="space-x-1">
                         {(exchange_rates_data ? currency : currencyBTC).symbol}
-                        {numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}
-                        {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<>&nbsp;{(exchange_rates_data ? currency : currencyBTC).id.toUpperCase()}</>)}
-                      </>
+                        <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
+                        {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyBTC).id}</span>)}
+                      </span>
                       :
                       '-'
                     }
                     {exchange_rates_data && vs_currency !== currencyBTC.id && (
-                      <span className="text-gray-400 text-xs font-medium">
+                      <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
-                          <>{numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}&nbsp;{currencyBTC.id.toUpperCase()}</>
+                          <>
+                            <span>{numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}</span>
+                            <span className="uppercase">{currencyBTC.id}</span>
+                          </>
                           :
                           '-'
                         }
