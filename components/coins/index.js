@@ -67,9 +67,9 @@ const Coins = ({ navigationData, navigationItemData }) => {
                   price_change_percentage_30d_in_currency: typeof coinData.price_change_percentage_30d_in_currency === 'string' ? Number(coinData.price_change_percentage_30d_in_currency) : typeof coinData.price_change_percentage_30d_in_currency === 'number' ? coinData.price_change_percentage_30d_in_currency : Number.MIN_SAFE_INTEGER,
                   roi: {
                     ...coinData.roi,
-                    times: coinData.roi ? coinData.roi.times : coinData.atl !== 0 ? (coinData.current_price - coinData.atl) / coinData.atl : null,
+                    times: coinData.roi ? coinData.roi.times : coinData.atl > 0 ? (coinData.current_price - coinData.atl) / coinData.atl : null,
                     currency: coinData.roi && coinData.roi.currency ? coinData.roi.currency : vs_currency,
-                    percentage: coinData.roi ? coinData.roi.percentage : coinData.atl !== 0 ? (coinData.current_price - coinData.atl) * 100 / coinData.atl : null,
+                    percentage: coinData.roi ? coinData.roi.percentage : coinData.atl > 0 ? (coinData.current_price - coinData.atl) * 100 / coinData.atl : null,
                     from: !coinData.roi ? 'atl' : null,
                   },
                   market_cap: typeof coinData.market_cap === 'string' ? Number(coinData.market_cap) : typeof coinData.market_cap === 'number' ? coinData.market_cap : -1,
@@ -145,11 +145,11 @@ const Coins = ({ navigationData, navigationItemData }) => {
     }
   }
 
-  return (!coinsData || coin_type === coinsData.coin_type) && (
+  return (
     <div className="mx-1">
       {pathname.endsWith('/[coin_type]') && (
         <div className="flex flex-col sm:flex-row items-start space-y-1 sm:space-y-0 space-x-0 sm:space-x-4 mb-2 ml-0.5">
-          {coinsData && coinsData.vs_currency === vs_currency ?
+          {coinsData && coinsData.vs_currency === vs_currency && coin_type === coinsData.coin_type ?
             <>
               <span className="flex items-center space-x-1">
                 <span className="text-gray-400 dark:text-gray-600 font-normal">Coins:</span>
@@ -190,7 +190,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
             </>
             :
             <>
-              <div className="skeleton w-24 h-4 rounded mr-3 sm:mr-6 mb-0.5" />
+              <div className="skeleton w-24 h-4 rounded mr-0 sm:mr-2 mb-0.5" />
               <div className="skeleton w-48 h-4 rounded mb-0.5" />
             </>
           }
@@ -615,7 +615,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
             headerClassName: 'justify-end text-right',
           },
         ].filter(column => !((coin_type === 'categories' ? ['current_price', 'price_change_percentage_1h_in_currency', 'price_change_percentage_24h_in_currency', 'price_change_percentage_7d_in_currency', 'price_change_percentage_30d_in_currency', 'roi.times', 'fully_diluted_valuation', 'total_volume', 'circulating_supply'] : ['market_cap_change_24h', 'volume_24h', 'market_share']).includes(column.accessor)))}
-        data={coinsData && coinsData.vs_currency === vs_currency ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => {return { i, skeleton: true } })}
+        data={coinsData && coinsData.vs_currency === vs_currency && coin_type === coinsData.coin_type ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => {return { i, skeleton: true } })}
         defaultPageSize={100}
         pagination={!(coin_type && !(['high-volume'].includes(coin_type))) && (
           <div className="flex flex-col sm:flex-row items-center justify-center my-4">

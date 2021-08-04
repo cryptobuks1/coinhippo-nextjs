@@ -257,3 +257,13 @@
     }
   }
 }
+
+@media (max-width: 1366px) {
+  [data-collapsed="true"] {
+    .hidden-sibling {
+      + ul {
+        @apply hidden;
+      }
+    }
+  }
+}

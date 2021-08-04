@@ -80,10 +80,10 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
     router.push(navigationData.items[0].url)
   }
 
-  return (!derivativesData || derivative_type === derivativesData.derivative_type) && (
+  return (
     <div className="mx-1">
       <div className="flex flex-col sm:flex-row items-start space-y-1 sm:space-y-0 space-x-0 sm:space-x-4 mb-2 ml-0.5">
-        {derivativesData ?
+        {derivativesData && derivative_type === derivativesData.derivative_type ?
           <>
             <span className="flex items-center space-x-1">
               <span className="text-gray-400 dark:text-gray-600 font-normal">Contracts:</span>
@@ -124,7 +124,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
           </>
           :
           <>
-            <div className="skeleton w-24 h-4 rounded mr-3 sm:mr-6 mb-0.5" />
+            <div className="skeleton w-24 h-4 rounded mr-0 sm:mr-2 mb-0.5" />
             <div className="skeleton w-48 h-4 rounded mb-0.5" />
           </>
         }
@@ -193,7 +193,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
             accessor: 'symbol',
             Cell: props => (
               <div className="text-gray-800 dark:text-gray-200 font-medium ml-2 lg:ml-4">
-                {all_crypto_data && !props.row.original.skeleton ?
+                {!props.row.original.skeleton ?
                   props.value
                   :
                   <div className="skeleton w-20 h-4 rounded" />
@@ -404,7 +404,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
             headerClassName: 'justify-end text-right mr-2',
           },
         ].filter(column => !((derivative_type === 'futures' ? ['funding_rate'] : []).includes(column.accessor)))}
-        data={derivativesData ? derivativesData.data.map((derivativeData, i) => { return { ...derivativeData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
+        data={derivativesData && derivative_type === derivativesData.derivative_type ? derivativesData.data.map((derivativeData, i) => { return { ...derivativeData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
         defaultPageSize={100}
         className="striped"
       />

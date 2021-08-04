@@ -95,10 +95,10 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
     router.push(navigationData.items[0].url)
   }
 
-  return (!exchangesData || exchange_type === exchangesData.exchange_type) && (
+  return (
     <div className="mx-1">
       <div className="flex flex-col sm:flex-row items-start space-y-1 sm:space-y-0 space-x-0 sm:space-x-4 mb-2 ml-0.5">
-        {exchangesData ?
+        {exchangesData && exchange_type === exchangesData.exchange_type ?
           <>
             <span className="flex items-center space-x-1">
               <span className="text-gray-400 dark:text-gray-600 font-normal">Exchanges:</span>
@@ -141,7 +141,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
           </>
           :
           <>
-            <div className="skeleton w-24 h-4 rounded mr-3 sm:mr-6 mb-0.5" />
+            <div className="skeleton w-24 h-4 rounded mr-0 sm:mr-2 mb-0.5" />
             <div className="skeleton w-48 h-4 rounded mb-0.5" />
           </>
         }
@@ -391,7 +391,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
             headerClassName: 'justify-end text-right mr-2 lg:mr-4 xl:mr-8',
           },
         ].filter(column => !((exchange_type === 'derivatives' ? ['trust_score'] : ['open_interest_btc', 'number_of_perpetual_pairs', 'number_of_futures_pairs']).includes(column.accessor)))}
-        data={exchangesData ? exchangesData.data.map((exchangeData, i) => { return { ...exchangeData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
+        data={exchangesData && exchange_type === exchangesData.exchange_type ? exchangesData.data.map((exchangeData, i) => { return { ...exchangeData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
         defaultPageSize={pathname.endsWith('/[exchange_type]') ? 50 : 100}
         className="striped"
       />

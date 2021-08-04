@@ -53,9 +53,9 @@ const PublicCompanies = ({ navigationData, navigationItemData }) => {
     router.push(navigationData.items[0].url)
   }
 
-  return (!treasuryData || coin_id === treasuryData.coin_id) && (
+  return (
     <div className="mx-1">
-      <Summary data={treasuryData} navigationItemData={navigationItemData} />
+      <Summary data={treasuryData && coin_id === treasuryData.coin_id && treasuryData} navigationItemData={navigationItemData} />
       <Datatable
         columns={[
           {
@@ -125,7 +125,22 @@ const PublicCompanies = ({ navigationData, navigationItemData }) => {
                 {!props.row.original.skeleton ?
                   <>
                     {props.value ? `$${numberFormat(props.value, '0,0')}` : '-'}
-                    <span className="text-gray-400 text-xs font-normal">{props.value && props.row.original.total_holdings ? `~ $${numberFormat(props.value / props.row.original.total_holdings, '0,0')}${navigationItemData && navigationItemData.symbol ? ` / ${navigationItemData.symbol.toUpperCase()}` : ''}` : '-'}</span>
+                    <span className="text-gray-400 text-xs font-normal space-x-1">
+                      {props.value && props.row.original.total_holdings ?
+                        <>
+                          <span>~</span>
+                          <span>${numberFormat(props.value / props.row.original.total_holdings, '0,0')}</span>
+                          {navigationItemData && navigationItemData.symbol && (
+                            <>
+                              <span>/</span>
+                              <span className="uppercase">{navigationItemData.symbol}</span>
+                            </>
+                          )}
+                        </>
+                        :
+                        '-'
+                      }
+                    </span>
                   </>
                   :
                   <>
@@ -179,7 +194,7 @@ const PublicCompanies = ({ navigationData, navigationItemData }) => {
             ),
           }
         ]}
-        data={treasuryData ? treasuryData.companies.map((company, i) => { return { ...company, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
+        data={treasuryData && coin_id === treasuryData.coin_id ? treasuryData.companies.map((company, i) => { return { ...company, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
         className="striped"
       />
     </div>

@@ -66,6 +66,12 @@ export default function Datatable({ columns, data, rowSelectEnable, defaultPageS
     }
   )
 
+  useEffect(() => {
+    if (pageIndex + 1 > pageCount) {
+      gotoPage(pageCount - 1)
+    }
+  }, [pageIndex, pageCount])
+
   return (
     <>
       <table ref={tableRef} { ...getTableProps() } className={`table ${className}`}>

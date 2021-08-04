@@ -14,7 +14,18 @@ export default function Logo({ noSiderbar, className = '' }) {
     return (
       <div className={`logo truncate ${className}`}>
         <Link href="/">
-          <a className="flex flex-row items-center justify-start space-x-2">
+          <a
+            onClick={() => {
+              if (!collapsed) {
+                dispatch({
+                  type: CONFIG_KEY,
+                  key: 'collapsed',
+                  value: !collapsed
+                })
+              }
+            }}
+            className="flex flex-row items-center justify-start space-x-2"
+          >
             <Image src="/logos/api/coinhippo.png" alt="" width={48} height={48} className="rounded-full" />
             {!noSiderbar && (<span className="text-indigo-600 dark:text-indigo-400">{name}</span>)}
           </a>
