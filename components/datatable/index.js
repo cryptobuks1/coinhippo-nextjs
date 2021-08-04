@@ -72,6 +72,8 @@ export default function Datatable({ columns, data, rowSelectEnable, defaultPageS
     }
   }, [pageIndex, pageCount])
 
+  const loading = data && data.findIndex(item => item.skeleton) > -1 ? true : false
+
   return (
     <>
       <table ref={tableRef} { ...getTableProps() } className={`table ${className}`}>
@@ -131,6 +133,7 @@ export default function Datatable({ columns, data, rowSelectEnable, defaultPageS
           <div className="pagination flex flex-wrap items-center justify-end">
             {pageIndex !== 0 && (
               <PageWithText
+                disabled={loading}
                 onClick={() => {
                   gotoPage(0)
                   tableRef.current.scrollIntoView() 
@@ -141,6 +144,7 @@ export default function Datatable({ columns, data, rowSelectEnable, defaultPageS
             )}
             {canPreviousPage && (
               <PageWithText
+                disabled={loading}
                 onClick={() => {
                   previousPage()
                   tableRef.current.scrollIntoView() 
@@ -151,7 +155,7 @@ export default function Datatable({ columns, data, rowSelectEnable, defaultPageS
             )}
             {canNextPage && (
               <PageWithText
-                disabled={!canNextPage}
+                disabled={!canNextPage || loading}
                 onClick={() => {
                   nextPage()
                   tableRef.current.scrollIntoView() 
@@ -162,7 +166,7 @@ export default function Datatable({ columns, data, rowSelectEnable, defaultPageS
             )}
             {pageIndex !== pageCount - 1 && (
               <PageWithText
-                disabled={!canNextPage}
+                disabled={!canNextPage || loading}
                 onClick={() => {
                   gotoPage(pageCount - 1)
                   tableRef.current.scrollIntoView() 

@@ -620,8 +620,9 @@ const Coins = ({ navigationData, navigationItemData }) => {
         pagination={!(coin_type && !(['high-volume'].includes(coin_type))) && (
           <div className="flex flex-col sm:flex-row items-center justify-center my-4">
             <Pagination
-              items={[...Array(Math.ceil((all_crypto_data && all_crypto_data.coins ? all_crypto_data.coins.length : 7500) / per_page)).keys()]}
+              disabled={!(coinsData && coinsData.vs_currency === vs_currency && coin_type === coinsData.coin_type && page === coinsData.page)}
               active={page}
+              items={[...Array(Math.ceil((all_crypto_data && all_crypto_data.coins ? all_crypto_data.coins.length : 10000) / per_page)).keys()]}
               previous="Previous"
               next="Next"
               onClick={_page => router.push(generateUrl(_asPath, { ...query, page: _page }))}
