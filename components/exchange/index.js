@@ -15,10 +15,10 @@ import { getName, numberFormat } from '../../lib/utils'
 
 const per_page = 100
 
-const Exchange = ({ data }) => {
-  const { preferences, _data } = useSelector(state => ({ preferences: state.preferences, _data: state.data }), shallowEqual)
+const Exchange = ({ exchangeData }) => {
+  const { preferences, data } = useSelector(state => ({ preferences: state.preferences, data: state.data }), shallowEqual)
   const { vs_currency } = { ...preferences }
-  const { all_crypto_data, exchange_rates_data } = { ..._data }
+  const { all_crypto_data, exchange_rates_data } = { ...data }
   const currency = currencies[currencies.findIndex(c => c.id === vs_currency)] || currencies[0]
   const currencyBTC = currencies[currencies.findIndex(c => c.id === 'btc')]
 
@@ -26,28 +26,31 @@ const Exchange = ({ data }) => {
   const { query } = { ...router }
   const { exchange_id } = { ...query }
 
+  const [derivativeType, setDerivativeType] = useState('perpetual')
   const [tickersData, setTickersData] = useState(null)
 
   const mountedRef = useMountedRef()
+
+  const marketType = (exchangeData && exchangeData.market_type) || 'spot'
 
   useEffect(() => {
     const getTickers = async () => {
       let _tickersData
 
-      for (let i = 0; i < data.market_type !== 'spot' ? 1 : 20; i++) {
-        const response = data.market_type !== 'spot' ?
-          { ...data }
+      for (let i = 0; i < (marketType !== 'spot' ? 1 : 20); i++) {
+        const response = marketType !== 'spot' ?
+          { ...exchangeData }
           :
-          await exchangeTickers(data.id, { page: i + 1, order: 'trust_score_desc', depth: true })
+          await exchangeTickers(exchangeData.id, { page: i + 1, order: 'trust_score_desc', depth: true })
 
         if (response && response.tickers) {
           _tickersData = (
             _.orderBy(
-              _.uniqBy(_.concat(_tickersData || [], response.tickers).map(tickerData => { return { ...tickerData, id: `${tickerData.base}_${tickerData.target}` } }), 'id')
+              _.concat(_tickersData || [], response.tickers)
               .map(tickerData => {
                 return {
                   ...tickerData,
-                  converted_last: Object.fromEntries(new Map(Object.entries(tickerData.converted_last).map(([key, value]) => [key, typeof value === 'string' ? Number(value) : typeof value === 'number' ? value : -1]))),
+                  converted_last: tickerData.converted_last && Object.fromEntries(new Map(Object.entries(tickerData.converted_last).map(([key, value]) => [key, typeof value === 'string' ? Number(value) : typeof value === 'number' ? value : -1]))),
                   h24_percentage_change: typeof tickerData.h24_percentage_change === 'string' ? Number(tickerData.h24_percentage_change) : typeof tickerData.h24_percentage_change === 'number' ? tickerData.h24_percentage_change : Number.MIN_SAFE_INTEGER,
                   index: tickerData.index === 'string' ? Number(tickerData.index) : typeof tickerData.index === 'number' ? tickerData.index : -1,
                   index_basis_percentage: tickerData.index_basis_percentage === 'string' ? Number(tickerData.index_basis_percentage) : typeof tickerData.index_basis_percentage === 'number' ? tickerData.index_basis_percentage : Number.MIN_SAFE_INTEGER,
@@ -57,7 +60,7 @@ const Exchange = ({ data }) => {
                   down_depth: typeof tickerData.down_depth === 'string' ? Number(tickerData.down_depth) : typeof tickerData.down_depth === 'number' ? tickerData.down_depth : -1,
                   funding_rate: tickerData.funding_rate === 'string' ? Number(tickerData.funding_rate) : typeof tickerData.funding_rate === 'number' ? tickerData.funding_rate : Number.MIN_SAFE_INTEGER,
                   open_interest_usd: typeof tickerData.open_interest_usd === 'string' ? Number(tickerData.open_interest_usd) : typeof tickerData.open_interest_usd === 'number' ? tickerData.open_interest_usd : -1,
-                  converted_volume: Object.fromEntries(new Map(Object.entries(tickerData.converted_volume).map(([key, value]) => [key, typeof value === 'string' ? Number(value) : typeof value === 'number' ? value : -1]))),
+                  converted_volume: tickerData.converted_volume && Object.fromEntries(new Map(Object.entries(tickerData.converted_volume).map(([key, value]) => [key, typeof value === 'string' ? Number(value) : typeof value === 'number' ? value : -1]))),
                   trust_score: typeof tickerData.trust_score === 'number' ? tickerData.trust_score : tickerData.trust_score === 'green' ? 1 : tickerData.trust_score === 'yellow' ? 0.5 : 0,
                 }
               }),
@@ -73,22 +76,32 @@ const Exchange = ({ data }) => {
 
       if (_tickersData) {
         if (mountedRef.current) {
-          setTickersData({ data: _tickersData, exchange_id: data.id })
+          if (marketType !== 'spot') {
+            exchangeData.number_of_perpetual_pairs = _tickersData.filter(tickerData => tickerData.contract_type === 'perpetual').length
+            exchangeData.number_of_futures_pairs = _tickersData.filter(tickerData => tickerData.contract_type === 'futures').length
+          }
+          else {
+            exchangeData.number_of_coins = _.uniqBy(_tickersData, 'base').length
+            exchangeData.number_of_pairs = _tickersData.length
+          }
+          setTickersData({ data: _tickersData, exchange_id: exchangeData.id })
         }
       }
     }
 
-    if (data) {
+    if (exchangeData) {
       getTickers()
     }
-
-    const interval = setInterval(() => getTickers(), 3 * 60 * 1000)
-    return () => clearInterval(interval)
-  }, [data])
+  }, [exchangeData, marketType])
 
   return (
     <div className="mx-1">
-      <Summary data={data && exchange_id === data.id && data} />
+      <Summary
+        exchangeData={exchangeData && exchange_id === exchangeData.id && exchangeData}
+        tickersData={tickersData && exchange_id === tickersData.exchange_id && tickersData.data && tickersData.data.filter(tickerData => marketType === 'spot' || tickerData.contract_type === derivativeType)}
+        derivativeType={derivativeType}
+        selectDerivativeType={derivativeType => setDerivativeType(derivativeType)}
+      />
       <Datatable
         columns={[
           {
@@ -486,11 +499,11 @@ const Exchange = ({ data }) => {
           //   ),
           //   headerClassName: 'justify-end text-right',
           // },
-        ].filter(column => !((data && data.market_type !== 'spot' ? ['bid_ask_spread_percentage', 'up_depth', 'down_depth', 'volume_percentage', 'trust_score'] : ['h24_percentage_change', 'index', 'index_basis_percentage', 'bid_ask_spread', 'funding_rate', 'open_interest_usd']).includes(column.accessor)))}
+        ].filter(column => !((marketType !== 'spot' ? ['bid_ask_spread_percentage', 'up_depth', 'down_depth', 'volume_percentage', 'trust_score'] : ['h24_percentage_change', 'index', 'index_basis_percentage', 'bid_ask_spread', 'funding_rate', 'open_interest_usd']).includes(column.accessor)))}
         data={tickersData && exchange_id === tickersData.exchange_id ?
-          tickersData.data.map((tickerData, i) => {
+          tickersData.data.filter(tickerData => marketType === 'spot' || tickerData.contract_type === derivativeType).map((tickerData, i) => {
             const coinIndex = all_crypto_data && all_crypto_data.coins ?
-              all_crypto_data.coins.findIndex(coinData => data && data.market_type !== 'spot' ?
+              all_crypto_data.coins.findIndex(coinData => marketType !== 'spot' ?
                 tickerData.base && (
                   (coinData.symbol && coinData.symbol.toLowerCase() === tickerData.base.toLowerCase()) ||
                   (coinData.id && coinData.id.toLowerCase() === tickerData.base.toLowerCase()) ||
@@ -552,7 +565,7 @@ const Exchange = ({ data }) => {
 }
 
 Exchange.propTypes = {
-  data: PropTypes.any,
+  exchangeData: PropTypes.any,
 }
 
 export default Exchange

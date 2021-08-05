@@ -189,7 +189,6 @@ body {
 .text-github {
   color: #2f2f2f;
 }
-
 .text-linkedin {
   color: #006db3;
 }
@@ -237,4 +236,19 @@ body {
 }
 .text-foursquare {
   color: #207dc5;
+}
+.text-reddit {
+  color: #fb2c07;
+}
+.text-slack {
+  color: #4e1056;
+}
+.text-medium {
+  color: #000000;
+}
+.text-weibo {
+  color: #de0023;
+}
+.text-discord {
+  color: #4749ef;
 }
