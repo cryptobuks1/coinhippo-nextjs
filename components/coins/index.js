@@ -85,22 +85,22 @@ const Coins = ({ navigationData, navigationItemData }) => {
             )
           )
 
+          if (data) {
+            data = data.map(coinData => {
+              return {
+                ...coinData,
+                market_share: coinData.volume_24h > -1 ? coinData.volume_24h / _.sumBy(data.filter(_coinData => _coinData.volume_24h > 0), 'volume_24h') : -1,
+              }
+            })
+
+            if (mountedRef.current) {
+              setCoinsData({ data, coin_type, vs_currency, page })
+            }
+          }
+
           if (response.length < per_page) {
             break
           }
-        }
-      }
-
-      if (data) {
-        data = data.map(coinData => {
-          return {
-            ...coinData,
-            market_share: coinData.volume_24h > -1 ? coinData.volume_24h / _.sumBy(data.filter(_coinData => _coinData.volume_24h > 0), 'volume_24h') : -1,
-          }
-        })
-
-        if (mountedRef.current) {
-          setCoinsData({ data, coin_type, vs_currency, page })
         }
       }
     }

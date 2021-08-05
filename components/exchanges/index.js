@@ -58,19 +58,19 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
             )
           )
 
+          if (data) {
+            data = data.map(exchangeData => {
+              return { ...exchangeData, market_share: exchangeData.trade_volume_24h_btc > -1 ? exchangeData.trade_volume_24h_btc / _.sumBy(data.filter(_exchangeData => _exchangeData.trade_volume_24h_btc > 0), 'trade_volume_24h_btc') : -1 }
+            })
+
+            if (mountedRef.current) {
+              setExchangesData({ data, exchange_type })
+            }
+          }
+
           if (response.length < per_page) {
             break
           }
-        }
-      }
-
-      if (data) {
-        data = data.map(exchangeData => {
-          return { ...exchangeData, market_share: exchangeData.trade_volume_24h_btc > -1 ? exchangeData.trade_volume_24h_btc / _.sumBy(data.filter(_exchangeData => _exchangeData.trade_volume_24h_btc > 0), 'trade_volume_24h_btc') : -1 }
-        })
-
-        if (mountedRef.current) {
-          setExchangesData({ data, exchange_type })
         }
       }
     }
