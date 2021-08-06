@@ -30,10 +30,6 @@ export default function Item({ url, icon, title, badge, items, hiddenItem, hidde
 
   const active = url === _asPath || (items && items.findIndex(item => item.url === _asPath && !item.is_shortcut) > -1)
 
-  if (typeof window === 'undefined') {
-    return null
-  }
-
   if (!items || items.length === 0) {
     return (
       <Link href={url}>

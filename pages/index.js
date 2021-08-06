@@ -13,6 +13,7 @@ import { TiArrowRight } from 'react-icons/ti'
 import { cryptoGlobal, simplePrice } from '../lib/api/coingecko'
 import FearAndGreedAPI from '../lib/api/fear-and-greed'
 import { navigation } from '../lib/menus'
+import { isMatchRoute } from '../lib/routes'
 import useMountedRef from '../lib/mountedRef'
 import { getName } from '../lib/utils'
 import { GLOBAL_DATA } from '../reducers/types'
@@ -80,14 +81,14 @@ export default function Index() {
     getFearAndGreed()
   }, [])
 
-  if (typeof window !== 'undefined') {
-    if (pathname !== _asPath) {
-      router.push(asPath)
-      return null
-    }
+  if (typeof window !== 'undefined' && pathname !== _asPath) {
+    router.push(isMatchRoute(_asPath) ? asPath : '/404')
   }
-  else {
-    return null
+
+  if (typeof window === 'undefined' || pathname !== _asPath) {
+    return (
+      <span className="min-h-screen" />
+    )
   }
 
   return (
