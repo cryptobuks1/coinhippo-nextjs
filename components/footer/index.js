@@ -1,5 +1,5 @@
-import Image from 'next/image'
 import { useSelector, shallowEqual } from 'react-redux'
+import Image from '../image'
 import { FaHeart, FaTwitter, FaTelegram } from 'react-icons/fa'
 import moment from 'moment'
 

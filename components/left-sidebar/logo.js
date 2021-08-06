@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
+import Image from '../image'
 import { FiMenu } from 'react-icons/fi'
 import { CONFIG_KEY } from '../../reducers/types'
 

@@ -1,6 +1,6 @@
-import Image from 'next/image'
 import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
+import Image from '../image'
 import { currencies } from '../../lib/menus'
 import { VS_CURRENCY } from '../../reducers/types'
 

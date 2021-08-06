@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import Global from '../components/dashboard/global'
@@ -20,6 +21,10 @@ export default function Index() {
   const dispatch = useDispatch()
   const { preferences, data } = useSelector(state => ({ preferences: state.preferences, data: state.data }), shallowEqual)
   const { vs_currency } = { ...preferences }
+
+  const router = useRouter()
+  const { pathname, asPath } = { ...router }
+  const _asPath = asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath
 
   const [bitcoin, setBitcoin] = useState(null)
   const [fearAndGreedData, setFearAndGreedData] = useState(null)
@@ -74,6 +79,16 @@ export default function Index() {
 
     getFearAndGreed()
   }, [])
+
+  if (typeof window !== 'undefined') {
+    if (pathname !== _asPath) {
+      router.push(asPath)
+      return null
+    }
+  }
+  else {
+    return null
+  }
 
   return (
     <>

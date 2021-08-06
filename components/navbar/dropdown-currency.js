@@ -1,6 +1,6 @@
-import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
+import Image from '../image'
 import Currencies from './currencies'
 import { currencies } from '../../lib/menus'
 
