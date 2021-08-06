@@ -13,7 +13,7 @@ export default function Header({ blogsData }) {
       <div className="navbar-inner w-full flex items-center justify-start overflow-x-scroll">
         {_.orderBy(blogsData.filter(blogData => !blogData.post_id), ['order'], ['asc']).map((blogData, i) => (
           <Link key={i} href={`/blog/${blogData.category_id}`}>
-            <a className={`btn btn-default bg-transparent hover:bg-blue-50 text-blue-700 hover:text-blue-800 my-2 ${blogData.category_id === category_id ? '' : ''}`}>
+            <a className="btn btn-default bg-transparent hover:bg-blue-50 text-blue-700 hover:text-blue-800 my-2">
               {blogData.title || getName(blogData.category_id)}
             </a>
           </Link>

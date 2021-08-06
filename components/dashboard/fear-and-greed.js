@@ -98,7 +98,7 @@ const FearAndGreed = ({ data }) => {
           <div className="my-1.5 mx-4 md:mx-8 lg:mx-8 xl:mx-8">
             <div className="flex items-center">
               <Circle size="lg" progress={0} color="transparent" />
-              <div className={`flex flex-col items-end ml-auto`}>
+              <div className="flex flex-col items-end ml-auto">
                 <div className="skeleton w-14 h-4 rounded" />
                 <div className="skeleton w-10 h-10 rounded-full mt-2" />
                 <div className="skeleton w-16 h-3 rounded mt-4" />

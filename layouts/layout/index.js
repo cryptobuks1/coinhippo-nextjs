@@ -77,7 +77,7 @@ export default function Layout({ children, noSiderbar }) {
           {!noSiderbar && (<LeftSidebar />)}
           <div className="main w-full bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
             <Navbar noSiderbar={noSiderbar} />
-            <div className="min-h-screen w-full p-4">{children}</div>
+            <div className="w-full min-h-screen p-4">{children}</div>
           </div>
         </div>
         <Footer />
