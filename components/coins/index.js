@@ -379,7 +379,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
                       :
                       '-'
                     }
-                    {exchange_rates_data && vs_currency !== currencyBTC.id && (
+                    {exchange_rates_data && currency.id !== currencyBTC.id && (
                       <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
                           <>
@@ -437,7 +437,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
                       :
                       '-'
                     }
-                    {exchange_rates_data && vs_currency !== currencyBTC.id && (
+                    {exchange_rates_data && currency.id !== currencyBTC.id && (
                       <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
                           <>
@@ -477,7 +477,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
                       :
                       '-'
                     }
-                    {exchange_rates_data && vs_currency !== currencyBTC.id && (
+                    {exchange_rates_data && currency.id !== currencyBTC.id && (
                       <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
                           <>

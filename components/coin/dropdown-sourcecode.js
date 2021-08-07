@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import Exchanges from './exchanges'
-import { HiOutlineDotsVertical } from 'react-icons/hi'
+import SourceCodes from './sourcecodes'
+import { HiCode } from 'react-icons/hi'
 
-const DropdownExchange = ({ data }) => {
+const DropdownSourceCode = ({ data }) => {
   const [hidden, setHidden] = useState(true)
 
   const buttonRef = useRef(null)
@@ -32,24 +32,25 @@ const DropdownExchange = ({ data }) => {
       <button
         ref={buttonRef}
         onClick={handleDropdownClick}
-        className="btn btn-raised btn-circle"
+        className="btn min-w-max btn-raised btn-rounded btn-icon flex items-center bg-transparent hover:bg-gray-100 text-gray-600 hover:text-gray-800 dark:hover:bg-gray-800 dark:text-white dark:hover:text-gray-200 text-xs space-x-1.5 mr-2 p-2"
       >
-        <HiOutlineDotsVertical size={16} className="text-indigo-600 dark:text-gray-100" />
+        <HiCode size={16} className="stroke-current" />
+        <span className="hidden lg:block">Source codes</span>
       </button>
       <div
         ref={dropdownRef} 
-        className={`dropdown ${hidden ? '' : 'open'} absolute top-0 right-0 mt-8`}
+        className={`dropdown ${hidden ? '' : 'open'} absolute top-0 left-0 sm:left-auto right-2 mt-8`}
       >
         <div className="dropdown-content w-40 sm:w-64 bottom-start">
-          <Exchanges data={data} handleDropdownClick={handleDropdownClick} />
+          <SourceCodes data={data} handleDropdownClick={handleDropdownClick} />
         </div>
       </div>
     </div>
   )
 }
 
-DropdownExchange.propTypes = {
+DropdownSourceCode.propTypes = {
   data: PropTypes.any,
 }
 
-export default DropdownExchange
+export default DropdownSourceCode

@@ -2,7 +2,7 @@ import { useSelector, shallowEqual } from 'react-redux'
 import PropTypes from 'prop-types'
 import Widget from '../widget'
 import Stars from '../stars'
-import { FaFacebook, FaTwitter, FaTelegram, FaReddit, FaSlack, FaGithub, FaLinkedin, FaDiscord, FaMedium, FaWeibo, FaCoins } from 'react-icons/fa'
+import { FaFacebook, FaTwitter, FaTelegram, FaReddit, FaSlack, FaYoutube, FaGithub, FaLinkedin, FaDiscord, FaMedium, FaWeibo, FaCoins } from 'react-icons/fa'
 import { GoBrowser } from 'react-icons/go'
 import { BsCheckCircle, BsCircle, BsFileCheck } from 'react-icons/bs'
 import { AiOutlineBarChart } from 'react-icons/ai'
@@ -55,7 +55,7 @@ const Summary = ({ exchangeData, tickersData, derivativeType = 'perpetual', sele
 
             const urlSplit = url.startsWith('http') && new URL(url).pathname.split('/').filter(path => path)
 
-            const value = urlSplit ? ['reddit.com'].findIndex(hostname => url.includes(hostname)) > -1 ? urlSplit.join('/') : _.last(urlSplit) : exchangeData[field]
+            const value = urlSplit ? ['reddit.com'].findIndex(hostname => url.includes(hostname)) > -1 ? urlSplit.join('/') : ['youtube.com'].findIndex(hostname => url.includes(hostname)) > -1 ? new URL(url).hostname : (_.last(urlSplit) || new URL(exchangeData[field]).hostname) : exchangeData[field]
 
             return ({
               field,
@@ -79,22 +79,25 @@ const Summary = ({ exchangeData, tickersData, derivativeType = 'perpetual', sele
                       urlData.field === 'slack_url' ?
                         <FaSlack size={20} className="text-slack" />
                         :
-                        new URL(urlData.url).hostname.includes('github.com') ?
-                          <FaGithub size={20} className="text-github dark:text-white" />
+                         new URL(urlData.url).hostname.includes('youtube.com') ?
+                          <FaYoutube size={20} className="text-youtube" />
                           :
-                          new URL(urlData.url).hostname.includes('linkedin.com') ?
-                            <FaLinkedin size={20} className="text-linkedin" />
+                          new URL(urlData.url).hostname.includes('github.com') ?
+                            <FaGithub size={20} className="text-github dark:text-white" />
                             :
-                            new URL(urlData.url).hostname.includes('discord') ?
-                              <FaDiscord size={20} className="text-discord" />
+                            new URL(urlData.url).hostname.includes('linkedin.com') ?
+                              <FaLinkedin size={20} className="text-linkedin" />
                               :
-                              new URL(urlData.url).hostname.includes('medium.com') ?
-                                <FaMedium size={20} className="text-medium dark:text-white" />
+                              new URL(urlData.url).hostname.includes('discord') ?
+                                <FaDiscord size={20} className="text-discord" />
                                 :
-                                new URL(urlData.url).hostname.includes('weibo.com') ?
-                                  <FaWeibo size={20} className="text-weibo" />
+                                new URL(urlData.url).hostname.includes('medium.com') ?
+                                  <FaMedium size={20} className="text-medium dark:text-white" />
                                   :
-                                  <GoBrowser size={20} className="text-google" />
+                                  new URL(urlData.url).hostname.includes('weibo.com') ?
+                                    <FaWeibo size={20} className="text-weibo" />
+                                    :
+                                    <GoBrowser size={20} className="text-google" />
             }
               <span className="text-blue-500 dark:text-blue-400">{urlData.value}</span>
             </a>
@@ -225,7 +228,7 @@ const Summary = ({ exchangeData, tickersData, derivativeType = 'perpetual', sele
                     <span>{numberFormat(exchangeData.open_interest_btc * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyBTC.id].value : 1), `0,0${Math.abs(exchangeData.open_interest_btc * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
                     {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyBTC).id}</span>)}
                   </span>
-                  {exchange_rates_data && vs_currency !== currencyBTC.id && (
+                  {exchange_rates_data && currency.id !== currencyBTC.id && (
                     <div className="text-gray-400 text-xs font-medium space-x-1 mt-1">
                       {exchangeData.open_interest_btc > -1 ?
                         <>
@@ -260,7 +263,7 @@ const Summary = ({ exchangeData, tickersData, derivativeType = 'perpetual', sele
                   <span>{numberFormat(exchangeData.trade_volume_24h_btc * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyBTC.id].value : 1), `0,0${Math.abs(exchangeData.trade_volume_24h_btc * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
                   {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyBTC).id}</span>)}
                 </span>
-                {exchange_rates_data && vs_currency !== currencyBTC.id && (
+                {exchange_rates_data && currency.id !== currencyBTC.id && (
                   <div className="text-gray-400 text-xs font-medium space-x-1 mt-1">
                     {exchangeData.trade_volume_24h_btc > -1 ?
                       <>

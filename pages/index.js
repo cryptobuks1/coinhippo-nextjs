@@ -102,7 +102,7 @@ export default function Index() {
             .map((navigationItemData, i) => (
               <Link key={i} href={navigationItemData.url}>
                 <a>
-                  <Badge size="sm" rounded color="bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 border-0 text-blue-500 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-300 font-normal mt-1 mr-1 py-1 pl-1.5 pr-1">
+                  <Badge size="sm" rounded color="bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 border-0 text-blue-500 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-300 font-medium mt-1 mr-1 py-1 pl-1.5 pr-1">
                     {navigationItemData.index_shortcut}
                     <TiArrowRight size={16} className="transform -rotate-45" />
                   </Badge>

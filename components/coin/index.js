@@ -18,7 +18,7 @@ import { getName, numberFormat, ellipseAddress } from '../../lib/utils'
 
 const per_page = 100
 
-const Exchange = ({ exchangeData }) => {
+const Coin = ({ coinData }) => {
   const { preferences, data } = useSelector(state => ({ preferences: state.preferences, data: state.data }), shallowEqual)
   const { vs_currency } = { ...preferences }
   const { all_crypto_data, exchange_rates_data } = { ...data }
@@ -28,85 +28,79 @@ const Exchange = ({ exchangeData }) => {
 
   const router = useRouter()
   const { query } = { ...router }
-  const { exchange_id } = { ...query }
+  const { coin_id } = { ...query }
 
-  const [derivativeType, setDerivativeType] = useState('perpetual')
   const [tickersData, setTickersData] = useState(null)
 
   const mountedRef = useMountedRef()
-
-  const marketType = (exchangeData && exchangeData.market_type) || 'spot'
 
   useEffect(() => {
     const getTickers = async () => {
       let _tickersData
 
-      for (let i = 0; i < (marketType !== 'spot' ? 1 : 20); i++) {
-        const response = marketType !== 'spot' ?
-          { ...exchangeData }
-          :
-          await exchangeTickers(exchangeData.id, { page: i + 1, order: 'trust_score_desc', depth: true })
+      // for (let i = 0; i < (marketType !== 'spot' ? 1 : 20); i++) {
+      //   const response = marketType !== 'spot' ?
+      //     { ...exchangeData }
+      //     :
+      //     await exchangeTickers(exchangeData.id, { page: i + 1, order: 'trust_score_desc', depth: true })
 
-        if (response && response.tickers) {
-          _tickersData = (
-            _.orderBy(
-              _.concat(_tickersData || [], response.tickers)
-              .map(tickerData => {
-                return {
-                  ...tickerData,
-                  converted_last: tickerData.converted_last && Object.fromEntries(new Map(Object.entries(tickerData.converted_last).map(([key, value]) => [key, typeof value === 'string' ? Number(value) : typeof value === 'number' ? value : -1]))),
-                  h24_percentage_change: typeof tickerData.h24_percentage_change === 'string' ? Number(tickerData.h24_percentage_change) : typeof tickerData.h24_percentage_change === 'number' ? tickerData.h24_percentage_change : Number.MIN_SAFE_INTEGER,
-                  index: tickerData.index === 'string' ? Number(tickerData.index) : typeof tickerData.index === 'number' ? tickerData.index : -1,
-                  index_basis_percentage: tickerData.index_basis_percentage === 'string' ? Number(tickerData.index_basis_percentage) : typeof tickerData.index_basis_percentage === 'number' ? tickerData.index_basis_percentage : Number.MIN_SAFE_INTEGER,
-                  bid_ask_spread_percentage: typeof tickerData.bid_ask_spread_percentage === 'string' ? Number(tickerData.bid_ask_spread_percentage) : typeof tickerData.bid_ask_spread_percentage === 'number' ? tickerData.bid_ask_spread_percentage : -1,
-                  bid_ask_spread: typeof tickerData.bid_ask_spread === 'string' ? Number(tickerData.bid_ask_spread) : typeof tickerData.bid_ask_spread === 'number' ? tickerData.bid_ask_spread : -1,
-                  up_depth: typeof tickerData.cost_to_move_up_usd === 'string' ? Number(tickerData.cost_to_move_up_usd) : typeof tickerData.cost_to_move_up_usd === 'number' ? tickerData.cost_to_move_up_usd : -1,
-                  down_depth: typeof tickerData.cost_to_move_down_usd === 'string' ? Number(tickerData.cost_to_move_down_usd) : typeof tickerData.cost_to_move_down_usd === 'number' ? tickerData.cost_to_move_down_usd : -1,
-                  funding_rate: tickerData.funding_rate === 'string' ? Number(tickerData.funding_rate) : typeof tickerData.funding_rate === 'number' ? tickerData.funding_rate : Number.MIN_SAFE_INTEGER,
-                  open_interest_usd: typeof tickerData.open_interest_usd === 'string' ? Number(tickerData.open_interest_usd) : typeof tickerData.open_interest_usd === 'number' ? tickerData.open_interest_usd : -1,
-                  converted_volume: tickerData.converted_volume && Object.fromEntries(new Map(Object.entries(tickerData.converted_volume).map(([key, value]) => [key, typeof value === 'string' ? Number(value) : typeof value === 'number' ? value : -1]))),
-                  trust_score: typeof tickerData.trust_score === 'number' ? tickerData.trust_score : tickerData.trust_score === 'green' ? 1 : tickerData.trust_score === 'yellow' ? 0.5 : 0,
-                }
-              }),
-              [marketType !== 'spot' ? 'open_interest_usd' : 'trust_score'], ['desc']
-            )
-          )
+      //   if (response && response.tickers) {
+      //     _tickersData = (
+      //       _.orderBy(
+      //         _.concat(_tickersData || [], response.tickers)
+      //         .map(tickerData => {
+      //           return {
+      //             ...tickerData,
+      //             converted_last: tickerData.converted_last && Object.fromEntries(new Map(Object.entries(tickerData.converted_last).map(([key, value]) => [key, typeof value === 'string' ? Number(value) : typeof value === 'number' ? value : -1]))),
+      //             h24_percentage_change: typeof tickerData.h24_percentage_change === 'string' ? Number(tickerData.h24_percentage_change) : typeof tickerData.h24_percentage_change === 'number' ? tickerData.h24_percentage_change : Number.MIN_SAFE_INTEGER,
+      //             index: tickerData.index === 'string' ? Number(tickerData.index) : typeof tickerData.index === 'number' ? tickerData.index : -1,
+      //             index_basis_percentage: tickerData.index_basis_percentage === 'string' ? Number(tickerData.index_basis_percentage) : typeof tickerData.index_basis_percentage === 'number' ? tickerData.index_basis_percentage : Number.MIN_SAFE_INTEGER,
+      //             bid_ask_spread_percentage: typeof tickerData.bid_ask_spread_percentage === 'string' ? Number(tickerData.bid_ask_spread_percentage) : typeof tickerData.bid_ask_spread_percentage === 'number' ? tickerData.bid_ask_spread_percentage : -1,
+      //             bid_ask_spread: typeof tickerData.bid_ask_spread === 'string' ? Number(tickerData.bid_ask_spread) : typeof tickerData.bid_ask_spread === 'number' ? tickerData.bid_ask_spread : -1,
+      //             up_depth: typeof tickerData.cost_to_move_up_usd === 'string' ? Number(tickerData.cost_to_move_up_usd) : typeof tickerData.cost_to_move_up_usd === 'number' ? tickerData.cost_to_move_up_usd : -1,
+      //             down_depth: typeof tickerData.cost_to_move_down_usd === 'string' ? Number(tickerData.cost_to_move_down_usd) : typeof tickerData.cost_to_move_down_usd === 'number' ? tickerData.cost_to_move_down_usd : -1,
+      //             funding_rate: tickerData.funding_rate === 'string' ? Number(tickerData.funding_rate) : typeof tickerData.funding_rate === 'number' ? tickerData.funding_rate : Number.MIN_SAFE_INTEGER,
+      //             open_interest_usd: typeof tickerData.open_interest_usd === 'string' ? Number(tickerData.open_interest_usd) : typeof tickerData.open_interest_usd === 'number' ? tickerData.open_interest_usd : -1,
+      //             converted_volume: tickerData.converted_volume && Object.fromEntries(new Map(Object.entries(tickerData.converted_volume).map(([key, value]) => [key, typeof value === 'string' ? Number(value) : typeof value === 'number' ? value : -1]))),
+      //             trust_score: typeof tickerData.trust_score === 'number' ? tickerData.trust_score : tickerData.trust_score === 'green' ? 1 : tickerData.trust_score === 'yellow' ? 0.5 : 0,
+      //           }
+      //         }),
+      //         [marketType !== 'spot' ? 'open_interest_usd' : 'trust_score'], ['desc']
+      //       )
+      //     )
 
-          if (_tickersData) {
-            if (mountedRef.current) {
-              if (marketType !== 'spot') {
-                exchangeData.number_of_perpetual_pairs = _tickersData.filter(tickerData => tickerData.contract_type === 'perpetual').length
-                exchangeData.number_of_futures_pairs = _tickersData.filter(tickerData => tickerData.contract_type === 'futures').length
-              }
-              else {
-                exchangeData.number_of_coins = _.uniqBy(_tickersData, 'base').length
-                exchangeData.number_of_pairs = _tickersData.length
-              }
-              setTickersData({ data: _tickersData, exchange_id: exchangeData.id })
-            }
-          }
+      //     if (_tickersData) {
+      //       if (mountedRef.current) {
+      //         if (marketType !== 'spot') {
+      //           exchangeData.number_of_perpetual_pairs = _tickersData.filter(tickerData => tickerData.contract_type === 'perpetual').length
+      //           exchangeData.number_of_futures_pairs = _tickersData.filter(tickerData => tickerData.contract_type === 'futures').length
+      //         }
+      //         else {
+      //           exchangeData.number_of_coins = _.uniqBy(_tickersData, 'base').length
+      //           exchangeData.number_of_pairs = _tickersData.length
+      //         }
+      //         setTickersData({ data: _tickersData, exchange_id: exchangeData.id })
+      //       }
+      //     }
 
-          if (response.tickers.length < per_page) {
-            break
-          }
-        }
-      }
+      //     if (response.tickers.length < per_page) {
+      //       break
+      //     }
+      //   }
+      // }
     }
 
-    if (exchangeData) {
+    if (coinData) {
       getTickers()
     }
-  }, [exchangeData, marketType])
+  }, [coinData])
 
   return (
     <div className="mx-1">
       <Summary
-        exchangeData={exchangeData && exchange_id === exchangeData.id && exchangeData}
-        tickersData={tickersData && exchange_id === tickersData.exchange_id && tickersData.data && tickersData.data.filter(tickerData => marketType === 'spot' || tickerData.contract_type === derivativeType)}
-        derivativeType={derivativeType}
-        selectDerivativeType={derivativeType => setDerivativeType(derivativeType)}
+        coinData={coinData && coin_id === coinData.id && coinData}
       />
-      <Datatable
+      {/*<Datatable
         columns={[
           {
             Header: '#',
@@ -606,13 +600,13 @@ const Exchange = ({ exchangeData }) => {
           [...Array(10).keys()].map(i => {return { i, skeleton: true } })
         }
         defaultPageSize={per_page}
-      />
+      />*/}
     </div>
   )
 }
 
-Exchange.propTypes = {
-  exchangeData: PropTypes.any,
+Coin.propTypes = {
+  coinData: PropTypes.any,
 }
 
-export default Exchange
+export default Coin

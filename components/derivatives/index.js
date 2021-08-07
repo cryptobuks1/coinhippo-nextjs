@@ -174,7 +174,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
                       :
                       '-'
                     }
-                    {exchange_rates_data && vs_currency !== currencyUSD.id && (
+                    {exchange_rates_data && currency.id !== currencyUSD.id && (
                       <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
                           <>
@@ -295,7 +295,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
                       :
                       '-'
                     }
-                    {exchange_rates_data && vs_currency !== currencyUSD.id && (
+                    {exchange_rates_data && currency.id !== currencyUSD.id && (
                       <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
                           <>
@@ -335,7 +335,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
                       :
                       '-'
                     }
-                    {exchange_rates_data && vs_currency !== currencyUSD.id && (
+                    {exchange_rates_data && currency.id !== currencyUSD.id && (
                       <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
                           <>

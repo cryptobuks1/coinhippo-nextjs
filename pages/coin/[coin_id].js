@@ -2,12 +2,14 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
-// import Coin from '../../components/coin'
+import Coin from '../../components/coin'
 import DropdownExchange from '../../components/coin/dropdown-exchange'
 import SectionTitle from '../../components/section-title'
 import { Badge } from '../../components/badges'
 import Image from '../../components/image'
+import { ProgressBarWithText } from '../../components/progress-bars'
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi'
+import { MdArrowDropUp } from 'react-icons/md'
 import _ from 'lodash'
 import { coin } from '../../lib/api/coingecko'
 import { getTrades } from '../../lib/exchanges'
@@ -46,6 +48,7 @@ export default function CoinId() {
                 'atl',
                 'market_cap',
                 'fully_diluted_valuation',
+                'total_value_locked',
                 'total_volume',
                 'high_24h',
                 'low_24h'
@@ -81,7 +84,6 @@ export default function CoinId() {
               }
               else if ([
                 'market_cap_rank',
-                'total_value_locked',
                 'mcap_to_tvl_ratio',
                 'fdv_to_tvl_ratio',
                 'total_supply',
@@ -124,6 +126,7 @@ export default function CoinId() {
   useEffect(() => {
     if (coinData && coinData.vs_currency !== vs_currency && coinData.market_data) {
       coinData.vs_currency = vs_currency
+      coinData.market_data.fully_diluted_valuation[vs_currency] = coinData.market_data.fully_diluted_valuation[vs_currency] > 0 ? coinData.market_data.fully_diluted_valuation[vs_currency] : coinData.market_data.current_price[vs_currency] * (coinData.market_data.max_supply || coinData.market_data.total_supply || coinData.market_data.circulating_supply)
       coinData.roi = {
         ...coinData.market_data.roi,
         times: coinData.market_data.roi ? coinData.market_data.roi.times : coinData.market_data.atl[vs_currency] > 0 ? (coinData.market_data.current_price[vs_currency] - coinData.market_data.atl[vs_currency]) / coinData.market_data.atl[vs_currency] : null,
@@ -166,7 +169,7 @@ export default function CoinId() {
       </Head>
       <SectionTitle
         title="Cryptocurrency"
-        subtitle={coinData ?
+        subtitle={coinData && coin_id === coinData.id ?
           <>
             <div className="coin-column flex items-center space-x-2 mt-1.5">
               {coinData.image && (
@@ -183,40 +186,66 @@ export default function CoinId() {
                 {coinData.symbol && (<span className={`uppercase text-gray-400 text-base font-normal ${coinData.symbol.length > 5 ? 'break-all' : ''}`}>{coinData.symbol}</span>)}
               </span>
             </div>
-            <span className="flex flex-wrap items-center mt-1">
-              <Badge rounded color="bg-transparent flex items-center normal-case text-gray-800 dark:text-gray-200 my-1 ml-0.5 mr-2 px-0">Rank #{coinData.market_cap_rank > -1 ? numberFormat(coinData.market_cap_rank, '0,0')  : '-'}</Badge>
-              {((coinData.categories && coinData.categories.filter(category => ['cryptocurrency'].findIndex(keyword => keyword === category.toLowerCase()) < 0)) || []).concat(coinData.hashing_algorithm || []).map((tag, i) => (
-                <Badge key={i} rounded color="bg-gray-200 flex items-center text-gray-700 dark:bg-gray-700 dark:text-gray-400 font-normal my-1 mr-2">{tag}</Badge>
-              ))}
-            </span>
+            <div className={`flex items-center ${coinData.market_data.price_change_percentage_24h_in_currency[currency.id] < 0 ? 'text-red-500 dark:text-red-400' : coinData.market_data.price_change_percentage_24h_in_currency[currency.id] > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} font-bold mt-1 space-x-1.5`}>
+              <span className="text-2xl space-x-1">
+                {coinData.market_data.current_price[currency.id] > -1 ?
+                  <>
+                    {currency.symbol}
+                    <span>{numberFormat(coinData.market_data.current_price[currency.id], '0,0.0000000000')}</span>
+                    {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
+                  </>
+                  :
+                  '-'
+                }
+              </span>
+              <span className="flex items-center pr-1">
+                <span className="text-sm font-normal">{numberFormat(coinData.market_data.price_change_percentage_24h_in_currency[currency.id], '+0,0.000')}%</span>
+                {coinData.market_data.price_change_percentage_24h_in_currency[currency.id] < 0 ? <FiArrowDown size={14} className="ml-0.5 mb-0.5" /> : coinData.market_data.price_change_percentage_24h_in_currency[currency.id] > 0 ? <FiArrowUp size={14} className="ml-0.5 mb-0.5" /> : null}
+              </span>
+            </div>
+            <div className="w-full max-w-xs flex items-center space-x-1.5 my-1 mr-1">
+              <span className="text-gray-400 dark:text-gray-500 text-xs font-normal space-x-1">
+                {currency.symbol}
+                <span>{numberFormat(coinData.market_data.low_24h[currency.id], '0,0.00000000')}</span>
+                {!(currency.symbol) && (<span className="uppercase">{currency.id}</span>)}
+              </span>
+              <ProgressBarWithText
+                width={coinData.market_data.high_24h[currency.id] - coinData.market_data.low_24h[currency.id] > 0 ? (coinData.market_data.current_price[currency.id] - coinData.market_data.low_24h[currency.id]) * 100 / (coinData.market_data.high_24h[currency.id] - coinData.market_data.low_24h[currency.id]) : 0}
+                text={coinData.market_data.high_24h[currency.id] - coinData.market_data.low_24h[currency.id] > 0 && (<MdArrowDropUp size={24} className="text-gray-200 dark:text-gray-600 mt-0.5 ml-auto" style={((coinData.market_data.current_price[currency.id] - coinData.market_data.low_24h[currency.id]) * 100 / (coinData.market_data.high_24h[currency.id] - coinData.market_data.low_24h[currency.id])) <= 5 ? { marginLeft: '-.5rem' } : { marginRight: '-.5rem' }} />)}
+                color="bg-gray-200 dark:bg-gray-600 rounded"
+                backgroundClassName="h-2 bg-gray-100 dark:bg-gray-800 rounded"
+                className="h-2"
+              />
+              <span className="text-gray-400 dark:text-gray-500 text-xs font-normal space-x-1 ml-auto">
+                {currency.symbol}
+                <span>{numberFormat(coinData.market_data.high_24h[currency.id], '0,0.00000000')}</span>
+                {!(currency.symbol) && (<span className="uppercase">{currency.id}</span>)}
+              </span>
+            </div>
           </>
           :
-          getName(coin_id)
+          <>
+            <div className="coin-column flex items-center space-x-2 mt-1.5">
+              <div className="skeleton w-8 h-8 rounded" />
+              <span>{getName(coin_id)}</span>
+            </div>
+            <div className="skeleton w-32 h-8 rounded mt-1" />
+            <div className="skeleton w-64 h-3 rounded mt-2 mb-1" />
+          </>
         }
         right={
           <div className="flex flex-col items-start sm:items-end my-1 ml-0 sm:ml-4 pr-1">
-            {coinData ?
+            {coinData && coin_id === coinData.id ?
               <>
-                <div className={`flex items-center ${coinData.market_data.price_change_percentage_24h_in_currency[currency.id] < 0 ? 'text-red-500 dark:text-red-400' : coinData.market_data.price_change_percentage_24h_in_currency[currency.id] > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} font-bold space-x-1.5`}>
-                  <span className="text-lg space-x-1">
-                    {coinData.market_data.current_price[currency.id] > -1 ?
-                      <>
-                        {currency.symbol}
-                        <span>{numberFormat(coinData.market_data.current_price[currency.id], '0,0.0000000000')}</span>
-                        {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
-                      </>
-                      :
-                      '-'
-                    }
-                  </span>
-                  <span className="flex items-center pr-1">
-                    <span className="text-sm font-normal">{numberFormat(coinData.market_data.price_change_percentage_24h_in_currency[currency.id], '+0,0.000')}%</span>
-                    {coinData.market_data.price_change_percentage_24h_in_currency[currency.id] < 0 ? <FiArrowDown size={14} className="ml-0.5 mb-0.5" /> : coinData.market_data.price_change_percentage_24h_in_currency[currency.id] > 0 ? <FiArrowUp size={14} className="ml-0.5 mb-0.5" /> : null}
-                  </span>
-                </div>
-                <div className="flex flex-wrap items-center">
+                <span className="max-w-screen-sm flex flex-wrap items-center justify-start sm:justify-end my-1 ml-0 sm:ml-auto">
+                  <Badge rounded color="bg-transparent flex items-center normal-case text-gray-800 dark:text-gray-200 my-1 ml-0.5 mr-2 px-0">Rank #{coinData.market_cap_rank > -1 ? numberFormat(coinData.market_cap_rank, '0,0')  : '-'}</Badge>
+                  {((coinData.categories && coinData.categories.filter(category => ['cryptocurrency'].findIndex(keyword => keyword === category.toLowerCase()) < 0)) || []).concat(coinData.hashing_algorithm || []).map((tag, i) => (
+                    <Badge key={i} rounded color="bg-gray-200 flex items-center text-gray-700 dark:bg-gray-700 dark:text-gray-400 font-normal my-1 mr-2">{tag}</Badge>
+                  ))}
+                </span>
+                <div className="flex flex-wrap items-center ml-0 sm:ml-auto">
                   {_.slice(getTrades(coinData, all_crypto_data, coinData.tickers), 0, 3).map((tickerData, i) => (
-                    <a key={i} href={tickerData.url} target="_blank" rel="noopener noreferrer" className={`btn btn-raised min-w-max btn-rounded flex items-center bg-transparent hover:bg-indigo-50 text-indigo-500 hover:text-indigo-600 dark:hover:bg-indigo-900 dark:text-white dark:hover:text-gray-200 text-xs space-x-1.5 my-1 ${i < 3 - 1 ? 'mr-2 md:mr-3' : ''} p-2`}>
+                    <a key={i} href={tickerData.url} target="_blank" rel="noopener noreferrer" className="btn btn-raised min-w-max btn-rounded flex items-center bg-transparent hover:bg-indigo-50 text-indigo-500 hover:text-indigo-600 dark:hover:bg-indigo-900 dark:text-white dark:hover:text-gray-200 text-xs space-x-1.5 my-1 mr-2 md:mr-3 p-2">
                       {tickerData.exchange && tickerData.exchange.large && (
                         <Image
                           src={tickerData.exchange.large}
@@ -226,7 +255,7 @@ export default function CoinId() {
                           className="rounded"
                         />
                       )}
-                      <span className="hidden sm:block">{tickerData.exchange.name || getName(tickerData.exchange.id)}</span>
+                      <span className="hidden lg:block">{tickerData.exchange.name || getName(tickerData.exchange.id)}</span>
                     </a>
                   ))}
                   <DropdownExchange data={_.slice(getTrades(coinData, all_crypto_data, coinData.tickers), 3)} />
@@ -234,12 +263,16 @@ export default function CoinId() {
               </>
               :
               <>
-              <div className="skeleton w-32 h-8 rounded my-1 ml-0 sm:ml-auto" />
-              <div className="flex flex-wrap items-center">
-                {[...Array(3).keys()].map(i => (
-                  <div key={i} className={`skeleton w-8 sm:w-28 h-8 rounded my-1 mr-${i < 3 - 1 ? 2 : 0}`} />
-                ))}
-              </div>
+                <span className="flex flex-wrap items-center my-1 ml-0 sm:ml-auto">
+                  {[...Array(3).keys()].map(i => (
+                    <div key={i} className={`skeleton w-16 sm:w-24 h-6 rounded my-1 mr-${i < 3 - 1 ? 2 : 0}`} />
+                  ))}
+                </span>
+                <div className="flex flex-wrap items-center ml-0 sm:ml-auto">
+                  {[...Array(3).keys()].map(i => (
+                    <div key={i} className={`skeleton w-8 sm:w-28 h-8 rounded my-1 mr-${i < 3 - 1 ? 2 : 0}`} />
+                  ))}
+                </div>
               </>
             }
           </div>
@@ -247,7 +280,7 @@ export default function CoinId() {
         className="flex-col sm:flex-row items-start sm:items-center mx-1"
         subTitleClassName="min-w-0 max-w-screen-sm"
       />
-      {/*<Coin coinData={coinData} />*/}
+      <Coin coinData={coinData} />
     </>
   )
 }

@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types'
-import Image from '../image'
 import { getName } from '../../lib/utils'
 
-const Exchanges = ({ data, handleDropdownClick }) => {
+const SourceCodes = ({ data, handleDropdownClick }) => {
   return (
     <>
-      <div className="dropdown-title">Others</div>
+      <div className="dropdown-title">Source codes</div>
       <div className="flex flex-wrap pb-1">
         {data && data.map((item, i) => (
           <a
@@ -16,16 +15,8 @@ const Exchanges = ({ data, handleDropdownClick }) => {
             onClick={() => handleDropdownClick()}
             className="dropdown-item w-full sm:w-1/2 flex items-center justify-start text-sm space-x-2 p-2"
           >
-            {item.exchange && item.exchange.large && (
-              <Image
-                src={item.exchange.large}
-                alt=""
-                width={16}
-                height={16}
-                className="rounded"
-              />
-            )}
-            <span>{item.exchange.name || getName(item.exchange.id)}</span>
+            {item.icon}
+            <span>{item.value}</span>
           </a>
         ))}
       </div>
@@ -33,9 +24,9 @@ const Exchanges = ({ data, handleDropdownClick }) => {
   )
 }
 
-Exchanges.propTypes = {
+SourceCodes.propTypes = {
   data: PropTypes.any,
   handleDropdownClick: PropTypes.any,
 }
 
-export default Exchanges
+export default SourceCodes
