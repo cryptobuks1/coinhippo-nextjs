@@ -131,13 +131,23 @@ const Exchange = ({ exchangeData }) => {
                 <Link href={`/coin${props.row.original.coin_id ? `/${props.row.original.coin_id}` : 's'}`}>
                   <a className="flex flex-col whitespace-pre-wrap font-medium" style={{ maxWidth: '10rem' }}>
                     <div className="coin-column flex items-center space-x-2">
-                      <Image
-                        src={props.row.original.coin && props.row.original.coin.image}
-                        alt=""
-                        width={24}
-                        height={24}
-                        className="rounded"
-                      />
+                      {tickersData.data.filter(tickerData => marketType === 'spot' || tickerData.contract_type === derivativeType).length > per_page ?
+                        <img
+                          src={props.row.original.coin && props.row.original.coin.image}
+                          alt=""
+                          width={24}
+                          height={24}
+                          className="rounded"
+                        />
+                        :
+                        <Image
+                          src={props.row.original.coin && props.row.original.coin.image}
+                          alt=""
+                          width={24}
+                          height={24}
+                          className="rounded"
+                        />
+                      }
                       <span className="space-x-1">
                         <span>{props.value}</span>
                         {props.row.original.coin && props.row.original.coin.symbol && (<span className={`uppercase text-gray-400 font-normal ${props.row.original.coin.symbol.length > 5 ? 'break-all' : ''}`}>{props.row.original.coin.symbol}</span>)}

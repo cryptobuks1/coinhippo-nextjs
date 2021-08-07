@@ -45,7 +45,7 @@ export const Page = ({
   )
 }
 
-export const Pages = ({ items, active, onClick, disabled = false }) => {
+export const Pages = ({ items = [], active, onClick, disabled = false }) => {
   const hide = i => items.length > 10 && [0, items.length - 1, active - 1].findIndex((_i, index) => Math.floor(Math.abs(i - _i)) < (index < 2 ? 3 : items.length < 20 ? 2 : 3)) < 0
 
   return (
@@ -99,9 +99,9 @@ export const Pagination = ({
 }
 
 Pagination.propTypes = {
-  items: PropTypes.array.isRequired,
-  active: PropTypes.number.isRequired,
-  previous: PropTypes.any.isRequired,
-  next: PropTypes.any.isRequired,
+  items: PropTypes.array,
+  active: PropTypes.number,
+  previous: PropTypes.any,
+  next: PropTypes.any,
   icons: PropTypes.bool,
 }

@@ -6,6 +6,7 @@ import DropdownSourceCode from './dropdown-sourcecode'
 import Widget from '../widget'
 import { ProgressBarWithText } from '../progress-bars'
 import { FaHome, FaFacebook, FaTwitter, FaTelegram, FaReddit, FaSlack, FaYoutube, FaGithub, FaBitbucket, FaLinkedin, FaDiscord, FaMedium, FaWeibo, FaCoins } from 'react-icons/fa'
+import { RiKakaoTalkFill } from 'react-icons/ri'
 import { GoBrowser } from 'react-icons/go'
 import { AiOutlineLineChart, AiOutlineAreaChart, AiOutlineLock, AiOutlineBarChart } from 'react-icons/ai'
 import _ from 'lodash'
@@ -112,7 +113,10 @@ const Summary = ({ coinData }) => {
                                       new URL(urlData.url).hostname.includes('weibo.com') ?
                                         <FaWeibo size={20} className="text-weibo" />
                                         :
-                                        <GoBrowser size={20} className="text-google" />
+                                        new URL(urlData.url).hostname.includes('kakao.com') ?
+                                          <RiKakaoTalkFill size={20} className="text-kakao" />
+                                          :
+                                          <GoBrowser size={20} className="text-google" />
                 }
                 <span className="text-blue-500 dark:text-blue-400">{urlData.value}</span>
               </a>

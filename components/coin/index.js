@@ -7,11 +7,12 @@ import Summary from './summary'
 import Datatable from '../../components/datatable'
 import Image from '../../components/image'
 import { ProgressBar } from '../../components/progress-bars'
+import { Pagination } from '../../components/pagination'
 import CopyClipboard from '../../components/copy-clipboard'
 import { IoInformationCircleSharp } from 'react-icons/io5'
 import { HiShieldCheck, HiShieldExclamation } from 'react-icons/hi'
 import _ from 'lodash'
-import { exchangeTickers } from '../../lib/api/coingecko'
+import { coinTickers } from '../../lib/api/coingecko'
 import { currencies } from '../../lib/menus'
 import useMountedRef from '../../lib/mountedRef'
 import { getName, numberFormat, ellipseAddress } from '../../lib/utils'
@@ -23,7 +24,6 @@ const Coin = ({ coinData }) => {
   const { vs_currency } = { ...preferences }
   const { all_crypto_data, exchange_rates_data } = { ...data }
   const currency = currencies[currencies.findIndex(c => c.id === vs_currency)] || currencies[0]
-  const currencyBTC = currencies[currencies.findIndex(c => c.id === 'btc')]
   const currencyUSD = currencies[currencies.findIndex(c => c.id === 'usd')]
 
   const router = useRouter()
@@ -31,6 +31,7 @@ const Coin = ({ coinData }) => {
   const { coin_id } = { ...query }
 
   const [tickersData, setTickersData] = useState(null)
+  const [numPage, setNumPage] = useState(1)
 
   const mountedRef = useMountedRef()
 
@@ -38,69 +39,47 @@ const Coin = ({ coinData }) => {
     const getTickers = async () => {
       let _tickersData
 
-      // for (let i = 0; i < (marketType !== 'spot' ? 1 : 20); i++) {
-      //   const response = marketType !== 'spot' ?
-      //     { ...exchangeData }
-      //     :
-      //     await exchangeTickers(exchangeData.id, { page: i + 1, order: 'trust_score_desc', depth: true })
+      for (let i = 0; i < numPage; i++) {
+        const response = await coinTickers(coinData.id, { page: i + 1, include_exchange_logo: true, order: 'volume_desc', depth: true })
 
-      //   if (response && response.tickers) {
-      //     _tickersData = (
-      //       _.orderBy(
-      //         _.concat(_tickersData || [], response.tickers)
-      //         .map(tickerData => {
-      //           return {
-      //             ...tickerData,
-      //             converted_last: tickerData.converted_last && Object.fromEntries(new Map(Object.entries(tickerData.converted_last).map(([key, value]) => [key, typeof value === 'string' ? Number(value) : typeof value === 'number' ? value : -1]))),
-      //             h24_percentage_change: typeof tickerData.h24_percentage_change === 'string' ? Number(tickerData.h24_percentage_change) : typeof tickerData.h24_percentage_change === 'number' ? tickerData.h24_percentage_change : Number.MIN_SAFE_INTEGER,
-      //             index: tickerData.index === 'string' ? Number(tickerData.index) : typeof tickerData.index === 'number' ? tickerData.index : -1,
-      //             index_basis_percentage: tickerData.index_basis_percentage === 'string' ? Number(tickerData.index_basis_percentage) : typeof tickerData.index_basis_percentage === 'number' ? tickerData.index_basis_percentage : Number.MIN_SAFE_INTEGER,
-      //             bid_ask_spread_percentage: typeof tickerData.bid_ask_spread_percentage === 'string' ? Number(tickerData.bid_ask_spread_percentage) : typeof tickerData.bid_ask_spread_percentage === 'number' ? tickerData.bid_ask_spread_percentage : -1,
-      //             bid_ask_spread: typeof tickerData.bid_ask_spread === 'string' ? Number(tickerData.bid_ask_spread) : typeof tickerData.bid_ask_spread === 'number' ? tickerData.bid_ask_spread : -1,
-      //             up_depth: typeof tickerData.cost_to_move_up_usd === 'string' ? Number(tickerData.cost_to_move_up_usd) : typeof tickerData.cost_to_move_up_usd === 'number' ? tickerData.cost_to_move_up_usd : -1,
-      //             down_depth: typeof tickerData.cost_to_move_down_usd === 'string' ? Number(tickerData.cost_to_move_down_usd) : typeof tickerData.cost_to_move_down_usd === 'number' ? tickerData.cost_to_move_down_usd : -1,
-      //             funding_rate: tickerData.funding_rate === 'string' ? Number(tickerData.funding_rate) : typeof tickerData.funding_rate === 'number' ? tickerData.funding_rate : Number.MIN_SAFE_INTEGER,
-      //             open_interest_usd: typeof tickerData.open_interest_usd === 'string' ? Number(tickerData.open_interest_usd) : typeof tickerData.open_interest_usd === 'number' ? tickerData.open_interest_usd : -1,
-      //             converted_volume: tickerData.converted_volume && Object.fromEntries(new Map(Object.entries(tickerData.converted_volume).map(([key, value]) => [key, typeof value === 'string' ? Number(value) : typeof value === 'number' ? value : -1]))),
-      //             trust_score: typeof tickerData.trust_score === 'number' ? tickerData.trust_score : tickerData.trust_score === 'green' ? 1 : tickerData.trust_score === 'yellow' ? 0.5 : 0,
-      //           }
-      //         }),
-      //         [marketType !== 'spot' ? 'open_interest_usd' : 'trust_score'], ['desc']
-      //       )
-      //     )
+        if (response && response.tickers) {
+          _tickersData = (
+            _.concat(_tickersData || [], response.tickers)
+            .map(tickerData => {
+              return {
+                ...tickerData,
+                converted_last: tickerData.converted_last && Object.fromEntries(new Map(Object.entries(tickerData.converted_last).map(([key, value]) => [key, typeof value === 'string' ? Number(value) : typeof value === 'number' ? value : -1]))),
+                bid_ask_spread_percentage: typeof tickerData.bid_ask_spread_percentage === 'string' ? Number(tickerData.bid_ask_spread_percentage) : typeof tickerData.bid_ask_spread_percentage === 'number' ? tickerData.bid_ask_spread_percentage : -1,
+                up_depth: typeof tickerData.cost_to_move_up_usd === 'string' ? Number(tickerData.cost_to_move_up_usd) : typeof tickerData.cost_to_move_up_usd === 'number' ? tickerData.cost_to_move_up_usd : -1,
+                down_depth: typeof tickerData.cost_to_move_down_usd === 'string' ? Number(tickerData.cost_to_move_down_usd) : typeof tickerData.cost_to_move_down_usd === 'number' ? tickerData.cost_to_move_down_usd : -1,
+                converted_volume: tickerData.converted_volume && Object.fromEntries(new Map(Object.entries(tickerData.converted_volume).map(([key, value]) => [key, typeof value === 'string' ? Number(value) : typeof value === 'number' ? value : -1]))),
+                trust_score: typeof tickerData.trust_score === 'number' ? tickerData.trust_score : tickerData.trust_score === 'green' ? 1 : tickerData.trust_score === 'yellow' ? 0.5 : 0,
+              }
+            })
+          )
 
-      //     if (_tickersData) {
-      //       if (mountedRef.current) {
-      //         if (marketType !== 'spot') {
-      //           exchangeData.number_of_perpetual_pairs = _tickersData.filter(tickerData => tickerData.contract_type === 'perpetual').length
-      //           exchangeData.number_of_futures_pairs = _tickersData.filter(tickerData => tickerData.contract_type === 'futures').length
-      //         }
-      //         else {
-      //           exchangeData.number_of_coins = _.uniqBy(_tickersData, 'base').length
-      //           exchangeData.number_of_pairs = _tickersData.length
-      //         }
-      //         setTickersData({ data: _tickersData, exchange_id: exchangeData.id })
-      //       }
-      //     }
+          if (_tickersData) {
+            if (mountedRef.current) {
+              setTickersData({ data: _tickersData, coin_id: coinData.id, page: numPage })
+            }
+          }
 
-      //     if (response.tickers.length < per_page) {
-      //       break
-      //     }
-      //   }
-      // }
+          if (response.tickers.length < per_page) {
+            break
+          }
+        }
+      }
     }
 
     if (coinData) {
       getTickers()
     }
-  }, [coinData])
+  }, [coinData, numPage])
 
   return (
     <div className="mx-1">
-      <Summary
-        coinData={coinData && coin_id === coinData.id && coinData}
-      />
-      {/*<Datatable
+      <Summary coinData={coinData && coin_id === coinData.id && coinData} />
+      <Datatable
         columns={[
           {
             Header: '#',
@@ -118,24 +97,21 @@ const Coin = ({ coinData }) => {
             headerClassName: 'justify-center',
           },
           {
-            Header: 'Coin',
-            accessor: 'coin_name',
+            Header: 'Exchange',
+            accessor: 'market_name',
             Cell: props => (
               !props.row.original.skeleton ?
-                <Link href={`/coin${props.row.original.coin_id ? `/${props.row.original.coin_id}` : 's'}`}>
+                <Link href={`/exchange${props.row.original.market && props.row.original.market.identifier ? `/${props.row.original.market.identifier}` : 's'}`}>
                   <a className="flex flex-col whitespace-pre-wrap font-medium" style={{ maxWidth: '10rem' }}>
                     <div className="coin-column flex items-center space-x-2">
                       <Image
-                        src={props.row.original.coin && props.row.original.coin.image}
+                        src={props.row.original.market && props.row.original.market.logo && props.row.original.market.logo.replace('small', 'large')}
                         alt=""
                         width={24}
                         height={24}
                         className="rounded"
                       />
-                      <span className="space-x-1">
-                        <span>{props.value}</span>
-                        {props.row.original.coin && props.row.original.coin.symbol && (<span className={`uppercase text-gray-400 font-normal ${props.row.original.coin.symbol.length > 5 ? 'break-all' : ''}`}>{props.row.original.coin.symbol}</span>)}
-                      </span>
+                      <span>{props.value}</span>
                     </div>
                   </a>
                 </Link>
@@ -157,8 +133,8 @@ const Coin = ({ coinData }) => {
                 {!props.row.original.skeleton ?
                   <div className="flex flex-col">
                     <div className="flex items-center space-x-0.5">
-                      {props.row.original.trade_url || (exchangeData && exchangeData.url) ?
-                        <a href={props.row.original.trade_url || (exchangeData && exchangeData.url)} target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400">
+                      {props.row.original.trade_url ?
+                        <a href={props.row.original.trade_url} target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400">
                           {props.value}
                         </a>
                         :
@@ -169,7 +145,7 @@ const Coin = ({ coinData }) => {
                           <IoInformationCircleSharp size={18} className="text-gray-300 dark:text-gray-600 mb-0.5" />
                         </a>
                       )}
-                      {marketType === 'spot' && props.row.original.trust_score > -1 && (
+                      {props.row.original.trust_score > -1 && (
                         <>
                           {!props.row.original.trust_score ?
                             <HiShieldExclamation size={18} className="text-red-400 dark:text-red-600 mb-0.5" />
@@ -255,67 +231,13 @@ const Coin = ({ coinData }) => {
             headerClassName: 'justify-end text-right mr-2',
           },
           {
-            Header: '24h',
-            accessor: 'h24_percentage_change',
-            sortType: (rowA, rowB) => rowA.original.h24_percentage_change > rowB.original.h24_percentage_change ? 1 : -1,
-            Cell: props => (
-              <div className={`${props.value < 0 ? 'text-red-500 dark:text-red-400' : props.value > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} text-xs font-medium text-right`}>
-                {!props.row.original.skeleton ?
-                  props.value > Number.MIN_SAFE_INTEGER ?
-                    `${numberFormat(props.value, `+0,0.000${Math.abs(props.value) < 0.001 ? '000' : ''}`)}%`
-                    :
-                    '-'
-                  :
-                  <div className="skeleton w-10 h-3 rounded ml-auto" />
-                }
-              </div>
-            ),
-            headerClassName: 'justify-end text-right',
-          },
-          {
-            Header: 'Index Price',
-            accessor: 'index',
-            sortType: (rowA, rowB) => rowA.original.index > rowB.original.index ? 1 : -1,
-            Cell: props => (
-              <div className="flex flex-col font-semibold text-right mr-2">
-                {!props.row.original.skeleton ?
-                  <>
-                    {props.value > -1 ?
-                      numberFormat(props.value, '0,0.00000000')
-                      :
-                      '-'
-                    }
-                  </>
-                  :
-                  <div className="skeleton w-28 h-4 rounded ml-auto" />
-                }
-              </div>
-            ),
-            headerClassName: 'justify-end text-right mr-2',
-          },
-          {
-            Header: 'Basis',
-            accessor: 'index_basis_percentage',
-            sortType: (rowA, rowB) => rowA.original.index_basis_percentage > rowB.original.index_basis_percentage ? 1 : -1,
-            Cell: props => (
-              <div className="text-gray-400 dark:text-gray-500 font-normal text-right mr-2">
-                {!props.row.original.skeleton ?
-                  props.value > Number.MIN_SAFE_INTEGER ? `${numberFormat(props.value, `+0,0.000${Math.abs(props.value) < 0.001 ? '000' : ''}`)}%` : '-'
-                  :
-                  <div className="skeleton w-10 h-3 rounded ml-auto" />
-                }
-              </div>
-            ),
-            headerClassName: 'justify-end text-right mr-2',
-          },
-          {
             Header: 'Spread',
-            accessor: marketType === 'spot' ? 'bid_ask_spread_percentage' : 'bid_ask_spread',
-            sortType: (rowA, rowB) => rowA.original[marketType === 'spot' ? 'bid_ask_spread_percentage' : 'bid_ask_spread'] > rowB.original[marketType === 'spot' ? 'bid_ask_spread_percentage' : 'bid_ask_spread'] ? 1 : -1,
+            accessor: 'bid_ask_spread_percentage',
+            sortType: (rowA, rowB) => rowA.original.bid_ask_spread_percentage > rowB.original.bid_ask_spread_percentage ? 1 : -1,
             Cell: props => (
               <div className="text-gray-400 dark:text-gray-500 font-normal text-right mr-2">
                 {!props.row.original.skeleton ?
-                  props.value > -1 ? `${numberFormat(props.value * (marketType !== 'spot' ? 100 : 1), `0,0.000${Math.abs(props.value * (marketType !== 'spot' ? 100 : 1)) < 0.001 ? '000' : ''}`)}%` : '-'
+                  props.value > -1 ? `${numberFormat(props.value, `0,0.000${Math.abs(props.value) < 0.001 ? '000' : ''}`)}%` : '-'
                   :
                   <div className="skeleton w-10 h-3 rounded ml-auto" />
                 }
@@ -386,61 +308,6 @@ const Coin = ({ coinData }) => {
                           <>
                             <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1), `0,0.00${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1)) < 0.01 ? '0000' : ''}`)}</span>
                             <span className="uppercase">{currency.id}</span>
-                          </>
-                          :
-                          '-'
-                        }
-                      </span>
-                    )}
-                  </>
-                  :
-                  <>
-                    <div className="skeleton w-28 h-4 rounded ml-auto" />
-                    <div className="skeleton w-16 h-3.5 rounded mt-2 ml-auto" />
-                  </>
-                }
-              </div>
-            ),
-            headerClassName: 'justify-end text-right mr-2',
-          },
-          {
-            Header: (<span style={{ fontSize: '.65rem' }}>Funding Rate</span>),
-            accessor: 'funding_rate',
-            sortType: (rowA, rowB) => rowA.original.funding_rate > rowB.original.funding_rate ? 1 : -1,
-            Cell: props => (
-              <div className="text-gray-400 dark:text-gray-500 font-normal text-right mr-2">
-                {!props.row.original.skeleton ?
-                  props.value > Number.MIN_SAFE_INTEGER ? `${numberFormat(props.value * 100, `0,0.000${Math.abs(props.value * 100) < 0.001 ? '000' : ''}`)}%` : '-'
-                  :
-                  <div className="skeleton w-10 h-3 rounded ml-auto" />
-                }
-              </div>
-            ),
-            headerClassName: 'justify-end text-right mr-2',
-          },
-          {
-            Header: (<span style={{ fontSize: '.65rem' }}>Open Interest</span>),
-            accessor: 'open_interest_usd',
-            sortType: (rowA, rowB) => rowA.original.open_interest_usd > rowB.original.open_interest_usd ? 1 : -1,
-            Cell: props => (
-              <div className="flex flex-col font-semibold text-right mr-2">
-                {!props.row.original.skeleton ?
-                  <>
-                    {props.value > -1 ?
-                      <span className="space-x-1">
-                        {(exchange_rates_data ? currency : currencyUSD).symbol}
-                        <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
-                        {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyUSD).id}</span>)}
-                      </span>
-                      :
-                      '-'
-                    }
-                    {exchange_rates_data && currency.id !== currencyUSD.id && (
-                      <span className="text-gray-400 text-xs font-medium space-x-1">
-                        {props.value > -1 ?
-                          <>
-                            <span>{numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}</span>
-                            <span className="uppercase">{currencyUSD.id}</span>
                           </>
                           :
                           '-'
@@ -533,21 +400,10 @@ const Coin = ({ coinData }) => {
               </div>
             ),
           },
-        ].filter(column => !((marketType !== 'spot' ? ['bid_ask_spread_percentage', 'up_depth', 'down_depth', 'volume_percentage', 'trust_score'] : ['h24_percentage_change', 'index', 'index_basis_percentage', 'bid_ask_spread', 'funding_rate', 'open_interest_usd']).includes(column.accessor)))}
-        data={tickersData && exchange_id === tickersData.exchange_id ?
-          tickersData.data.filter(tickerData => marketType === 'spot' || tickerData.contract_type === derivativeType).map((tickerData, i) => {
-            const coinIndex = all_crypto_data && all_crypto_data.coins ?
-              all_crypto_data.coins.findIndex(coinData => marketType !== 'spot' ?
-                tickerData.base && (
-                  (coinData.symbol && coinData.symbol.toLowerCase() === tickerData.base.toLowerCase()) ||
-                  (coinData.id && coinData.id.toLowerCase() === tickerData.base.toLowerCase()) ||
-                  (coinData.name && coinData.name.toLowerCase() === tickerData.base.toLowerCase())
-                )
-                :
-                coinData.id === tickerData.coin_id
-              )
-              :
-              -1
+        ].filter(column => !([].includes(column.accessor)))}
+        data={tickersData && coin_id === tickersData.coin_id ?
+          tickersData.data.map((tickerData, i) => {
+            const coinIndex = all_crypto_data && all_crypto_data.coins ? all_crypto_data.coins.findIndex(coinData => coinData.id === tickerData.coin_id) : -1
 
             if (coinIndex > -1) {
               tickerData.coin = { ...all_crypto_data.coins[coinIndex], image: all_crypto_data.coins[coinIndex].large }
@@ -557,19 +413,7 @@ const Coin = ({ coinData }) => {
             return {
               ...tickerData,
               i,
-              coin_name: tickerData.coin && tickerData.coin.name ?
-                tickerData.coin.name
-                :
-                tickerData.base && tickerData.base.startsWith('0X') ?
-                  tickerData.coin_id ?
-                    all_crypto_data && all_crypto_data.coins && all_crypto_data.coins.findIndex(coinData => coinData.id === tickerData.coin_id) > -1 ?
-                      all_crypto_data.coins[all_crypto_data.coins.findIndex(coinData => coinData.id === tickerData.coin_id)].name
-                      :
-                      getName(tickerData.coin_id)
-                    :
-                    ellipseAddress(tickerData.base, 6)
-                  :
-                  tickerData.base,
+              market_name: tickerData.market && tickerData.market.name,
               pair: `
                 ${tickerData.base && tickerData.base.startsWith('0X') ?
                   tickerData.coin_id ?
@@ -593,14 +437,35 @@ const Coin = ({ coinData }) => {
                   tickerData.target
                 }
               `,
-              volume_percentage: exchangeData && exchangeData.trade_volume_24h_btc && tickerData.converted_volume && tickerData.converted_volume[currencyBTC.id] > -1 ? tickerData.converted_volume[currencyBTC.id] / exchangeData.trade_volume_24h_btc : -1,
+              volume_percentage: coinData && coinData.market_data && coinData.market_data.total_volume ?
+                coinData.market_data.total_volume[currency.id] > -1 && tickerData.converted_volume[currency.id] > -1 ?
+                  tickerData.converted_volume[currency.id] / coinData.market_data.total_volume[currency.id]
+                  :
+                  coinData.market_data.total_volume[currencyUSD.id] > -1 && tickerData.converted_volume[currencyUSD.id] > -1 ?
+                    tickerData.converted_volume[currencyUSD.id] / coinData.market_data.total_volume[currencyUSD.id]
+                    :
+                    -1
+                :
+                -1,
             }
           })
           :
           [...Array(10).keys()].map(i => {return { i, skeleton: true } })
         }
         defaultPageSize={per_page}
-      />*/}
+        pagination={tickersData && tickersData.data.length > 0 && tickersData.data.length % per_page === 0 ?
+          <div className="flex flex-col sm:flex-row items-center justify-center my-4">
+            <Pagination
+              disabled={!(tickersData && coin_id === tickersData.coin_id && numPage === tickersData.page)}
+              active={numPage}
+              items={[1]}
+              onClick={page => setNumPage(page + 1)}
+            />
+          </div>
+          :
+          <></>
+        }
+      />
     </div>
   )
 }

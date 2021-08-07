@@ -124,13 +124,23 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
                 <Link href={`/exchange${props.row.original.id ? `/${props.row.original.id}` : 's'}`}>
                   <a className="flex flex-col font-semibold">
                     <div className="flex items-center space-x-2">
-                      <Image
-                        src={props.row.original.image}
-                        alt=""
-                        width={24}
-                        height={24}
-                        className="rounded"
-                      />
+                      {exchangesData.data.length > per_page ?
+                        <img
+                          src={props.row.original.image}
+                          alt=""
+                          width={24}
+                          height={24}
+                          className="rounded"
+                        />
+                        :
+                        <Image
+                          src={props.row.original.image}
+                          alt=""
+                          width={24}
+                          height={24}
+                          className="rounded"
+                        />
+                      }
                       <span>{props.value}</span>
                     </div>
                     <span className="text-gray-400 text-xs font-normal">
