@@ -222,7 +222,7 @@ const Summary = ({ exchangeData, tickersData, derivativeType = 'perpetual', sele
                 <>
                   <span className="space-x-1">
                     {(exchange_rates_data ? currency : currencyBTC).symbol}
-                    <span>{numberFormat(exchangeData.open_interest_btc * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), `0,0${Math.abs(exchangeData.open_interest_btc * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
+                    <span>{numberFormat(exchangeData.open_interest_btc * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyBTC.id].value : 1), `0,0${Math.abs(exchangeData.open_interest_btc * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
                     {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyBTC).id}</span>)}
                   </span>
                   {exchange_rates_data && vs_currency !== currencyBTC.id && (
@@ -257,7 +257,7 @@ const Summary = ({ exchangeData, tickersData, derivativeType = 'perpetual', sele
               <>
                 <span className="space-x-1">
                   {(exchange_rates_data ? currency : currencyBTC).symbol}
-                  <span>{numberFormat(exchangeData.trade_volume_24h_btc * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), `0,0${Math.abs(exchangeData.trade_volume_24h_btc * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
+                  <span>{numberFormat(exchangeData.trade_volume_24h_btc * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyBTC.id].value : 1), `0,0${Math.abs(exchangeData.trade_volume_24h_btc * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
                   {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyBTC).id}</span>)}
                 </span>
                 {exchange_rates_data && vs_currency !== currencyBTC.id && (

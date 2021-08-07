@@ -22,6 +22,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
   const { all_crypto_data, exchange_rates_data } = { ...data }
   const currency = currencies[currencies.findIndex(c => c.id === vs_currency)] || currencies[0]
   const currencyBTC = currencies[currencies.findIndex(c => c.id === 'btc')]
+  const currencyUSD = currencies[currencies.findIndex(c => c.id === 'usd')]
 
   const router = useRouter()
   const { query, pathname, asPath } = { ...router }
@@ -43,7 +44,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
 
       for (let i = 0; i < (coin_type && !(['high-volume', 'categories'].includes(coin_type)) ? 10 : 1); i++) {
         const response = await (coin_type === 'categories' ?
-          categoriesMarkets({ vs_currency })
+          categoriesMarkets()
           :
           coinsMarkets({ vs_currency,
             category: coin_type && !(['high-volume'].includes(coin_type)) ? coin_type : undefined,
@@ -94,7 +95,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
             })
 
             if (mountedRef.current) {
-              setCoinsData({ data, coin_type, vs_currency, page })
+              setCoinsData({ data, coin_type, vs_currency: coin_type === 'categories' ? currencyUSD.id : vs_currency, page })
             }
           }
 
@@ -372,7 +373,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
                     {props.value > -1 ?
                       <span className="space-x-1">
                         {currency.symbol}
-                        <span>{numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}</span>
+                        <span>{numberFormat(props.value * (coin_type === 'categories' && exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1), `0,0${Math.abs(props.value * (coin_type === 'categories' && exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
                         {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
                       </span>
                       :
@@ -382,7 +383,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
                       <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
                           <>
-                            <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[vs_currency].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
+                            <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[(coin_type === 'categories' ? currencyUSD : currency).id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[(coin_type === 'categories' ? currencyUSD : currency).id].value : 1)) < 1 ? '.000' : ''}`)}</span>
                             <span className="uppercase">{currencyBTC.id}</span>
                           </>
                           :
@@ -440,7 +441,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
                       <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
                           <>
-                            <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[vs_currency].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
+                            <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[currency.id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[currency.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
                             <span className="uppercase">{currencyBTC.id}</span>
                           </>
                           :
@@ -470,7 +471,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
                     {props.value > -1 ?
                       <span className="space-x-1">
                         {currency.symbol}
-                        <span>{numberFormat(props.value, `0,0${Math.abs(props.value) < 1 ? '.000' : ''}`)}</span>
+                        <span>{numberFormat(props.value * (coin_type === 'categories' && exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1), `0,0${Math.abs(props.value * (coin_type === 'categories' && exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
                         {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
                       </span>
                       :
@@ -480,7 +481,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
                       <span className="text-gray-400 text-xs font-medium space-x-1">
                         {props.value > -1 ?
                           <>
-                            <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[vs_currency].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
+                            <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[(coin_type === 'categories' ? currencyUSD : currency).id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[(coin_type === 'categories' ? currencyUSD : currency).id].value : 1)) < 1 ? '.000' : ''}`)}</span>
                             <span className="uppercase">{currencyBTC.id}</span>
                           </>
                           :
@@ -570,7 +571,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
             headerClassName: 'justify-end text-right',
           },
         ].filter(column => !((coin_type === 'categories' ? ['current_price', 'price_change_percentage_1h_in_currency', 'price_change_percentage_24h_in_currency', 'price_change_percentage_7d_in_currency', 'price_change_percentage_30d_in_currency', 'roi.times', 'fully_diluted_valuation', 'total_volume', 'circulating_supply'] : ['market_cap_change_24h', 'volume_24h', 'market_share']).includes(column.accessor)))}
-        data={coinsData && coinsData.vs_currency === vs_currency && coin_type === coinsData.coin_type && page === coinsData.page ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => {return { i, skeleton: true } })}
+        data={coinsData && coinsData.vs_currency === (coin_type === 'categories' ? currencyUSD.id : vs_currency) && coin_type === coinsData.coin_type && page === coinsData.page ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => {return { i, skeleton: true } })}
         defaultPageSize={100}
         pagination={!(coin_type && !(['high-volume'].includes(coin_type))) && (
           <div className="flex flex-col sm:flex-row items-center justify-center my-4">

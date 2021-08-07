@@ -4,7 +4,7 @@ export const Badge = ({
   rounded = false,
   outlined = false,
   size = 'default',
-  color,
+  color = '',
   children
 }) => {
   let css = []
@@ -14,27 +14,27 @@ export const Badge = ({
   if (rounded) css.push('rounded-lg')
 
   if (size === 'default') {
-    css.push('text-xs px-2 py-1')
+    css.push(`text-xs ${color.includes('px-') ? '' : 'px-2'} py-1`)
   }
   else if (size === 'sm') {
-    css.push('text-xs px-2 py-0')
+    css.push(`text-xs ${color.includes('px-') ? '' : 'px-2'} py-0`)
   }
   else if (size === 'lg') {
-    css.push('text-xs px-2 py-2')
+    css.push(`text-xs ${color.includes('px-') ? '' : 'px-2'} py-2`)
   }
 
   css = css.join(' ')
 
   if (outlined) {
     return (
-      <span className={`bg-transparent border border-current inline-flex uppercase font-semibold text-center ${css}`}>
+      <span className={`bg-transparent border border-current inline-flex uppercase ${css.includes('font-') ? '' : 'font-semibold'} text-center ${css}`}>
         {children}
       </span>
     )
   }
 
   return (
-    <span className={`inline-flex uppercase font-semibold text-center badge-${size} ${css}`}>
+    <span className={`inline-flex uppercase ${css.includes('font-') ? '' : 'font-semibold'} text-center badge-${size} ${css}`}>
       {children}
     </span>
   )

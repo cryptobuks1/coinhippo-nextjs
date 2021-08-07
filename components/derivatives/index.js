@@ -168,8 +168,8 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
                     {props.value > -1 ?
                       <span className="space-x-1">
                         {(exchange_rates_data ? currency : currencyUSD).symbol}
-                        <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1), '0,0.00000000')}</span>
-                        {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<span className="uppercase">(exchange_rates_data ? currency : currencyUSD).id}</span>)}
+                        <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1), '0,0.00000000')}</span>
+                        {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyUSD).id}</span>)}
                       </span>
                       :
                       '-'
@@ -289,7 +289,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
                     {props.value > -1 ?
                       <span className="space-x-1">
                         {(exchange_rates_data ? currency : currencyUSD).symbol}
-                        <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
+                        <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
                         {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyUSD).id}</span>)}
                       </span>
                       :
@@ -329,7 +329,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
                     {props.value > -1 ?
                       <span className="space-x-1">
                         {(exchange_rates_data ? currency : currencyUSD).symbol}
-                        <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
+                        <span>{numberFormat(props.value * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1), `0,0${Math.abs(props.value * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
                         {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyUSD).id}</span>)}
                       </span>
                       :

@@ -28,7 +28,7 @@ const Summary = ({ derivativesData }) => {
             <span className="text-gray-400 dark:text-gray-600 font-normal">Open Interest:</span>
             <span className="text-gray-700 dark:text-gray-300 font-medium space-x-1">
               {(exchange_rates_data ? currency : currencyUSD).symbol}
-              <span>{numberFormat(_.sumBy(derivativesData.data.filter(derivativeData => derivativeData.open_interest > 0), 'open_interest') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1), '0,0')}</span>
+              <span>{numberFormat(_.sumBy(derivativesData.data.filter(derivativeData => derivativeData.open_interest > 0), 'open_interest') * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1), '0,0')}</span>
               {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyUSD).id}</span>)}
             </span>
             {exchange_rates_data && vs_currency !== currencyUSD.id && (
@@ -44,7 +44,7 @@ const Summary = ({ derivativesData }) => {
             <span className="text-gray-400 dark:text-gray-600 font-normal">24h Vol:</span>
             <span className="text-gray-700 dark:text-gray-300 font-medium space-x-1">
               {(exchange_rates_data ? currency : currencyUSD).symbol}
-              <span>{numberFormat(_.sumBy(derivativesData.data.filter(derivativeData => derivativeData.volume_24h > 0), 'volume_24h') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyUSD.id].value : 1), '0,0')}</span>
+              <span>{numberFormat(_.sumBy(derivativesData.data.filter(derivativeData => derivativeData.volume_24h > 0), 'volume_24h') * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1), '0,0')}</span>
               {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyUSD).id}</span>)}
             </span>
             {exchange_rates_data && vs_currency !== currencyUSD.id && (

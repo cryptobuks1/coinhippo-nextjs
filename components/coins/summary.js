@@ -28,13 +28,13 @@ const Summary = ({ coinsData, page }) => {
             <span className="text-gray-400 dark:text-gray-600 font-normal">Market Cap:</span>
             <span className="text-gray-700 dark:text-gray-300 font-medium space-x-1">
               {(exchange_rates_data ? currency : currencyBTC).symbol}
-              <span>{numberFormat(_.sumBy(coinsData.data.filter(coinData => coinData.market_cap > 0), 'market_cap') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), '0,0')}</span>
+              <span>{numberFormat(_.sumBy(coinsData.data.filter(coinData => coinData.market_cap > 0), 'market_cap'), '0,0')}</span>
               {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyBTC).id}</span>)}
             </span>
             {exchange_rates_data && vs_currency !== currencyBTC.id && (
               <div className="text-gray-400 dark:text-gray-600 text-xs font-medium space-x-1">
                 (
-                <span>{numberFormat(_.sumBy(coinsData.data.filter(coinData => coinData.market_cap > 0), 'market_cap'), '0,0')}</span>
+                <span>{numberFormat(_.sumBy(coinsData.data.filter(coinData => coinData.market_cap > 0), 'market_cap') * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[currency.id].value : 1), '0,0')}</span>
                 <span className="uppercase">{currencyBTC.id}</span>
                 )
               </div>
@@ -44,13 +44,13 @@ const Summary = ({ coinsData, page }) => {
             <span className="text-gray-400 dark:text-gray-600 font-normal">24h Vol:</span>
             <span className="text-gray-700 dark:text-gray-300 font-medium space-x-1">
               {(exchange_rates_data ? currency : currencyBTC).symbol}
-              <span>{numberFormat(_.sumBy(coinsData.data.filter(coinData => coinData.total_volume > 0), 'total_volume') * (exchange_rates_data ? exchange_rates_data[vs_currency].value / exchange_rates_data[currencyBTC.id].value : 1), '0,0')}</span>
+              <span>{numberFormat(_.sumBy(coinsData.data.filter(coinData => coinData.total_volume > 0), 'total_volume'), '0,0')}</span>
               {!((exchange_rates_data ? currency : currencyBTC).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyBTC).id}</span>)}
             </span>
             {exchange_rates_data && vs_currency !== currencyBTC.id && (
               <div className="text-gray-400 dark:text-gray-600 text-xs font-medium space-x-1">
                 (
-                <span>{numberFormat(_.sumBy(coinsData.data.filter(coinData => coinData.total_volume > 0), 'total_volume'), '0,0')}</span>
+                <span>{numberFormat(_.sumBy(coinsData.data.filter(coinData => coinData.total_volume > 0), 'total_volume') * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[currency.id].value : 1), '0,0')}</span>
                 <span className="uppercase">{currencyBTC.id}</span>
                 )
               </div>
