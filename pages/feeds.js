@@ -20,7 +20,7 @@ export default function FeedsIndex() {
 
   const router = useRouter()
   const { query, asPath } = { ...router }
-  const { id, sub_id } = { ...query }
+  const { id, tx } = { ...query }
   const _asPath = asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath
 
   const [feedsData, setFeedsData] = useState(skeletonData(16))
@@ -41,8 +41,8 @@ export default function FeedsIndex() {
 
           setFeedsData(response.data ?
             response.data.flatMap(feedData => feedData.FeedType === 'whales' && feedData.Json ?
-              JSON.parse(feedData.Json).filter((tx, i) => typeof sub_id !== 'string' || Number(sub_id) === i).map(tx => {
-                return { ...feedData, Json: JSON.stringify(tx) }
+              JSON.parse(feedData.Json).filter(_tx => !tx || tx === _tx.key).map(_tx => {
+                return { ...feedData, Json: JSON.stringify(_tx) }
               }) : feedData)
               .filter(feedData => !(feedData.FeedType === 'markets' && feedData.Json && feedData.SortKey &&
                 ['_trending', '_defi', '_nfts'].findIndex(market_type => feedData.SortKey.endsWith(market_type)) > -1 &&
@@ -62,7 +62,7 @@ export default function FeedsIndex() {
 
     const interval = setInterval(() => getFeeds(), 5 * 60 * 1000)
     return () => clearInterval(interval)
-  }, [id, sub_id])
+  }, [id, tx])
 
   useEffect(() => {
     setFeedTypesSelect(feedTypesSelect.filter(feedType => feedsData.findIndex(feedData => feedData.FeedType === feedType) > -1))
