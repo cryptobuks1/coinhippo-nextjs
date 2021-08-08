@@ -240,7 +240,7 @@ export default function CoinId() {
                 <span className="max-w-screen-sm flex flex-wrap items-center justify-start sm:justify-end my-1 ml-0 sm:ml-auto">
                   <Badge rounded color="bg-transparent flex items-center normal-case text-gray-800 dark:text-gray-200 my-1 ml-0 sm:ml-2 mr-2 sm:mr-0 px-0">Rank #{coinData.market_cap_rank > -1 ? numberFormat(coinData.market_cap_rank, '0,0')  : '-'}</Badge>
                   {((coinData.categories && coinData.categories.filter(category => ['cryptocurrency'].findIndex(keyword => keyword === category.toLowerCase()) < 0)) || []).concat(coinData.hashing_algorithm || []).map((tag, i) => (
-                    <Badge key={i} rounded color="bg-gray-200 flex items-center text-gray-700 dark:bg-gray-700 dark:text-gray-400 font-normal my-1 ml-0 sm:ml-2 mr-2 sm:mr-0">{tag}</Badge>
+                    <Badge key={i} rounded color="hidden sm:block bg-gray-200 flex items-center text-gray-700 dark:bg-gray-700 dark:text-gray-400 font-normal my-1 ml-0 sm:ml-2 mr-2 sm:mr-0">{tag}</Badge>
                   ))}
                 </span>
                 <div className="flex flex-wrap items-center ml-0 sm:ml-auto">

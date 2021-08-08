@@ -118,7 +118,7 @@ const Summary = ({ coinData }) => {
                                           :
                                           <GoBrowser size={20} className="text-google" />
                 }
-                <span className="text-blue-500 dark:text-blue-400">{urlData.value}</span>
+                <span className="hidden sm:block text-blue-500 dark:text-blue-400">{urlData.value}</span>
               </a>
             ))}
           </div>
@@ -265,7 +265,7 @@ const Summary = ({ coinData }) => {
             Market Cap
             <AiOutlineLineChart size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
           </span>}
-          description={<span className={`text-sm sm:text-${hasTVL ? 'base' : 'xl'}`}>
+          description={<span className="text-xl">
             {coinData ?
               <>
                 <span className="space-x-1">
@@ -293,14 +293,14 @@ const Summary = ({ coinData }) => {
               </>
             }
           </span>}
-          className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border sm:border-gray-100 sm:dark:border-gray-800 p-0 sm:p-4"
+          className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border border-gray-100 dark:border-gray-800 p-0 sm:p-4"
         />
         <Widget
           title={<span className="uppercase flex items-center">
             Fully Diluted MCap
             <AiOutlineAreaChart size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
           </span>}
-          description={<span className={`text-sm sm:text-${hasTVL ? 'base' : 'xl'}`}>
+          description={<span className="text-xl">
             {coinData ?
               <>
                 <span className="space-x-1">
@@ -328,7 +328,7 @@ const Summary = ({ coinData }) => {
               </>
             }
           </span>}
-          className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border sm:border-gray-100 sm:dark:border-gray-800 p-0 sm:p-4"
+          className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border border-gray-100 dark:border-gray-800 p-0 sm:p-4"
         />
         {hasTVL && (
           <Widget
@@ -336,7 +336,7 @@ const Summary = ({ coinData }) => {
               Total Value Locked
               <AiOutlineLock size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
             </span>}
-            description={<span className={`text-sm sm:text-${hasTVL ? 'base' : 'xl'}`}>
+            description={<span className="text-xl">
               <span className="space-x-1">
                 {(exchange_rates_data ? currency : currencyUSD).symbol}
                 <span>{numberFormat(coinData.market_data.total_value_locked[currencyUSD.id] * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1), `0,0${Math.abs(coinData.market_data.total_value_locked[currencyUSD.id] * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
@@ -349,7 +349,7 @@ const Summary = ({ coinData }) => {
                 </div>
               )}
             </span>}
-            className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border sm:border-gray-100 sm:dark:border-gray-800 p-0 sm:p-4"
+            className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border border-gray-100 dark:border-gray-800 p-0 sm:p-4"
           />
         )}
         <Widget
@@ -357,7 +357,7 @@ const Summary = ({ coinData }) => {
             24h Volume
             <AiOutlineBarChart size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
           </span>}
-          description={<span className={`text-sm sm:text-${hasTVL ? 'base' : 'xl'}`}>
+          description={<span className="text-xl">
             {coinData ?
               <>
                 <span className="space-x-1">
@@ -385,14 +385,14 @@ const Summary = ({ coinData }) => {
               </>
             }
           </span>}
-          className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border sm:border-gray-100 sm:dark:border-gray-800 p-0 sm:p-4"
+          className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border border-gray-100 dark:border-gray-800 p-0 sm:p-4"
         />
         <Widget
           title={<span className="uppercase flex items-center">
             Circulating Supply
             <FaCoins size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
           </span>}
-          description={<span className={`text-sm sm:text-${hasTVL ? 'base' : 'xl'}`}>
+          description={<span className="text-xl">
             {coinData ?
               coinData.market_data.circulating_supply > -1 ?
                 <>
@@ -443,7 +443,7 @@ const Summary = ({ coinData }) => {
               </>
             }
           </span>}
-          className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border sm:border-gray-100 sm:dark:border-gray-800 p-0 sm:p-4"
+          className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border border-gray-100 dark:border-gray-800 p-0 sm:p-4"
         />
       </div>
     </>
