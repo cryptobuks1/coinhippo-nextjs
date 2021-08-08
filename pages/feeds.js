@@ -20,7 +20,7 @@ export default function FeedsIndex() {
 
   const router = useRouter()
   const { query, asPath } = { ...router }
-  const { id } = { ...query }
+  const { id, sub_id } = { ...query }
   const _asPath = asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath
 
   const [feedsData, setFeedsData] = useState(skeletonData(16))
@@ -41,7 +41,7 @@ export default function FeedsIndex() {
 
           setFeedsData(response.data ?
             response.data.flatMap(feedData => feedData.FeedType === 'whales' && feedData.Json ?
-              JSON.parse(feedData.Json).map(tx => {
+              JSON.parse(feedData.Json).filter((tx, i) => typeof sub_id !== 'string' || Number(sub_id) === i).map(tx => {
                 return { ...feedData, Json: JSON.stringify(tx) }
               }) : feedData)
               .filter(feedData => !(feedData.FeedType === 'markets' && feedData.Json && feedData.SortKey &&
@@ -62,7 +62,7 @@ export default function FeedsIndex() {
 
     const interval = setInterval(() => getFeeds(), 5 * 60 * 1000)
     return () => clearInterval(interval)
-  }, [id])
+  }, [id, sub_id])
 
   useEffect(() => {
     setFeedTypesSelect(feedTypesSelect.filter(feedType => feedsData.findIndex(feedData => feedData.FeedType === feedType) > -1))
@@ -121,10 +121,12 @@ export default function FeedsIndex() {
       )}
       {id && feedsData && feedsData[0] ?
         <div className="w-full min-h-screen flex items-center justify-center">
-          <div style={{ width: '326px' }}>
+          <div className={`${query.theme === 'dark' ? 'mb-8' : ''}`} style={{ width: '374px' }}>
             <FeedWidget
               feedType={feedsData[0].FeedType}
               data={feedsData[0]}
+              exactTime={true}
+              noBorder={true}
             />
           </div>
         </div>

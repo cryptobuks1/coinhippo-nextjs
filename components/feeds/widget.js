@@ -42,7 +42,7 @@ const repeatIcon = (data, iconSize = 24) => {
   .map(i => (<span key={i}>{icon}</span>))
 }
 
-const FeedWidget = ({ feedType = null, data = null }) => {
+const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder = false }) => {
   const { _data, theme } = useSelector(state => ({ _data: state.data, theme: state.theme }), shallowEqual)
   const { all_crypto_data } = { ..._data }
   const { background } = { ...theme }
@@ -68,7 +68,7 @@ const FeedWidget = ({ feedType = null, data = null }) => {
     : false
 
   return (
-    <Widget className={`${isInterested ? 'shadow border border-yellow-400 dark:border-yellow-600' : ''}`}>
+    <Widget className={`${isInterested ? 'shadow border border-yellow-400 dark:border-yellow-600' : noBorder ? 'border-0' : ''}`}>
       <div className="flex items-start justify-start space-x-4 p-2">
         <div className="w-8 flex-shrink-0">
           {isSkeleton ?
@@ -132,10 +132,49 @@ const FeedWidget = ({ feedType = null, data = null }) => {
               <div className="skeleton w-2/3 h-3 rounded mb-3" />
               :
               feedType === 'fear_and_greed' ?
-                <><HiOutlineRefresh size={14} className="mb-1 mr-1" /><span className="h-5">{moment(data.CreatedAt * 1000).fromNow()} ({moment(data.CreatedAt * 1000).format('h:[00] A')})</span></> :
-              feedType === 'news' ?
-                <><BsPencilSquare size={14} className="mb-1 mr-1" /><span className="h-5">{moment(json.published_at).fromNow()}{moment().diff(moment(json.published_at), 'hours') >= 1 && (<> ({moment(json.published_at).format('LT')})</>)}</span></> :
-                <>{feedType === 'gas' ? <GiWatch size={18} className="mb-1 mr-1" /> : <BiTime size={14} className="mb-1 mr-1" />}<span className="h-5">{moment(data.CreatedAt * 1000).fromNow()}{moment().diff(moment(data.CreatedAt * 1000), 'hours') >= 1 && (<> ({moment(data.CreatedAt * 1000).format('LT')})</>)}</span></>
+                <>
+                  <HiOutlineRefresh size={14} className="mb-1 mr-1" />
+                  <span className="h-5">
+                    {exactTime ?
+                      moment(data.CreatedAt * 1000).format('MMM D, YYYY h:[00] A')
+                      :
+                      <>{moment(data.CreatedAt * 1000).fromNow()} ({moment(data.CreatedAt * 1000).format('h:[00] A')})</>
+                    }
+                  </span>
+                </>
+                :
+                feedType === 'news' ?
+                  <>
+                    <BsPencilSquare size={14} className="mb-1 mr-1" />
+                    <span className="h-5">
+                      {exactTime ?
+                        moment(json.published_at).format('MMM D, YYYY h:mm A')
+                        :
+                        <>
+                          {moment(json.published_at).fromNow()}
+                          {moment().diff(moment(json.published_at), 'hours') >= 1 && (<> ({moment(json.published_at).format('LT')})</>)}
+                        </>
+                      }
+                    </span>
+                  </>
+                  :
+                  <>
+                    {feedType === 'gas' ?
+                      <GiWatch size={18} className="mb-1 mr-1" />
+                      :
+                      <BiTime size={14} className="mb-1 mr-1" />
+                    }
+                    <span className="h-5">
+                      {exactTime ?
+                        moment(data.CreatedAt * 1000).format('MMM D, YYYY h:mm A')
+                        :
+                        <>
+                          {moment(data.CreatedAt * 1000).fromNow()}
+                          {moment().diff(moment(data.CreatedAt * 1000), 'hours') >= 1 && (<> ({moment(data.CreatedAt * 1000).format('LT')})</>)}
+                        </>
+                      }
+                    </span>
+                  </>
             }
           </div>
           <div className="text-gray-600 dark:text-gray-400 text-sm mt-2">
@@ -477,6 +516,8 @@ const FeedWidget = ({ feedType = null, data = null }) => {
 FeedWidget.propTypes = {
   feedType: PropTypes.string,
   data: PropTypes.any,
+  exactTime: PropTypes.bool,
+  noBorder: PropTypes.bool,
 }
 
 export default FeedWidget

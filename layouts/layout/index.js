@@ -8,7 +8,7 @@ import Footer from '../../components/footer'
 import meta from '../../lib/meta'
 import { VS_CURRENCY, THEME } from '../../reducers/types'
 
-export default function Layout({ children, noSiderbar }) {
+export default function Layout({ children, noSiderbar, noNavbar, noFooter, customTheme }) {
   const dispatch = useDispatch()
   const { preferences, config, theme } = useSelector(state => ({ preferences: state.preferences, config: state.config, theme: state.theme }), shallowEqual)
   const { vs_currency } = { ...preferences }
@@ -68,19 +68,19 @@ export default function Layout({ children, noSiderbar }) {
       <div
         data-layout={layout}
         data-collapsed={collapsed}
-        data-background={background}
-        data-navbar={navbar}
-        data-left-sidebar={leftSidebar}
-        className={`font-sans antialiased text-sm disable-scrollbars ${background === 'dark' ? 'dark' : ''}`}
+        data-background={customTheme || background}
+        data-navbar={customTheme || navbar}
+        data-left-sidebar={customTheme || leftSidebar}
+        className={`font-sans antialiased text-sm disable-scrollbars ${customTheme === 'dark' || background === 'dark' ? 'dark' : ''}`}
       >
         <div className="wrapper">
           {!noSiderbar && (<LeftSidebar />)}
           <div className="main w-full bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
-            <Navbar noSiderbar={noSiderbar} />
+            {!noNavbar && (<Navbar noSiderbar={noSiderbar} />)}
             <div className="w-full min-h-screen p-4">{children}</div>
           </div>
         </div>
-        <Footer />
+        {!noFooter && (<Footer />)}
       </div>
     </>
   )

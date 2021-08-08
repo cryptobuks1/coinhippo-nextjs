@@ -8,15 +8,45 @@ export default function Layouts({ children }) {
   const { pathname, query } = { ...router }
 
   if (['/404', '/500'].includes(pathname)) {
-    return <Centered>{children}</Centered>
+    return (
+      <Centered>
+        {children}
+      </Centered>
+    )
   }
-  else if (['/widget'].includes(pathname) || ['widget'].includes(query.view)) {
-    return <Empty>{children}</Empty>
+  else if (['widget'].includes(query.view)) {
+    if (['dark'].includes(query.theme)) {
+      return (
+        <Layout
+          noSiderbar={true}
+          noNavbar={true}
+          noFooter={true}
+          customTheme={query.theme}
+        >
+          {children}
+        </Layout>
+      )
+    }
+    return (
+      <Empty>
+        {children}
+      </Empty>
+    )
   }
   else if (['/blog', '/blog/[category_id]', '/blog/[category_id]/[post_id]'].includes(pathname)) {
-    return <Layout noSiderbar={true}>{children}</Layout>
+    return (
+      <Layout
+        noSiderbar={true}
+      >
+        {children}
+      </Layout>
+    )
   }
   else {
-    return <Layout>{children}</Layout>
+    return (
+      <Layout>
+        {children}
+      </Layout>
+    )
   }
 }
