@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import PropTypes from 'prop-types'
 import Summary from './summary'
+import History from './history'
 import Datatable from '../../components/datatable'
 import Image from '../../components/image'
 import { ProgressBar } from '../../components/progress-bars'
@@ -44,7 +45,7 @@ const Coin = ({ coinData }) => {
           _tickersData = _.concat(_tickersData || [], _.slice(tickersData.data, i * per_page, (i + 1) * per_page))
         }
         else {
-          const response = await coinTickers(coinData.id, { page: i + 1, include_exchange_logo: true, order: 'volume_desc', depth: true })
+          const response = await coinTickers(coinData.id, { page: i + 1, include_exchange_logo: true, order: 'trust_score_desc', depth: true })
 
           if (response && response.tickers) {
             _tickersData = (
@@ -84,7 +85,9 @@ const Coin = ({ coinData }) => {
   return (
     <div className="mx-1">
       <Summary coinData={coinData && coin_id === coinData.id && coinData} />
-      <div className="my-8">
+      <History coinData={coinData && coin_id === coinData.id && coinData} />
+      <div className="my-4">
+        <div className="text-gray-800 dark:text-gray-200 text-base font-semibold mb-0 sm:mb-2">Markets</div>
         <Datatable
           columns={[
             {

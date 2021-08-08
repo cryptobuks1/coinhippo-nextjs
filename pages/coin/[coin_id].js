@@ -186,7 +186,7 @@ export default function CoinId() {
                 {coinData.symbol && (<span className={`uppercase text-gray-400 text-base font-normal ${coinData.symbol.length > 5 ? 'break-all' : ''}`}>{coinData.symbol}</span>)}
               </span>
             </div>
-            <div className={`flex items-center ${coinData.market_data.price_change_percentage_24h_in_currency[currency.id] < 0 ? 'text-red-500 dark:text-red-400' : coinData.market_data.price_change_percentage_24h_in_currency[currency.id] > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} font-bold mt-1 space-x-1.5`}>
+            <div className={`flex items-center ${coinData.market_data.price_change_percentage_24h_in_currency[currency.id] < 0 ? 'text-red-500 dark:text-red-400' : coinData.market_data.price_change_percentage_24h_in_currency[currency.id] > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} font-bold space-x-1.5 mt-1`}>
               <span className="text-2xl space-x-1">
                 {coinData.market_data.current_price[currency.id] > -1 ?
                   <>

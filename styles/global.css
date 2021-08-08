@@ -95,6 +95,17 @@ button {
   }
 }
 
+.exchange-mini-column {
+  div {
+    min-width: 1rem;
+  }
+
+  img {
+    height: auto !important;
+    min-height: .75rem !important;
+  }
+}
+
 .image-logo img {
   height: auto !important;
   min-height: 1rem !important;

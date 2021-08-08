@@ -14,7 +14,7 @@ const Exchanges = ({ data, handleDropdownClick }) => {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => handleDropdownClick()}
-            className="dropdown-item w-full sm:w-1/2 flex items-center justify-start text-sm space-x-2 p-2"
+            className="dropdown-item exchange-mini-column w-full sm:w-1/2 flex items-center justify-start text-sm space-x-2 p-2"
           >
             {item.exchange && item.exchange.large && (
               <Image
