@@ -238,9 +238,9 @@ export default function CoinId() {
             {coinData && coin_id === coinData.id ?
               <>
                 <span className="max-w-screen-sm flex flex-wrap items-center justify-start sm:justify-end my-1 ml-0 sm:ml-auto">
-                  <Badge rounded color="bg-transparent flex items-center normal-case text-gray-800 dark:text-gray-200 my-1 ml-0.5 mr-2 px-0">Rank #{coinData.market_cap_rank > -1 ? numberFormat(coinData.market_cap_rank, '0,0')  : '-'}</Badge>
+                  <Badge rounded color="bg-transparent flex items-center normal-case text-gray-800 dark:text-gray-200 my-1 ml-0 sm:ml-2 mr-2 sm:mr-0 px-0">Rank #{coinData.market_cap_rank > -1 ? numberFormat(coinData.market_cap_rank, '0,0')  : '-'}</Badge>
                   {((coinData.categories && coinData.categories.filter(category => ['cryptocurrency'].findIndex(keyword => keyword === category.toLowerCase()) < 0)) || []).concat(coinData.hashing_algorithm || []).map((tag, i) => (
-                    <Badge key={i} rounded color="bg-gray-200 flex items-center text-gray-700 dark:bg-gray-700 dark:text-gray-400 font-normal my-1 mr-2">{tag}</Badge>
+                    <Badge key={i} rounded color="bg-gray-200 flex items-center text-gray-700 dark:bg-gray-700 dark:text-gray-400 font-normal my-1 ml-0 sm:ml-2 mr-2 sm:mr-0">{tag}</Badge>
                   ))}
                 </span>
                 <div className="flex flex-wrap items-center ml-0 sm:ml-auto">
@@ -265,12 +265,12 @@ export default function CoinId() {
               <>
                 <span className="flex flex-wrap items-center my-1 ml-0 sm:ml-auto">
                   {[...Array(3).keys()].map(i => (
-                    <div key={i} className={`skeleton w-16 sm:w-24 h-6 rounded my-1 mr-${i < 3 - 1 ? 2 : 0}`} />
+                    <div key={i} className="skeleton w-16 sm:w-24 h-6 rounded my-1 ml-0 sm:ml-2 mr-2 sm:mr-0" />
                   ))}
                 </span>
                 <div className="flex flex-wrap items-center ml-0 sm:ml-auto">
                   {[...Array(3).keys()].map(i => (
-                    <div key={i} className={`skeleton w-8 sm:w-28 h-8 rounded my-1 mr-${i < 3 - 1 ? 2 : 0}`} />
+                    <div key={i} className="skeleton w-8 sm:w-28 h-8 rounded my-1 ml-0 sm:ml-2 mr-2 sm:mr-0" />
                   ))}
                 </div>
               </>

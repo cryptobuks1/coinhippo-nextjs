@@ -55,7 +55,7 @@ export const Pages = ({ items = [], active, onClick, disabled = false }) => {
           <BsThreeDots size={20} className="text-gray-300 dark:text-gray-600 mt-1.5" />
         </div>
         :
-        <Page key={i} disabled={disabled} onClick={() => onClick(i + 1)} active={i + 1 === active}>
+        <Page key={i} disabled={disabled} active={i + 1 === active} onClick={() => onClick(i + 1)}>
           {i + 1}
         </Page>
       )}
@@ -66,6 +66,8 @@ export const Pages = ({ items = [], active, onClick, disabled = false }) => {
 Pages.propTypes = {
   items: PropTypes.array.isRequired,
   active: PropTypes.number.isRequired,
+  onClick: PropTypes.any,
+  disabled: PropTypes.bool,
 }
 
 export const Pagination = ({
@@ -99,9 +101,44 @@ export const Pagination = ({
 }
 
 Pagination.propTypes = {
-  items: PropTypes.array,
-  active: PropTypes.number,
-  previous: PropTypes.any,
-  next: PropTypes.any,
+  items: PropTypes.array.isRequired,
+  active: PropTypes.number.isRequired,
+  previous: PropTypes.any.isRequired,
+  next: PropTypes.any.isRequired,
   icons: PropTypes.bool,
+  onClick: PropTypes.any,
+  disabled: PropTypes.bool,
+}
+
+export const PaginationLoadMore = ({
+  item,
+  active,
+  icon = false,
+  onClick,
+  disabled = false,
+}) => {
+  if (icon) {
+    return (
+      <div className="pagination flex flex-wrap items-center justify-center">
+        <Page disabled={disabled} active={active} onClick={onClick}>
+          {item}
+        </Page>
+      </div>
+    )
+  }
+  return (
+    <div className="pagination flex flex-wrap items-center justify-center">
+      <PageWithText disabled={disabled} active={active} onClick={onClick}>
+        {item}
+      </PageWithText>
+    </div>
+  )
+}
+
+PaginationLoadMore.propTypes = {
+  item: PropTypes.string,
+  active: PropTypes.bool,
+  icon: PropTypes.bool,
+  onClick: PropTypes.any,
+  disabled: PropTypes.bool,
 }

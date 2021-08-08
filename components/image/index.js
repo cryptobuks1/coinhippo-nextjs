@@ -14,7 +14,7 @@ const customSrc = (src, host = process.env.NEXT_PUBLIC_SITE_URL) => {
   return newSrc
 }
 
-export default function ImageWithFallback({ src = fallbackImg, fallbackSrc = fallbackImg, className = '', ...props }) {
+export default function ImageWithFallback({ src = fallbackImg, fallbackSrc = fallbackImg, className = '', useImg, ...rest }) {
   const [imgSrc, setImgSrc] = useState(src)
 
   useEffect(() => {
@@ -22,12 +22,19 @@ export default function ImageWithFallback({ src = fallbackImg, fallbackSrc = fal
   }, [src])
 
   return (
-    <Image
-      {...props}
-      loader={myLoader}
-      src={imgSrc}
-      onError={() => setImgSrc(customSrc(fallbackSrc, window.location.origin))}
-      className={`image-logo ${className}`}
-    />
+    useImg ?
+      <img
+        {...rest}
+        src={imgSrc}
+        className={`image-logo ${className}`}
+      />
+      :
+      <Image
+        {...rest}
+        loader={myLoader}
+        src={imgSrc}
+        onError={() => setImgSrc(customSrc(fallbackSrc, window.location.origin))}
+        className={`image-logo ${className}`}
+      />
   )
 }

@@ -293,6 +293,7 @@ const Summary = ({ coinData }) => {
               </>
             }
           </span>}
+          className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border sm:border-gray-100 sm:dark:border-gray-800 p-0 sm:p-4"
         />
         <Widget
           title={<span className="uppercase flex items-center">
@@ -327,6 +328,7 @@ const Summary = ({ coinData }) => {
               </>
             }
           </span>}
+          className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border sm:border-gray-100 sm:dark:border-gray-800 p-0 sm:p-4"
         />
         {hasTVL && (
           <Widget
@@ -347,6 +349,7 @@ const Summary = ({ coinData }) => {
                 </div>
               )}
             </span>}
+            className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border sm:border-gray-100 sm:dark:border-gray-800 p-0 sm:p-4"
           />
         )}
         <Widget
@@ -382,6 +385,7 @@ const Summary = ({ coinData }) => {
               </>
             }
           </span>}
+          className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border sm:border-gray-100 sm:dark:border-gray-800 p-0 sm:p-4"
         />
         <Widget
           title={<span className="uppercase flex items-center">
@@ -439,6 +443,7 @@ const Summary = ({ coinData }) => {
               </>
             }
           </span>}
+          className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border sm:border-gray-100 sm:dark:border-gray-800 p-0 sm:p-4"
         />
       </div>
     </>

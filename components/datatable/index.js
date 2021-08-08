@@ -21,12 +21,13 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   )
 })
 
-export default function Datatable({ columns, data, rowSelectEnable, defaultPageSize, pagination, className = '' }) {
+export default function Datatable({ columns, data, rowSelectEnable, noPagination = false, defaultPageSize, pagination, className = '' }) {
   const tableRef = useRef()
 
   const {
     getTableProps,
     getTableBodyProps,
+    rows,
     headerGroups,
     prepareRow,
     page,
@@ -48,7 +49,7 @@ export default function Datatable({ columns, data, rowSelectEnable, defaultPageS
       stateReducer: (newState, action, prevState) => action.type.startsWith('reset') ? prevState : newState,
     },
     useSortBy,
-    usePagination,
+    noPagination ? false : usePagination,
     useRowSelect,
     hooks => {
       hooks.visibleColumns.push(columns => [
@@ -102,7 +103,7 @@ export default function Datatable({ columns, data, rowSelectEnable, defaultPageS
           ))}
         </thead>
         <tbody { ...getTableBodyProps() }>
-          {page.map((row, i) => {
+          {(noPagination ? rows : page).map((row, i) => {
             prepareRow(row)
             return (
               <tr { ...row.getRowProps() }>

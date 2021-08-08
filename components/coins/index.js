@@ -181,22 +181,14 @@ const Coins = ({ navigationData, navigationItemData }) => {
                   <a className="flex flex-col whitespace-pre-wrap text-blue-600 dark:text-blue-400 font-semibold" style={{ maxWidth: coin_type === 'categories' ? 'unset' : '10rem' }}>
                     <div className="coin-column flex items-center space-x-2">
                       {coin_type !== 'categories' && (
-                        coinsData.data.length > per_page ?
-                          <img
-                            src={props.row.original.image}
-                            alt=""
-                            width={24}
-                            height={24}
-                            className="rounded"
-                          />
-                          :
-                          <Image
-                            src={props.row.original.image}
-                            alt=""
-                            width={24}
-                            height={24}
-                            className="rounded"
-                          />
+                        <Image
+                          useImg={coinsData.data.length > per_page}
+                          src={props.row.original.image}
+                          alt=""
+                          width={24}
+                          height={24}
+                          className="rounded"
+                        />
                       )}
                       <span className="space-x-1">
                         <span>{props.value}</span>

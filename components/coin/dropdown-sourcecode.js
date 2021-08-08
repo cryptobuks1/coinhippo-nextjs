@@ -32,14 +32,14 @@ const DropdownSourceCode = ({ data }) => {
       <button
         ref={buttonRef}
         onClick={handleDropdownClick}
-        className="btn min-w-max btn-raised btn-rounded btn-icon flex items-center bg-transparent hover:bg-gray-100 text-gray-600 hover:text-gray-800 dark:hover:bg-gray-800 dark:text-white dark:hover:text-gray-200 text-xs space-x-1.5 mr-2 p-2"
+        className="btn min-w-max btn-raised btn-rounded btn-icon flex items-center bg-transparent hover:bg-gray-100 text-gray-600 hover:text-gray-800 dark:hover:bg-gray-800 dark:text-white dark:hover:text-gray-200 text-xs space-x-1.5 ml-0 sm:ml-2 mr-2 sm:mr-0 p-2"
       >
         <HiCode size={16} className="stroke-current" />
         <span className="hidden lg:block">Source codes</span>
       </button>
       <div
         ref={dropdownRef} 
-        className={`dropdown ${hidden ? '' : 'open'} absolute top-0 left-0 sm:left-auto right-2 mt-8`}
+        className={`dropdown ${hidden ? '' : 'open'} absolute top-0 left-0 sm:left-auto right-0 mt-8`}
       >
         <div className="dropdown-content w-40 sm:w-64 bottom-start">
           <SourceCodes data={data} handleDropdownClick={handleDropdownClick} />
