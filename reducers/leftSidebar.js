@@ -2,14 +2,7 @@ import { LEFT_SIDEBAR_CONFIG } from './types'
 
 export default function leftSidebar(
   state = {
-    showButtonText: true,
-    showSectionTitle: true,
     showLogo: true,
-    showCard: true,
-    showAccountLinks: false,
-    showProjects: true,
-    showTags: true,
-    card: 1,
   },
   action
 ) {

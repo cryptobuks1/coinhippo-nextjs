@@ -6,9 +6,7 @@ export default function config(
     title: process.env.NEXT_PUBLIC_DEFAULT_TITLE,
     description: process.env.NEXT_PUBLIC_DEFAULT_DESCRIPTION,
     url: process.env.NEXT_PUBLIC_SITE_URL,
-    layout: 'layout',
     collapsed: true,
-    backdrop: false,
   },
   action
 ) {
