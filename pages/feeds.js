@@ -57,8 +57,9 @@ export default function FeedsIndex() {
       }
     }
 
-    if ((query && Object.keys(query).length > 0) || _asPath === asPath)
-    getFeeds()
+    if ((query && Object.keys(query).length > 0) || _asPath === asPath) {
+      getFeeds()
+    }
 
     const interval = setInterval(() => getFeeds(), 5 * 60 * 1000)
     return () => clearInterval(interval)

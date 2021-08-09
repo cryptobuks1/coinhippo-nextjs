@@ -11,7 +11,7 @@ import { currencies } from '../../lib/menus'
 import useMountedRef from '../../lib/mountedRef'
 import { numberFormat } from '../../lib/utils'
 
-export default function Trending() {
+export default function Trending({ noBorder }) {
   const { preferences, data } = useSelector(state => ({ preferences: state.preferences, data: state.data }), shallowEqual)
   const { vs_currency } = { ...preferences }
   const { trending_data } = { ...data }
@@ -113,6 +113,7 @@ export default function Trending() {
           ))
         }
       </div>}
+      className={`${noBorder ? 'border-0' : ''}`}
     />
   )
 }

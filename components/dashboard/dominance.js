@@ -8,7 +8,7 @@ import { BiPieChartAlt } from 'react-icons/bi'
 import _ from 'lodash'
 import { numberFormat } from '../../lib/utils'
 
-export default function Dominance() {
+export default function Dominance({ noBorder }) {
   const { data } = useSelector(state => ({ data: state.data }), shallowEqual)
   const { global_data, all_crypto_data } = { ...data }
 
@@ -79,6 +79,7 @@ export default function Dominance() {
           ))
         }
       </div>}
+      className={`${noBorder ? 'border-0' : ''}`}
     />
   )
 }

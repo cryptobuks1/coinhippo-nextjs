@@ -17,7 +17,7 @@ const days = [
   { day: 30, title: 'Last Month' },
 ]
 
-const FearAndGreed = ({ data }) => {
+const FearAndGreed = ({ data, noBorder }) => {
   const [dayData, setDayData] = useState(null)
   const [day, setDay] = useState(0)
 
@@ -112,6 +112,7 @@ const FearAndGreed = ({ data }) => {
           </div>
         }
       </div>}
+      className={`${noBorder ? 'border-0' : ''}`}
     />
   )
 }

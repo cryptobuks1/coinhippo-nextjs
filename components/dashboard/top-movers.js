@@ -16,7 +16,7 @@ const sortDirections = [
   { direction: 'asc', title: 'Losers' },
 ]
 
-export default function TopMover() {
+export default function TopMover({ noBorder }) {
   const { preferences } = useSelector(state => ({ preferences: state.preferences }), shallowEqual)
   const { vs_currency } = { ...preferences }
 
@@ -128,6 +128,7 @@ export default function TopMover() {
           ))
         }
       </div>}
+      className={`${noBorder ? 'border-0' : ''}`}
     />
   )
 }

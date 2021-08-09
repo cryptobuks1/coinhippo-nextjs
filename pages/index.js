@@ -24,7 +24,8 @@ export default function Index() {
   const { vs_currency } = { ...preferences }
 
   const router = useRouter()
-  const { pathname, asPath } = { ...router }
+  const { query, pathname, asPath } = { ...router }
+  const { widget } = { ...query }
   const _asPath = asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath
 
   const [bitcoin, setBitcoin] = useState(null)
@@ -43,11 +44,13 @@ export default function Index() {
       }
     }
 
-    getBitcoin()
+    if ((query && Object.keys(query).length > 0 && !widget) || _asPath === asPath) {
+      getBitcoin()
+    }
 
     const interval = setInterval(() => getBitcoin(), 3 * 60 * 1000)
     return () => clearInterval(interval)
-  }, [vs_currency])
+  }, [vs_currency, query, widget])
 
   useEffect(() => {
     const getCryptoGlobal = async () => {
@@ -61,11 +64,13 @@ export default function Index() {
       }
     }
 
-    getCryptoGlobal()
+    if ((query && Object.keys(query).length > 0 && (!widget || ['dominance'].includes(widget))) || _asPath === asPath) {
+      getCryptoGlobal()
+    }
 
     const interval = setInterval(() => getCryptoGlobal(), 3 * 60 * 1000)
     return () => clearInterval(interval)
-  }, [])
+  }, [query, widget])
 
   useEffect(() => {
     const getFearAndGreed = async () => {
@@ -78,8 +83,10 @@ export default function Index() {
       }
     }
 
-    getFearAndGreed()
-  }, [])
+    if ((query && Object.keys(query).length > 0 && (!widget || ['fear_and_greed'].includes(widget))) || _asPath === asPath) {
+      getFearAndGreed()
+    }
+  }, [query, widget])
 
   if (typeof window !== 'undefined' && pathname !== _asPath) {
     router.push(isMatchRoute(_asPath) ? asPath : '/404')
@@ -93,32 +100,44 @@ export default function Index() {
 
   return (
     <>
-      <SectionTitle
-        title="Overview"
-        subtitle="Dashboard"
-        right={<div className="flex flex-wrap items-center ml-0 sm:ml-4">
-          {navigation.filter(item => item.index_shortcut || item.items.findIndex(_item => _item.index_shortcut || _item.items.findIndex(__item => __item.index_shortcut) > -1) > -1)
-            .flatMap(item => item.index_shortcut ? item : item.items.flatMap(_item => _item.index_shortcut ? _item : _item.items.filter(__item => __item.index_shortcut)))
-            .map((navigationItemData, i) => (
-              <Link key={i} href={navigationItemData.url}>
-                <a>
-                  <Badge size="sm" rounded color="bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 border-0 text-blue-500 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-300 font-medium mt-1 mr-1 py-1 pl-1.5 pr-1">
-                    {navigationItemData.index_shortcut}
-                    <TiArrowRight size={16} className="transform -rotate-45" />
-                  </Badge>
-                </a>
-              </Link>
-            ))
-          }
-        </div>}
-        className="flex-col sm:flex-row items-start sm:items-center mx-1"
-      />
-      <Global bitcoin={bitcoin} />
-      <div className="w-full grid grid-flow-row grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-2 xl:gap-4 mb-4 lg:mb-2 xl:mb-4">
-        <FearAndGreed data={fearAndGreedData} />
-        <Dominance />
-        <TopMovers />
-        <Trending />
+      {!widget && (
+        <SectionTitle
+          title="Overview"
+          subtitle="Dashboard"
+          right={<div className="flex flex-wrap items-center ml-0 sm:ml-4">
+            {navigation.filter(item => item.index_shortcut || item.items.findIndex(_item => _item.index_shortcut || _item.items.findIndex(__item => __item.index_shortcut) > -1) > -1)
+              .flatMap(item => item.index_shortcut ? item : item.items.flatMap(_item => _item.index_shortcut ? _item : _item.items.filter(__item => __item.index_shortcut)))
+              .map((navigationItemData, i) => (
+                <Link key={i} href={navigationItemData.url}>
+                  <a>
+                    <Badge size="sm" rounded color="bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 border-0 text-blue-500 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-300 font-medium mt-1 mr-1 py-1 pl-1.5 pr-1">
+                      {navigationItemData.index_shortcut}
+                      <TiArrowRight size={16} className="transform -rotate-45" />
+                    </Badge>
+                  </a>
+                </Link>
+              ))
+            }
+          </div>}
+          className="flex-col sm:flex-row items-start sm:items-center mx-1"
+        />
+      )}
+      {!widget && (
+        <Global bitcoin={bitcoin} />
+      )}
+      <div className={`w-full grid grid-flow-row grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-2 xl:gap-4 mb-4 lg:mb-2 xl:mb-4 ${query.theme === 'dark' && widget ? '-mt-4 -ml-4' : ''}`}>
+        {(!widget || ['fear_and_greed'].includes(widget)) && (
+          <FearAndGreed data={fearAndGreedData} noBorder={['fear_and_greed'].includes(widget)} />
+        )}
+        {(!widget || ['dominance'].includes(widget)) && (
+          <Dominance noBorder={['dominance'].includes(widget)} />
+        )}
+        {(!widget || ['top_movers'].includes(widget)) && (
+          <TopMovers noBorder={['top_movers'].includes(widget)} />
+        )}
+        {(!widget || ['trending'].includes(widget)) && (
+          <Trending noBorder={['trending'].includes(widget)} />
+        )}
       </div>
     </>
   )
