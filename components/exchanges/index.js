@@ -27,7 +27,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
 
   const router = useRouter()
   const { query, pathname, asPath } = { ...router }
-  const { exchange_type } = { ...query }
+  const { exchange_type, n } = { ...query }
   const _asPath = asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath
 
   const [exchangesData, setExchangesData] = useState(null)
@@ -346,7 +346,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
           },
         ].filter(column => !((exchange_type === 'derivatives' ? ['trust_score'] : ['open_interest_btc', 'number_of_perpetual_pairs', 'number_of_futures_pairs']).includes(column.accessor)))}
         data={exchangesData && exchange_type === exchangesData.exchange_type ? exchangesData.data.map((exchangeData, i) => { return { ...exchangeData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
-        defaultPageSize={pathname.endsWith('/[exchange_type]') ? 50 : 100}
+        defaultPageSize={[10, 25, 50, 100].includes(Number(n)) ? Number(n) : pathname.endsWith('/[exchange_type]') ? 50 : 100}
         className="striped"
       />
     </div>
