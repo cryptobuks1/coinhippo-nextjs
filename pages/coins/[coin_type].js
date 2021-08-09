@@ -6,7 +6,7 @@ import Coins from '../../components/coins'
 import SectionTitle from '../../components/section-title'
 import Image from '../../components/image'
 import { navigation } from '../../lib/menus'
-import { getName } from '../../lib/utils'
+import { generateUrl, getName } from '../../lib/utils'
 
 export default function CoinType() {
   const { data } = useSelector(state => ({ data: state.data }), shallowEqual)
@@ -54,7 +54,7 @@ export default function CoinType() {
             {navigationData && navigationData.items && (
               <div className="flex flex-wrap items-center ml-0 sm:ml-4 pr-1">
                 {navigationData.items.map((item, i) => (
-                  <Link key={i} href={item.url}>
+                  <Link key={i} href={generateUrl(item.url, query, ['coin_type', 'page'])}>
                     <a className={`btn btn-raised min-w-max btn-rounded flex items-center ${navigationItemData && item.url === navigationItemData.url ? 'bg-indigo-600 text-white' : 'bg-transparent hover:bg-indigo-50 text-indigo-500 hover:text-indigo-600 dark:hover:bg-indigo-900 dark:text-white dark:hover:text-gray-200'} text-xs space-x-1.5 my-1 ${i < navigationData.items.length - 1 ? 'mr-2 md:mr-3' : 'mr-2 md:mr-3'} p-2`}>
                       {item.image && (
                         <Image

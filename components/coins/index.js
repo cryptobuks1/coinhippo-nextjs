@@ -26,13 +26,14 @@ const Coins = ({ navigationData, navigationItemData }) => {
 
   const router = useRouter()
   const { query, pathname, asPath } = { ...router }
+  const { n } = { ...query }
   let { coin_type, page } = { ...query }
   const _asPath = asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath
   coin_type = !coin_type && !pathname.endsWith('/[coin_type]') ? _.last(_asPath.split('/')) : coin_type
   coin_type = coin_type === 'coins' ? '' : coin_type
   page = coin_type !== 'categories' ? !isNaN(page) && Number(page) > 0 ? Number(page) : typeof page === 'undefined' ? 1 : -1 : -1
 
-  const per_page = coin_type && !(['high-volume'].includes(coin_type)) ? 50 : 100
+  let per_page = coin_type && !(['high-volume'].includes(coin_type)) ? Number(n) > 0 ? Number(n) < 10 ? 10 : Number(n) > 50 ? 50 : Number(n) : 50 : Number(n) > 0 ? Number(n) < 10 ? 10 : Number(n) > 100 ? 100 : Number(n) : 100
 
   const [coinsData, setCoinsData] = useState(null)
 
@@ -139,11 +140,12 @@ const Coins = ({ navigationData, navigationItemData }) => {
     if (navigationData && navigationData.items && navigationData.items[0] &&
       !pathname.endsWith('/coins') && coin_type &&
       navigationData.items.findIndex(item => item.url === _asPath) < 0 &&
-      all_crypto_data && all_crypto_data.categories && all_crypto_data.categories.findIndex(categoryData => categoryData.category_id === coin_type) < 0) {
-        router.push(navigationData.items[0].url)
+      all_crypto_data && all_crypto_data.categories && all_crypto_data.categories.findIndex(categoryData => categoryData.category_id === coin_type) < 0
+    ) {
+      router.push(generateUrl(navigationData.items[0].url, query, ['coin_type', 'page']))
     }
-    else if (asPath.includes('?') && page < 0) {
-      router.push(_asPath)
+    else if (['?', 'page='].findIndex(keyword => !(asPath.includes(keyword))) < 0 && page < 0) {
+      router.push(generateUrl(_asPath, query, ['coin_type', 'page']))
     }
   }
 
