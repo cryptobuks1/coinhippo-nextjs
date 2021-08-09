@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import Widget from '../widget'
@@ -19,6 +20,11 @@ const sortDirections = [
 export default function TopMover({ noBorder }) {
   const { preferences } = useSelector(state => ({ preferences: state.preferences }), shallowEqual)
   const { vs_currency } = { ...preferences }
+
+  const router = useRouter()
+  const { query } = { ...router }
+  let { n } = { ...query }
+  n = Number(n) > 2 ? Number(n) > 25 ? 25 : Number(n) : 5
 
   const [coinsData, setCoinsData] = useState(null)
   const [sortDirection, setSortDirection] = useState('desc')
@@ -63,7 +69,7 @@ export default function TopMover({ noBorder }) {
       </span>}
       description={<div className="mt-3.5">
         {coinsData ?
-          _.slice(_.orderBy(coinsData, ['price_change_percentage_24h'], [sortDirection]), 0, 5).map((coinData, i) => {
+          _.slice(_.orderBy(coinsData, ['price_change_percentage_24h'], [sortDirection]), 0, n).map((coinData, i) => {
             const currency = currencies[currencies.findIndex(c => c.id === coinData.vs_currency)] || currencies[0]
             return (
               <div key={i} className={`${i < 3 ? `bg-${sortDirection === 'desc' ? 'green' : 'red'}-${i < 1 ? 200 : i < 2 ? 100 : 50} dark:bg-${sortDirection === 'desc' ? 'green' : 'red'}-${i < 1 ? 700 : i < 2 ? 800 : 900} rounded pt-1 px-1` : ''} mt-${i > 0 ? i < 3 ? 1 : 2 : 0}`}>
@@ -108,7 +114,7 @@ export default function TopMover({ noBorder }) {
             )
           })
           :
-          [...Array(5).keys()].map(i => (
+          [...Array(n).keys()].map(i => (
             <div key={i} className={`mt-${i > 0 ? 3 : 0}`}>
               <div className="flex items-center">
                 <div className="skeleton w-5 h-5 rounded mr-1.5" />

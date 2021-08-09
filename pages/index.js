@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import Global from '../components/dashboard/global'
+import CoinPrices from '../components/navbar/coin-prices'
 import FearAndGreed from '../components/dashboard/fear-and-greed'
 import Dominance from '../components/dashboard/dominance'
 import TopMovers from '../components/dashboard/top-movers'
@@ -83,7 +84,7 @@ export default function Index() {
       }
     }
 
-    if ((query && Object.keys(query).length > 0 && (!widget || ['fear_and_greed'].includes(widget))) || _asPath === asPath) {
+    if ((query && Object.keys(query).length > 0 && (!widget || ['fear-and-greed'].includes(widget))) || _asPath === asPath) {
       getFearAndGreed()
     }
   }, [query, widget])
@@ -125,15 +126,18 @@ export default function Index() {
       {!widget && (
         <Global bitcoin={bitcoin} />
       )}
-      <div className={`w-full grid grid-flow-row grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-2 xl:gap-4 mb-4 lg:mb-2 xl:mb-4 ${query.theme === 'dark' && widget ? '-mt-4 -ml-4' : ''}`}>
-        {(!widget || ['fear_and_greed'].includes(widget)) && (
-          <FearAndGreed data={fearAndGreedData} noBorder={['fear_and_greed'].includes(widget)} />
+      <div className={`w-full grid grid-flow-row grid-cols-1 ${!(['price-marquee'].includes(widget)) ? 'sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4' : ''} gap-4 lg:gap-2 xl:gap-4 mb-4 lg:mb-2 xl:mb-4 ${query.theme === 'dark' && widget ? '-mt-4 -ml-4' : ''}`}>
+        {(['price-marquee'].includes(widget)) && (
+          <CoinPrices />
+        )}
+        {(!widget || ['fear-and-greed'].includes(widget)) && (
+          <FearAndGreed data={fearAndGreedData} noBorder={['fear-and-greed'].includes(widget)} />
         )}
         {(!widget || ['dominance'].includes(widget)) && (
           <Dominance noBorder={['dominance'].includes(widget)} />
         )}
-        {(!widget || ['top_movers'].includes(widget)) && (
-          <TopMovers noBorder={['top_movers'].includes(widget)} />
+        {(!widget || ['top-movers'].includes(widget)) && (
+          <TopMovers noBorder={['top-movers'].includes(widget)} />
         )}
         {(!widget || ['trending'].includes(widget)) && (
           <Trending noBorder={['trending'].includes(widget)} />

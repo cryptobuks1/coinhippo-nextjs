@@ -14,7 +14,7 @@ export default function Layouts({ children }) {
       </Centered>
     )
   }
-  else if (['widget'].includes(query.view)) {
+  else if (['widget'].includes(query.view) || Object.keys(query).includes('widget')) {
     if (['dark'].includes(query.theme)) {
       return (
         <Layout
