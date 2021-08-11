@@ -136,7 +136,7 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                   <HiOutlineRefresh size={14} className="mb-1 mr-1" />
                   <span className="h-5">
                     {exactTime ?
-                      moment(data.CreatedAt * 1000).format('MMM D, YYYY h:[00] A')
+                      moment(data.CreatedAt * 1000).format('MMM D, YYYY h:[00] A z')
                       :
                       <>{moment(data.CreatedAt * 1000).fromNow()} ({moment(data.CreatedAt * 1000).format('h:[00] A')})</>
                     }
@@ -148,7 +148,7 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                     <BsPencilSquare size={14} className="mb-1 mr-1" />
                     <span className="h-5">
                       {exactTime ?
-                        moment(json.published_at).format('MMM D, YYYY h:mm A')
+                        moment(json.published_at).format('MMM D, YYYY h:mm A z')
                         :
                         <>
                           {moment(json.published_at).fromNow()}
@@ -166,7 +166,7 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                     }
                     <span className="h-5">
                       {exactTime ?
-                        moment(data.CreatedAt * 1000).format('MMM D, YYYY h:mm A')
+                        moment(data.CreatedAt * 1000).format('MMM D, YYYY h:mm A z')
                         :
                         <>
                           {moment(data.CreatedAt * 1000).fromNow()}
