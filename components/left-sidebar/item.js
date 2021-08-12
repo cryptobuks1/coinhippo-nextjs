@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { FiChevronRight } from 'react-icons/fi'
 import { CONFIG_KEY } from '../../reducers/types'
 
-export default function Item({ url, icon, title, badge, items, hiddenItem, hiddenItems, openItem, openItems }) {
+export default function Item({ url, icon, title, badge, items, isComing, hiddenItem, hiddenItems, openItem, openItems }) {
   const dispatch = useDispatch()
   const { config } = useSelector(state => ({ config: state.config }), shallowEqual)
   const { collapsed } = { ...config }
@@ -32,31 +32,40 @@ export default function Item({ url, icon, title, badge, items, hiddenItem, hidde
 
   if (!items || items.length === 0) {
     return (
-      <Link href={url}>
-        <a
-          onClick={() => {
-            if (!collapsed) {
-              dispatch({
-                type: CONFIG_KEY,
-                key: 'collapsed',
-                value: !collapsed
-              })
-            }
-            else if (hiddenItems) {
-              hiddenItems()
-            }
-          }}
-          className={`left-sidebar-item ${active ? 'active' : ''}`}
-        >
+      isComing ?
+        <span className="left-sidebar-item">
           {icon}
-          <span className="title">{title}</span>
-          {badge && (
-            <span className={`badge badge-circle badge-sm ${badge.color}`}>
-              {badge.text}
-            </span>
-          )}
-        </a>
-      </Link>
+          <span className="title flex flex-col text-xs">
+            <span>{title}</span>
+            <span className="text-gray-400 dark:text-gray-600 font-light">Coming Soon</span>
+          </span>
+        </span>
+        :
+        <Link href={url}>
+          <a
+            onClick={() => {
+              if (!collapsed) {
+                dispatch({
+                  type: CONFIG_KEY,
+                  key: 'collapsed',
+                  value: !collapsed
+                })
+              }
+              else if (hiddenItems) {
+                hiddenItems()
+              }
+            }}
+            className={`left-sidebar-item ${active ? 'active' : ''}`}
+          >
+            {icon}
+            <span className="title">{title}</span>
+            {badge && (
+              <span className={`badge badge-circle badge-sm ${badge.color}`}>
+                {badge.text}
+              </span>
+            )}
+          </a>
+        </Link>
     )
   }
 
