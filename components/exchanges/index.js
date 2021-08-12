@@ -27,7 +27,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
 
   const router = useRouter()
   const { query, pathname, asPath } = { ...router }
-  const { exchange_type, n } = { ...query }
+  const { exchange_type, view, n } = { ...query }
   const _asPath = asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath
 
   const [exchangesData, setExchangesData] = useState(null)
@@ -97,7 +97,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
   }
 
   return (
-    <div className="mx-1">
+    <div className={`${['widget'].includes(view) ? 'max-w-lg' : ''} mx-1`}>
       <Summary exchangesData={exchangesData} />
       <Datatable
         columns={[
@@ -344,7 +344,8 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
             ),
             headerClassName: 'justify-end text-right mr-2 lg:mr-4 xl:mr-8',
           },
-        ].filter(column => !((exchange_type === 'derivatives' ? ['trust_score'] : ['open_interest_btc', 'number_of_perpetual_pairs', 'number_of_futures_pairs']).includes(column.accessor)))}
+        ].filter(column => !((exchange_type === 'derivatives' ? ['trust_score'] : ['open_interest_btc', 'number_of_perpetual_pairs', 'number_of_futures_pairs']).includes(column.accessor)))
+        .filter(column => ['widget'].includes(view) ? ['i', 'name', 'trade_volume_24h_btc', 'url'].includes(column.accessor) : true)}
         data={exchangesData && exchange_type === exchangesData.exchange_type ? exchangesData.data.map((exchangeData, i) => { return { ...exchangeData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
         defaultPageSize={[10, 25, 50, 100].includes(Number(n)) ? Number(n) : pathname.endsWith('/[exchange_type]') ? 50 : 100}
         className="striped"

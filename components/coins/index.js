@@ -26,7 +26,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
 
   const router = useRouter()
   const { query, pathname, asPath } = { ...router }
-  const { n } = { ...query }
+  const { view, n } = { ...query }
   let { coin_type, page } = { ...query }
   const _asPath = asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath
   coin_type = !coin_type && !pathname.endsWith('/[coin_type]') ? _.last(_asPath.split('/')) : coin_type
@@ -64,7 +64,6 @@ const Coins = ({ navigationData, navigationItemData }) => {
                   ...coinData,
                   market_cap_rank: typeof coinData.market_cap_rank === 'string' ? Number(coinData.market_cap_rank) : typeof coinData.market_cap_rank === 'number' ? coinData.market_cap_rank : Number.MAX_SAFE_INTEGER,
                   current_price: typeof coinData.current_price === 'string' ? Number(coinData.current_price) : typeof coinData.current_price === 'number' ? coinData.current_price : -1,
-                  // price_change_percentage_1h_in_currency: typeof coinData.price_change_percentage_1h_in_currency === 'string' ? Number(coinData.price_change_percentage_1h_in_currency) : typeof coinData.price_change_percentage_1h_in_currency === 'number' ? coinData.price_change_percentage_1h_in_currency : Number.MIN_SAFE_INTEGER,
                   price_change_percentage_24h_in_currency: typeof coinData.price_change_percentage_24h_in_currency === 'string' ? Number(coinData.price_change_percentage_24h_in_currency) : typeof coinData.price_change_percentage_24h_in_currency === 'number' ? coinData.price_change_percentage_24h_in_currency : Number.MIN_SAFE_INTEGER,
                   price_change_percentage_7d_in_currency: typeof coinData.price_change_percentage_7d_in_currency === 'string' ? Number(coinData.price_change_percentage_7d_in_currency) : typeof coinData.price_change_percentage_7d_in_currency === 'number' ? coinData.price_change_percentage_7d_in_currency : Number.MIN_SAFE_INTEGER,
                   price_change_percentage_30d_in_currency: typeof coinData.price_change_percentage_30d_in_currency === 'string' ? Number(coinData.price_change_percentage_30d_in_currency) : typeof coinData.price_change_percentage_30d_in_currency === 'number' ? coinData.price_change_percentage_30d_in_currency : Number.MIN_SAFE_INTEGER,
@@ -150,7 +149,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
   }
 
   return (
-    <div className="mx-1">
+    <div className={`${['widget'].includes(view) ? 'max-w-lg' : ''} mx-1`}>
       {pathname.endsWith('/[coin_type]') && (
         <Summary coinsData={coinsData} page={page} />
       )}
@@ -266,24 +265,6 @@ const Coins = ({ navigationData, navigationItemData }) => {
             ),
             headerClassName: 'justify-start sm:justify-end text-left sm:text-right',
           },
-          // {
-          //   Header: '1h',
-          //   accessor: 'price_change_percentage_1h_in_currency',
-          //   sortType: (rowA, rowB) => rowA.original.price_change_percentage_1h_in_currency > rowB.original.price_change_percentage_1h_in_currency ? 1 : -1,
-          //   Cell: props => (
-          //     <div className={`${props.value < 0 ? 'text-red-500 dark:text-red-400' : props.value > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} text-xs font-medium text-right`}>
-          //       {!props.row.original.skeleton ?
-          //         props.value > Number.MIN_SAFE_INTEGER ?
-          //           `${numberFormat(props.value, `+0,0.000${Math.abs(props.value) < 0.001 ? '000' : ''}`)}%`
-          //           :
-          //           '-'
-          //         :
-          //         <div className="skeleton w-10 h-3 rounded ml-auto" />
-          //       }
-          //     </div>
-          //   ),
-          //   headerClassName: 'justify-end text-right',
-          // },
           {
             Header: '24h',
             accessor: 'price_change_percentage_24h_in_currency',
@@ -573,7 +554,8 @@ const Coins = ({ navigationData, navigationItemData }) => {
             ),
             headerClassName: 'justify-end text-right',
           },
-        ].filter(column => !((coin_type === 'categories' ? ['current_price', 'price_change_percentage_1h_in_currency', 'price_change_percentage_24h_in_currency', 'price_change_percentage_7d_in_currency', 'price_change_percentage_30d_in_currency', 'roi.times', 'fully_diluted_valuation', 'total_volume', 'circulating_supply'] : ['market_cap_change_24h', 'volume_24h', 'market_share']).includes(column.accessor)))}
+        ].filter(column => !((coin_type === 'categories' ? ['current_price', 'price_change_percentage_1h_in_currency', 'price_change_percentage_24h_in_currency', 'price_change_percentage_7d_in_currency', 'price_change_percentage_30d_in_currency', 'roi.times', 'fully_diluted_valuation', 'total_volume', 'circulating_supply'] : ['market_cap_change_24h', 'volume_24h', 'market_share']).includes(column.accessor)))
+        .filter(column => ['widget'].includes(view) ? ['i', 'market_cap_rank', 'name', 'current_price', 'price_change_percentage_24h_in_currency', 'market_cap'].includes(column.accessor) : true)}
         data={coinsData && coinsData.vs_currency === (coin_type === 'categories' ? currencyUSD.id : vs_currency) && coin_type === coinsData.coin_type && page === coinsData.page ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => {return { i, skeleton: true } })}
         defaultPageSize={100}
         pagination={!(coin_type && !(['high-volume'].includes(coin_type))) && (
