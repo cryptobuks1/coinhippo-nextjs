@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useSelector, shallowEqual } from 'react-redux'
 import PropTypes from 'prop-types'
 import DropdownContract from './dropdown-contract'
@@ -21,11 +22,17 @@ const Summary = ({ coinData }) => {
   const currencyBTC = currencies[currencies.findIndex(c => c.id === 'btc')]
   const currencyUSD = currencies[currencies.findIndex(c => c.id === 'usd')]
 
+  const router = useRouter()
+  const { query } = { ...router }
+  const { view } = { ...query }
+
   const hasTVL = coinData && coinData.market_data && coinData.market_data.total_value_locked && coinData.market_data.total_value_locked[currencyBTC.id] > 0
+
+  const isWidget = ['widget'].includes(view)
 
   return (
     <>
-      {coinData && (
+      {!isWidget && coinData && (
         <div className="flex flex-col sm:flex-row">
           <div className="max-w-sm lg:max-w-4xl flex flex-wrap items-center my-auto">
             {['homepage', 'facebook_username', 'twitter_screen_name', 'telegram_channel_identifier', 'subreddit_url', 'announcement_url', 'official_forum_url', 'bitcointalk_thread_identifier', 'chat_url'].filter(field => coinData.links[field] && (coinData.links[field].length > 0 || typeof coinData.links[field] === 'object'))
@@ -259,13 +266,15 @@ const Summary = ({ coinData }) => {
           </div>
         </div>
       )}
-      <div className={`w-full grid grid-flow-row grid-cols-1 sm:grid-cols-2 lg:grid-cols-${hasTVL ? 5 : 4} gap-4 my-2 md:my-4`}>
+      <div className={`w-full ${isWidget ? 'flex flex-col' : `grid grid-flow-row grid-cols-1 sm:grid-cols-2 lg:grid-cols-${hasTVL ? 5 : 4}`} gap-${isWidget ? 2 : 4} my-2 md:my-4`}>
         <Widget
-          title={<span className="uppercase flex items-center">
+          title={<span className={`uppercase flex items-center ${isWidget ? 'text-xs mt-1' : ''}`}>
             Market Cap
-            <AiOutlineLineChart size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
+            {!isWidget && (
+              <AiOutlineLineChart size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
+            )}
           </span>}
-          description={<span className="text-xl">
+          description={<span className={`${isWidget ? 'text-base' : 'text-xl'}`}>
             {coinData ?
               <>
                 <span className="space-x-1">
@@ -274,7 +283,7 @@ const Summary = ({ coinData }) => {
                   {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
                 </span>
                 {exchange_rates_data && currency.id !== currencyBTC.id && (
-                  <div className="text-gray-400 text-xs font-medium space-x-1 mt-1">
+                  <div className={`text-gray-400 text-xs font-medium space-x-1 mt-${isWidget ? 0 : 1}`}>
                     {coinData.market_data.market_cap[currency.id] > -1 ?
                       <>
                         <span>{numberFormat(coinData.market_data.market_cap[currency.id] * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[currency.id].value : 1), `0,0${Math.abs(coinData.market_data.market_cap[currency.id] * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[currency.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
@@ -289,75 +298,85 @@ const Summary = ({ coinData }) => {
               :
               <>
                 <div className="skeleton w-36 h-6 rounded mt-1" />
-                <div className="skeleton w-20 h-4 rounded mt-1.5" />
+                <div className={`skeleton w-20 h-4 rounded mt-1.5 ${isWidget ? 'ml-auto' : ''}`} />
               </>
             }
           </span>}
-          className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border border-gray-100 dark:border-gray-800 p-0 sm:p-4"
+          className={`bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 border-gray-100 dark:border-gray-800 p-0 ${isWidget ? 'sm:border-0 sm:p-0' : 'sm:border sm:p-4'}`}
+          contentClassName={`${isWidget ? 'w-72 text-right' : ''}`}
+          titleSubTitleClassName={`${isWidget ? 'flex items-start justify-between' : ''}`}
         />
-        <Widget
-          title={<span className="uppercase flex items-center">
-            Fully Diluted MCap
-            <AiOutlineAreaChart size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
-          </span>}
-          description={<span className="text-xl">
-            {coinData ?
-              <>
-                <span className="space-x-1">
-                  {currency.symbol}
-                  <span>{coinData.market_data.fully_diluted_valuation[currency.id] > -1 ? numberFormat(coinData.market_data.fully_diluted_valuation[currency.id], `0,0${Math.abs(coinData.market_data.fully_diluted_valuation[currency.id]) < 1 ? '.000' : ''}`) : '-'}</span>
-                  {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
-                </span>
-                {exchange_rates_data && currency.id !== currencyBTC.id && (
-                  <div className="text-gray-400 text-xs font-medium space-x-1 mt-1">
-                    {coinData.market_data.fully_diluted_valuation[currency.id] > -1 ?
-                      <>
-                        <span>{numberFormat(coinData.market_data.fully_diluted_valuation[currency.id] * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[currency.id].value : 1), `0,0${Math.abs(coinData.market_data.fully_diluted_valuation[currency.id] * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[currency.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
-                        <span className="uppercase">{currencyBTC.id}</span>
-                      </>
-                      :
-                      '-'
-                    }
-                  </div>
-                )}
-              </>
-              :
-              <>
-                <div className="skeleton w-36 h-6 rounded mt-1" />
-                <div className="skeleton w-20 h-4 rounded mt-1.5" />
-              </>
-            }
-          </span>}
-          className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border border-gray-100 dark:border-gray-800 p-0 sm:p-4"
-        />
-        {hasTVL && (
+        {!isWidget && (
           <Widget
             title={<span className="uppercase flex items-center">
-              Total Value Locked
-              <AiOutlineLock size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
+              Fully Diluted MCap
+              <AiOutlineAreaChart size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
             </span>}
             description={<span className="text-xl">
+              {coinData ?
+                <>
+                  <span className="space-x-1">
+                    {currency.symbol}
+                    <span>{coinData.market_data.fully_diluted_valuation[currency.id] > -1 ? numberFormat(coinData.market_data.fully_diluted_valuation[currency.id], `0,0${Math.abs(coinData.market_data.fully_diluted_valuation[currency.id]) < 1 ? '.000' : ''}`) : '-'}</span>
+                    {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
+                  </span>
+                  {exchange_rates_data && currency.id !== currencyBTC.id && (
+                    <div className="text-gray-400 text-xs font-medium space-x-1 mt-1">
+                      {coinData.market_data.fully_diluted_valuation[currency.id] > -1 ?
+                        <>
+                          <span>{numberFormat(coinData.market_data.fully_diluted_valuation[currency.id] * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[currency.id].value : 1), `0,0${Math.abs(coinData.market_data.fully_diluted_valuation[currency.id] * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[currency.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
+                          <span className="uppercase">{currencyBTC.id}</span>
+                        </>
+                        :
+                        '-'
+                      }
+                    </div>
+                  )}
+                </>
+                :
+                <>
+                  <div className="skeleton w-36 h-6 rounded mt-1" />
+                  <div className="skeleton w-20 h-4 rounded mt-1.5" />
+                </>
+              }
+            </span>}
+            className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border border-gray-100 dark:border-gray-800 p-0 sm:p-4"
+          />
+        )}
+        {hasTVL && (
+          <Widget
+            title={<span className={`uppercase flex items-center ${isWidget ? 'text-xs mt-1' : ''}`}>
+              Total Value Locked
+              {!isWidget && (
+                <AiOutlineLock size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
+              )}
+            </span>}
+            description={<span className={`${isWidget ? 'text-base' : 'text-xl'}`}>
               <span className="space-x-1">
                 {(exchange_rates_data ? currency : currencyUSD).symbol}
                 <span>{numberFormat(coinData.market_data.total_value_locked[currencyUSD.id] * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1), `0,0${Math.abs(coinData.market_data.total_value_locked[currencyUSD.id] * (exchange_rates_data ? exchange_rates_data[currency.id].value / exchange_rates_data[currencyUSD.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
                 {!((exchange_rates_data ? currency : currencyUSD).symbol) && (<span className="uppercase">{(exchange_rates_data ? currency : currencyUSD).id}</span>)}
               </span>
               {currency.id !== currencyBTC.id && (
-                <div className="text-gray-400 text-xs font-medium space-x-1 mt-1">
+                <div className={`text-gray-400 text-xs font-medium space-x-1 mt-${isWidget ? 0 : 1}`}>
                   <span>{numberFormat(coinData.market_data.total_value_locked[currencyBTC.id], `0,0${Math.abs(coinData.market_data.total_value_locked[currencyBTC.id]) < 1 ? '.000' : ''}`)}</span>
                   <span className="uppercase">{currencyBTC.id}</span>
                 </div>
               )}
             </span>}
-            className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border border-gray-100 dark:border-gray-800 p-0 sm:p-4"
+            className={`bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 border-gray-100 dark:border-gray-800 p-0 ${isWidget ? 'sm:border-0 sm:p-0' : 'sm:border sm:p-4'}`}
+            contentClassName={`${isWidget ? 'w-72 text-right' : ''}`}
+            titleSubTitleClassName={`${isWidget ? 'flex items-start justify-between' : ''}`}
           />
         )}
         <Widget
-          title={<span className="uppercase flex items-center">
+          title={<span className={`uppercase flex items-center ${isWidget ? 'text-xs mt-1' : ''}`}>
             24h Volume
-            <AiOutlineBarChart size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
+            {!isWidget && (
+              <AiOutlineBarChart size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
+            )}
           </span>}
-          description={<span className="text-xl">
+          description={<span className={`${isWidget ? 'text-base' : 'text-xl'}`}>
             {coinData ?
               <>
                 <span className="space-x-1">
@@ -366,7 +385,7 @@ const Summary = ({ coinData }) => {
                   {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
                 </span>
                 {exchange_rates_data && currency.id !== currencyBTC.id && (
-                  <div className="text-gray-400 text-xs font-medium space-x-1 mt-1">
+                  <div className={`text-gray-400 text-xs font-medium space-x-1 mt-${isWidget ? 0 : 1}`}>
                     {coinData.market_data.total_volume[currency.id] > -1 ?
                       <>
                         <span>{numberFormat(coinData.market_data.total_volume[currency.id] * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[currency.id].value : 1), `0,0${Math.abs(coinData.market_data.total_volume[currency.id] * (exchange_rates_data ? exchange_rates_data[currencyBTC.id].value / exchange_rates_data[currency.id].value : 1)) < 1 ? '.000' : ''}`)}</span>
@@ -381,70 +400,74 @@ const Summary = ({ coinData }) => {
               :
               <>
                 <div className="skeleton w-36 h-6 rounded mt-1" />
-                <div className="skeleton w-20 h-4 rounded mt-1.5" />
+                <div className={`skeleton w-20 h-4 rounded mt-1.5 ${isWidget ? 'ml-auto' : ''}`} />
               </>
             }
           </span>}
-          className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border border-gray-100 dark:border-gray-800 p-0 sm:p-4"
+          className={`bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 border-gray-100 dark:border-gray-800 p-0 ${isWidget ? 'sm:border-0 sm:p-0' : 'sm:border sm:p-4'}`}
+          contentClassName={`${isWidget ? 'w-72 text-right' : ''}`}
+          titleSubTitleClassName={`${isWidget ? 'flex items-start justify-between' : ''}`}
         />
-        <Widget
-          title={<span className="uppercase flex items-center">
-            Circulating Supply
-            <FaCoins size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
-          </span>}
-          description={<span className="text-xl">
-            {coinData ?
-              coinData.market_data.circulating_supply > -1 ?
-                <>
-                  <span>{numberFormat(coinData.market_data.circulating_supply, '0,0')}</span>
-                  {coinData.market_data.max_supply > 0 ?
-                    <>
-                      <div className="flex items-center text-xs space-x-1.5 mt-1">
-                        <ProgressBarWithText
-                          width={coinData.market_data.circulating_supply * 100 / coinData.market_data.max_supply}
-                          text={<div className="text-gray-600 dark:text-gray-400 font-normal mx-1" style={{ fontSize: coinData.market_data.circulating_supply * 100 / coinData.market_data.max_supply < 25 ? '.45rem' : '.55rem' }}>{numberFormat(coinData.market_data.circulating_supply * 100 / coinData.market_data.max_supply, `0,0.000${Math.abs(coinData.market_data.circulating_supply * 100 / coinData.market_data.max_supply) < 0.001 ? '000' : ''}`)}%</div>}
-                          color="bg-gray-200 dark:bg-gray-600 rounded"
-                          backgroundClassName="h-3 bg-gray-100 dark:bg-gray-800 rounded"
-                          className={`h-3 flex items-center justify-${coinData.market_data.circulating_supply * 100 / coinData.market_data.max_supply < 25 ? 'start' : 'end'}`}
-                        />
-                        <span className="text-gray-400 dark:text-gray-500 font-normal ml-auto" style={{ fontSize: '.65rem' }}>
-                          <span className="font-medium mr-1">Max</span>
-                          {numberFormat(coinData.market_data.max_supply, '0,0')}
-                        </span>
-                      </div>
-                    </>
-                    :
-                    coinData.market_data.total_supply > 0 ?
+        {!isWidget && (
+          <Widget
+            title={<span className="uppercase flex items-center">
+              Circulating Supply
+              <FaCoins size={28} className="stroke-current text-gray-500 dark:text-gray-400 ml-auto" />
+            </span>}
+            description={<span className="text-xl">
+              {coinData ?
+                coinData.market_data.circulating_supply > -1 ?
+                  <>
+                    <span>{numberFormat(coinData.market_data.circulating_supply, '0,0')}</span>
+                    {coinData.market_data.max_supply > 0 ?
                       <>
                         <div className="flex items-center text-xs space-x-1.5 mt-1">
                           <ProgressBarWithText
-                            width={coinData.market_data.circulating_supply * 100 / coinData.market_data.total_supply}
-                            text={<div className="text-gray-600 dark:text-gray-400 font-normal mx-1" style={{ fontSize: coinData.market_data.circulating_supply * 100 / coinData.market_data.total_supply < 25 ? '.45rem' : '.55rem' }}>{numberFormat(coinData.market_data.circulating_supply * 100 / coinData.market_data.total_supply, `0,0.000${Math.abs(coinData.market_data.circulating_supply * 100 / coinData.market_data.total_supply) < 0.001 ? '000' : ''}`)}%</div>}
+                            width={coinData.market_data.circulating_supply * 100 / coinData.market_data.max_supply}
+                            text={<div className="text-gray-600 dark:text-gray-400 font-normal mx-1" style={{ fontSize: coinData.market_data.circulating_supply * 100 / coinData.market_data.max_supply < 25 ? '.45rem' : '.55rem' }}>{numberFormat(coinData.market_data.circulating_supply * 100 / coinData.market_data.max_supply, `0,0.000${Math.abs(coinData.market_data.circulating_supply * 100 / coinData.market_data.max_supply) < 0.001 ? '000' : ''}`)}%</div>}
                             color="bg-gray-200 dark:bg-gray-600 rounded"
                             backgroundClassName="h-3 bg-gray-100 dark:bg-gray-800 rounded"
-                            className={`h-3 flex items-center justify-${coinData.market_data.circulating_supply * 100 / coinData.market_data.total_supply < 25 ? 'start' : 'end'}`}
+                            className={`h-3 flex items-center justify-${coinData.market_data.circulating_supply * 100 / coinData.market_data.max_supply < 25 ? 'start' : 'end'}`}
                           />
                           <span className="text-gray-400 dark:text-gray-500 font-normal ml-auto" style={{ fontSize: '.65rem' }}>
-                            <span className="font-medium mr-1">Total</span>
-                            {numberFormat(coinData.market_data.total_supply, '0,0')}
+                            <span className="font-medium mr-1">Max</span>
+                            {numberFormat(coinData.market_data.max_supply, '0,0')}
                           </span>
                         </div>
                       </>
                       :
-                      null
-                  }
-                </>
+                      coinData.market_data.total_supply > 0 ?
+                        <>
+                          <div className="flex items-center text-xs space-x-1.5 mt-1">
+                            <ProgressBarWithText
+                              width={coinData.market_data.circulating_supply * 100 / coinData.market_data.total_supply}
+                              text={<div className="text-gray-600 dark:text-gray-400 font-normal mx-1" style={{ fontSize: coinData.market_data.circulating_supply * 100 / coinData.market_data.total_supply < 25 ? '.45rem' : '.55rem' }}>{numberFormat(coinData.market_data.circulating_supply * 100 / coinData.market_data.total_supply, `0,0.000${Math.abs(coinData.market_data.circulating_supply * 100 / coinData.market_data.total_supply) < 0.001 ? '000' : ''}`)}%</div>}
+                              color="bg-gray-200 dark:bg-gray-600 rounded"
+                              backgroundClassName="h-3 bg-gray-100 dark:bg-gray-800 rounded"
+                              className={`h-3 flex items-center justify-${coinData.market_data.circulating_supply * 100 / coinData.market_data.total_supply < 25 ? 'start' : 'end'}`}
+                            />
+                            <span className="text-gray-400 dark:text-gray-500 font-normal ml-auto" style={{ fontSize: '.65rem' }}>
+                              <span className="font-medium mr-1">Total</span>
+                              {numberFormat(coinData.market_data.total_supply, '0,0')}
+                            </span>
+                          </div>
+                        </>
+                        :
+                        null
+                    }
+                  </>
+                  :
+                  '-'
                 :
-                '-'
-              :
-              <>
-                <div className="skeleton w-36 h-6 rounded mt-1" />
-                <div className="skeleton w-20 h-4 rounded mt-1.5" />
-              </>
-            }
-          </span>}
-          className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border border-gray-100 dark:border-gray-800 p-0 sm:p-4"
-        />
+                <>
+                  <div className="skeleton w-36 h-6 rounded mt-1" />
+                  <div className="skeleton w-20 h-4 rounded mt-1.5" />
+                </>
+              }
+            </span>}
+            className="bg-transparent sm:bg-white sm:dark:bg-gray-900 border-0 sm:border border-gray-100 dark:border-gray-800 p-0 sm:p-4"
+          />
+        )}
       </div>
     </>
   )

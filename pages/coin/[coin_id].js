@@ -26,7 +26,7 @@ export default function CoinId() {
 
   const router = useRouter()
   const { query, asPath } = { ...router }
-  const { coin_id } = { ...query }
+  const { view, coin_id } = { ...query }
 
   const [coinData, setCoinData] = useState(null)
 
@@ -168,7 +168,14 @@ export default function CoinId() {
         <link rel="canonical" href={headMeta.url} />
       </Head>
       <SectionTitle
-        title="Cryptocurrency"
+        title={<div className="flex items-center">
+          <span>Cryptocurrency</span>
+          {['widget'].includes(view) && coinData && (
+            <span className="normal-case text-gray-800 dark:text-gray-200 font-semibold ml-auto">
+              Rank #{coinData.market_cap_rank > -1 ? numberFormat(coinData.market_cap_rank, '0,0')  : '-'}
+            </span>
+          )}
+        </div>}
         subtitle={coinData && coin_id === coinData.id ?
           <>
             <div className="coin-column flex items-center space-x-2 mt-1.5">
@@ -230,10 +237,10 @@ export default function CoinId() {
               <span>{getName(coin_id)}</span>
             </div>
             <div className="skeleton w-32 h-8 rounded mt-1" />
-            <div className="skeleton w-64 h-3 rounded mt-2 mb-1" />
+            <div className="skeleton w-48 h-3 rounded mt-2 mb-1" />
           </>
         }
-        right={
+        right={!(['widget'].includes(view)) && (
           <div className="flex flex-col items-start sm:items-end my-1 ml-0 sm:ml-4 pr-1">
             {coinData && coin_id === coinData.id ?
               <>
@@ -276,9 +283,9 @@ export default function CoinId() {
               </>
             }
           </div>
-        }
+        )}
         className="flex-col sm:flex-row items-start sm:items-center mx-1"
-        subTitleClassName="min-w-0 max-w-screen-sm"
+        subTitleClassName={`min-w-0 ${['widget'].includes(view) ? 'w-72' : ''} max-w-screen-sm`}
       />
       <Coin coinData={coinData} />
     </>
