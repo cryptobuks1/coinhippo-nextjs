@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import MarqueeCoins from './marquee-coins'
@@ -7,6 +8,10 @@ import useMountedRef from '../../lib/mountedRef'
 export default function CoinPrices() {
   const { preferences } = useSelector(state => ({ preferences: state.preferences }), shallowEqual)
   const { vs_currency } = { ...preferences }
+
+  const router = useRouter()
+  const { query } = { ...router }
+  const { widget } = { ...query }
 
   const [coinsData, setCoinsData] = useState(null)
 
@@ -30,7 +35,7 @@ export default function CoinPrices() {
   }, [vs_currency])
 
   return coinsData && (
-    <div className="w-full hidden sm:block ml-1 mr-3">
+    <div className={`w-full ${['price-marquee'].includes(widget) ? '' : 'hidden'} sm:block ml-1 mr-3`}>
       <MarqueeCoins data={coinsData} />
     </div>
   )

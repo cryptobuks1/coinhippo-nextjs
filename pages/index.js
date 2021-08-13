@@ -127,7 +127,7 @@ export default function Index() {
         <Global bitcoin={bitcoin} />
       )}
       <div className={`w-full grid grid-flow-row grid-cols-1 ${!(['price-marquee'].includes(widget)) ? 'sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4' : ''} gap-4 lg:gap-2 xl:gap-4 mb-4 lg:mb-2 xl:mb-4 ${query.theme === 'dark' && widget ? '-mt-4 -ml-4' : ''}`}>
-        {(['price-marquee'].includes(widget)) && (
+        {['price-marquee'].includes(widget) && (
           <CoinPrices />
         )}
         {(!widget || ['fear-and-greed'].includes(widget)) && (

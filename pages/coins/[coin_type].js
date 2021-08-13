@@ -14,7 +14,7 @@ export default function CoinType() {
 
   const router = useRouter()
   const { query, asPath } = { ...router }
-  const { coin_type } = { ...query }
+  const { coin_type, view } = { ...query }
   const _asPath = asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath
 
   let navigationData, navigationItemData
@@ -44,12 +44,14 @@ export default function CoinType() {
     categoryData.category_id && !(navigationData && navigationData.items && navigationData.items.findIndex(item => item.url === `/coins/${categoryData.category_id}`) > -1)
   )
 
+  const isWidget = ['widget'].includes(view)
+
   return (
     <>
       <SectionTitle
         title="Top Cryptocurrency Prices by Market Capitalization"
         subtitle={navigationItemData && navigationItemData.title ? navigationItemData.title : othersCategories && othersCategories.findIndex(categoryData => categoryData.category_id === coin_type && categoryData.name) > -1 ? othersCategories[othersCategories.findIndex(categoryData => categoryData.category_id === coin_type)].name : getName(coin_type)}
-        right={
+        right={!isWidget && (
           <>
             {navigationData && navigationData.items && (
               <div className="flex flex-wrap items-center ml-0 sm:ml-4 pr-1">
@@ -75,7 +77,7 @@ export default function CoinType() {
               </div>
             )}
           </>
-        }
+        )}
         className="flex-col sm:flex-row items-start sm:items-center mx-1"
       />
       <Coins navigationData={navigationData} />

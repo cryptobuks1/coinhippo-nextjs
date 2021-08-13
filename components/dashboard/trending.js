@@ -19,6 +19,7 @@ export default function Trending({ noBorder }) {
 
   const router = useRouter()
   const { query } = { ...router }
+  const { widget } = { ...query }
   let { n } = { ...query }
   n = Number(n) > 2 ? Number(n) > 7 ? 7 : Number(n) : 5
 
@@ -43,6 +44,8 @@ export default function Trending({ noBorder }) {
     return () => clearInterval(interval)
   }, [vs_currency, trending_data])
 
+  const isWidget = ['trending'].includes(widget)
+
   return (
     <Widget
       title={<span className="uppercase flex items-center">
@@ -60,7 +63,7 @@ export default function Trending({ noBorder }) {
               <div key={i} className={`${i < 3 ? `bg-yellow-${i < 1 ? 200 : i < 2 ? 100 : 50} dark:bg-indigo-${i < 1 ? 700 : i < 2 ? 800 : 900} rounded pt-1 px-1` : ''} mt-${i > 0 ? i < 3 ? 1 : 2 : 0}`}>
                 <div className="flex items-center text-sm">
                   <Link href={`/coin${coinData ? `/${coinData.id}` : 's'}`}>
-                    <a className="flex items-center space-x-1 mr-2">
+                    <a target={isWidget && '_blank'} rel={isWidget && 'noopener noreferrer'} className="flex items-center space-x-1 mr-2">
                       <Image
                         src={coinData.large}
                         alt=""

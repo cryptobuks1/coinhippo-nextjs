@@ -96,9 +96,13 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
     router.push(navigationData.items[0].url)
   }
 
+  const isWidget = ['widget'].includes(view)
+
   return (
-    <div className={`${['widget'].includes(view) ? 'max-w-lg' : ''} mx-1`}>
-      <Summary exchangesData={exchangesData} />
+    <div className={`${isWidget ? 'max-w-xl' : ''} mx-1`}>
+      {!isWidget && (
+        <Summary exchangesData={exchangesData} />
+      )}
       <Datatable
         columns={[
           {
@@ -122,7 +126,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
             Cell: props => (
               !props.row.original.skeleton ?
                 <Link href={`/exchange${props.row.original.id ? `/${props.row.original.id}` : 's'}`}>
-                  <a className="flex flex-col font-semibold">
+                  <a target={isWidget && '_blank'} rel={isWidget && 'noopener noreferrer'} className="flex flex-col font-semibold">
                     <div className="flex items-center space-x-2">
                       <Image
                         useImg={exchangesData.data.length > per_page}
@@ -345,7 +349,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
             headerClassName: 'justify-end text-right mr-2 lg:mr-4 xl:mr-8',
           },
         ].filter(column => !((exchange_type === 'derivatives' ? ['trust_score'] : ['open_interest_btc', 'number_of_perpetual_pairs', 'number_of_futures_pairs']).includes(column.accessor)))
-        .filter(column => ['widget'].includes(view) ? ['i', 'name', 'trade_volume_24h_btc', 'url'].includes(column.accessor) : true)}
+        .filter(column => isWidget ? ['i', 'name', 'trade_volume_24h_btc', 'url'].includes(column.accessor) : true)}
         data={exchangesData && exchange_type === exchangesData.exchange_type ? exchangesData.data.map((exchangeData, i) => { return { ...exchangeData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
         defaultPageSize={[10, 25, 50, 100].includes(Number(n)) ? Number(n) : pathname.endsWith('/[exchange_type]') ? 50 : 100}
         className="striped"

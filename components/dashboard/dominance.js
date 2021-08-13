@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useSelector, shallowEqual } from 'react-redux'
 import Widget from '../widget'
 import Image from '../image'
@@ -11,6 +12,12 @@ import { numberFormat } from '../../lib/utils'
 export default function Dominance({ noBorder }) {
   const { data } = useSelector(state => ({ data: state.data }), shallowEqual)
   const { global_data, all_crypto_data } = { ...data }
+
+  const router = useRouter()
+  const { query } = { ...router }
+  const { widget } = { ...query }
+
+  const isWidget = ['dominance'].includes(widget)
 
   return (
     <Widget
@@ -36,7 +43,7 @@ export default function Dominance({ noBorder }) {
               <div key={i} className={`mt-${i > 0 ? 2 : 0}`}>
                 <div className="flex items-center">
                   <Link href={`/coin${coinData ? `/${coinData.id}` : 's'}`}>
-                    <a className="flex items-center space-x-2">
+                    <a target={isWidget && '_blank'} rel={isWidget && 'noopener noreferrer'} className="flex items-center space-x-2">
                       {!coinData.large && coinData.name === 'Others' ?
                         <BiPieChartAlt size={24} className="stroke-current text-gray-400" />
                         :

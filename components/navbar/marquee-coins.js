@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -14,6 +15,10 @@ const MarqueeCoins = ({ data }) => {
   const { preferences } = useSelector(state => ({ preferences: state.preferences }), shallowEqual)
   const { vs_currency } = { ...preferences }
 
+  const router = useRouter()
+  const { query } = { ...router }
+  const { widget } = { ...query }
+
   const [pageVisible, setPageVisible] = useState(true)
   const [currentCurrency, setCurrentCurrency] = useState(vs_currency)
 
@@ -27,6 +32,8 @@ const MarqueeCoins = ({ data }) => {
     }
   }, [vs_currency, currentCurrency])
 
+  const isWidget = ['price-marquee'].includes(widget)
+
   return data && currentCurrency === vs_currency && (
     <PageVisibility onChange={handleVisibilityChange}>
       {pageVisible && (
@@ -37,7 +44,7 @@ const MarqueeCoins = ({ data }) => {
                 const currency = currencies[currencies.findIndex(c => c.id === item.vs_currency)] || currencies[0]
                 return (
                   <Link key={index} href={`/coin${item.id ? `/${item.id}` : 's'}`}>
-                    <a>
+                    <a target={isWidget && '_blank'} rel={isWidget && 'noopener noreferrer'}>
                       <div className={`h-5 w-full flex items-center text-xs font-semibold mt-0.5 px-2 ${index && index % data.length === 0 ? 'pl-4 md:pl-8 pr-2 md:pr-3' : 'md:px-3'}`}>
                         <div className="flex items-center space-x-1 mr-2">
                           <Image

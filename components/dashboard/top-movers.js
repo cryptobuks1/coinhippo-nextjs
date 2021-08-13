@@ -23,6 +23,7 @@ export default function TopMover({ noBorder }) {
 
   const router = useRouter()
   const { query } = { ...router }
+  const { widget } = { ...query }
   let { n } = { ...query }
   n = Number(n) > 2 ? Number(n) > 25 ? 25 : Number(n) : 5
 
@@ -47,6 +48,8 @@ export default function TopMover({ noBorder }) {
     const interval = setInterval(() => getCoinsMarkets(), 3 * 60 * 1000)
     return () => clearInterval(interval)
   }, [vs_currency])
+
+  const isWidget = ['top-movers'].includes(widget)
 
   return (
     <Widget
@@ -75,7 +78,7 @@ export default function TopMover({ noBorder }) {
               <div key={i} className={`${i < 3 ? `bg-${sortDirection === 'desc' ? 'green' : 'red'}-${i < 1 ? 200 : i < 2 ? 100 : 50} dark:bg-${sortDirection === 'desc' ? 'green' : 'red'}-${i < 1 ? 700 : i < 2 ? 800 : 900} rounded pt-1 px-1` : ''} mt-${i > 0 ? i < 3 ? 1 : 2 : 0}`}>
                 <div className="flex items-center text-sm">
                   <Link href={`/coin${coinData ? `/${coinData.id}` : 's'}`}>
-                    <a className="flex items-center space-x-1 mr-2">
+                    <a target={isWidget && '_blank'} rel={isWidget && 'noopener noreferrer'} className="flex items-center space-x-1 mr-2">
                       <Image
                         src={coinData.image}
                         alt=""

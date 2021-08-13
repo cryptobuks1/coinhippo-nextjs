@@ -33,7 +33,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
   coin_type = coin_type === 'coins' ? '' : coin_type
   page = coin_type !== 'categories' ? !isNaN(page) && Number(page) > 0 ? Number(page) : typeof page === 'undefined' ? 1 : -1 : -1
 
-  let per_page = coin_type && !(['high-volume'].includes(coin_type)) ? Number(n) > 0 ? Number(n) < 10 ? 10 : Number(n) > 50 ? 50 : Number(n) : 50 : Number(n) > 0 ? Number(n) < 10 ? 10 : Number(n) > 100 ? 100 : Number(n) : 100
+  const per_page = coin_type && !(['high-volume'].includes(coin_type)) ? Number(n) > 0 ? Number(n) < 10 ? 10 : Number(n) > 50 ? 50 : Number(n) : 50 : Number(n) > 0 ? Number(n) < 10 ? 10 : Number(n) > 100 ? 100 : Number(n) : 100
 
   const [coinsData, setCoinsData] = useState(null)
 
@@ -148,9 +148,11 @@ const Coins = ({ navigationData, navigationItemData }) => {
     }
   }
 
+  const isWidget = ['widget'].includes(view)
+
   return (
-    <div className={`${['widget'].includes(view) ? 'max-w-lg' : ''} mx-1`}>
-      {pathname.endsWith('/[coin_type]') && (
+    <div className={`${isWidget ? 'max-w-2xl' : ''} mx-1`}>
+      {pathname.endsWith('/[coin_type]') && !isWidget && (
         <Summary coinsData={coinsData} page={page} />
       )}
       <Datatable
@@ -179,7 +181,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
             Cell: props => (
               !props.row.original.skeleton ?
                 <Link href={`/coin${props.row.original.id ? `${coin_type === 'categories' ? 's' : ''}/${props.row.original.id}` : 's'}`}>
-                  <a className="flex flex-col whitespace-pre-wrap text-blue-600 dark:text-blue-400 font-semibold" style={{ maxWidth: coin_type === 'categories' ? 'unset' : '10rem' }}>
+                  <a target={isWidget && '_blank'} rel={isWidget && 'noopener noreferrer'} className="flex flex-col whitespace-pre-wrap text-blue-600 dark:text-blue-400 font-semibold" style={{ maxWidth: coin_type === 'categories' ? 'unset' : '10rem' }}>
                     <div className="coin-column flex items-center space-x-2">
                       {coin_type !== 'categories' && (
                         <Image
@@ -555,9 +557,9 @@ const Coins = ({ navigationData, navigationItemData }) => {
             headerClassName: 'justify-end text-right',
           },
         ].filter(column => !((coin_type === 'categories' ? ['current_price', 'price_change_percentage_1h_in_currency', 'price_change_percentage_24h_in_currency', 'price_change_percentage_7d_in_currency', 'price_change_percentage_30d_in_currency', 'roi.times', 'fully_diluted_valuation', 'total_volume', 'circulating_supply'] : ['market_cap_change_24h', 'volume_24h', 'market_share']).includes(column.accessor)))
-        .filter(column => ['widget'].includes(view) ? ['i', 'market_cap_rank', 'name', 'current_price', 'price_change_percentage_24h_in_currency', 'market_cap'].includes(column.accessor) : true)}
+        .filter(column => isWidget ? ['i', 'market_cap_rank', 'name', 'current_price', 'price_change_percentage_24h_in_currency', 'market_cap'].includes(column.accessor) : true)}
         data={coinsData && coinsData.vs_currency === (coin_type === 'categories' ? currencyUSD.id : vs_currency) && coin_type === coinsData.coin_type && page === coinsData.page ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => {return { i, skeleton: true } })}
-        defaultPageSize={100}
+        defaultPageSize={per_page}
         pagination={!(coin_type && !(['high-volume'].includes(coin_type))) && (
           <div className="flex flex-col sm:flex-row items-center justify-center my-4">
             <Pagination
