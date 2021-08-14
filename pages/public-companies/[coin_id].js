@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import PublicCompanies from '../../components/public-companies'
 import SectionTitle from '../../components/section-title'
 import Image from '../../components/image'
-import { navigation } from '../../lib/menus'
+import { navigations } from '../../lib/menus'
 import { getName } from '../../lib/utils'
 
 export default function PublicCompaniesCoin() {
@@ -14,7 +14,7 @@ export default function PublicCompaniesCoin() {
 
   let navigationData, navigationItemData
 
-  navigation.forEach(nav => {
+  navigations.forEach(nav => {
     if (nav.url === '/public-companies') navigationData = nav
     else if (nav.items) {
       nav.items.forEach(nav_1 => {

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import Coins from '../../components/coins'
 import SectionTitle from '../../components/section-title'
 import Image from '../../components/image'
-import { navigation } from '../../lib/menus'
+import { navigations } from '../../lib/menus'
 import { generateUrl, getName } from '../../lib/utils'
 
 export default function Categories() {
@@ -13,7 +13,7 @@ export default function Categories() {
 
   let navigationData, navigationItemData
 
-  navigation.forEach(nav => {
+  navigations.forEach(nav => {
     if (nav.url === '/coins') navigationData = nav
     else if (nav.items) {
       nav.items.forEach(nav_1 => {

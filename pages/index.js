@@ -13,7 +13,7 @@ import { Badge } from '../components/badges'
 import { TiArrowRight } from 'react-icons/ti'
 import { cryptoGlobal, simplePrice } from '../lib/api/coingecko'
 import FearAndGreedAPI from '../lib/api/fear-and-greed'
-import { navigation } from '../lib/menus'
+import { navigations } from '../lib/menus'
 import { isMatchRoute } from '../lib/routes'
 import useMountedRef from '../lib/mountedRef'
 import { getName } from '../lib/utils'
@@ -106,7 +106,7 @@ export default function Index() {
           title="Overview"
           subtitle="Dashboard"
           right={<div className="flex flex-wrap items-center ml-0 sm:ml-4">
-            {navigation.filter(item => item.index_shortcut || item.items.findIndex(_item => _item.index_shortcut || _item.items.findIndex(__item => __item.index_shortcut) > -1) > -1)
+            {navigations.filter(item => item.index_shortcut || item.items.findIndex(_item => _item.index_shortcut || _item.items.findIndex(__item => __item.index_shortcut) > -1) > -1)
               .flatMap(item => item.index_shortcut ? item : item.items.flatMap(_item => _item.index_shortcut ? _item : _item.items.filter(__item => __item.index_shortcut)))
               .map((navigationItemData, i) => (
                 <Link key={i} href={navigationItemData.url}>

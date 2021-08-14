@@ -9,6 +9,7 @@ export default function widget({ src, title, width, height, copyText }) {
         frameBorder="0"
         width={width}
         height={height}
+        className="mx-auto"
       />
       <span className="flex items-center justify-center space-x-1">
         <CopyClipboard

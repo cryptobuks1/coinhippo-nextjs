@@ -16,7 +16,7 @@ provider "aws" {
 module "next_image_optimizer" {
   source = "dealmore/next-js-image-optimization/aws"
 
-  next_image_domains = ["assets.coingecko.com", "coinhippo.io", "www.coinhippo.io", "bitcoin.org", "ethereum.org", "bin.bnbstatic.com", "xrpl.org", "polkadot.network"]
+  next_image_domains = ["assets.coingecko.com", "coinhippo.io", "www.coinhippo.io", "bitcoin.org", "ethereum.org", "bin.bnbstatic.com"]
 }
 
 output "domain" {

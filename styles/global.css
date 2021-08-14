@@ -111,6 +111,11 @@ button {
   min-height: 1rem !important;
 }
 
+.image-logo-mini {
+  height: auto !important;
+  min-height: .75rem !important;
+}
+
 /**
  * hide scrollbars
  */

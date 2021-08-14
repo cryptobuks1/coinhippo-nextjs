@@ -9,7 +9,7 @@ import Image from '../../components/image'
 import { Badge } from '../../components/badges'
 import _ from 'lodash'
 import { derivatives } from '../../lib/api/coingecko'
-import { navigation, currencies } from '../../lib/menus'
+import { navigations, currencies } from '../../lib/menus'
 import useMountedRef from '../../lib/mountedRef'
 import { getName, numberFormat } from '../../lib/utils'
 
@@ -66,7 +66,7 @@ const Derivatives = ({ navigationData, navigationItemData }) => {
   }, [derivative_type])
 
   if (!navigationData) {
-    navigation.forEach(nav => {
+    navigations.forEach(nav => {
       if (nav.url === '/derivatives') navigationData = nav
       else if (nav.items) {
         nav.items.forEach(nav_1 => {

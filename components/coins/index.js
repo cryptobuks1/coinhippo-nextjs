@@ -12,7 +12,7 @@ import { Pagination } from '../../components/pagination'
 import { MdArrowDropUp } from 'react-icons/md'
 import _ from 'lodash'
 import { coinsMarkets, categoriesMarkets } from '../../lib/api/coingecko'
-import { navigation, currencies } from '../../lib/menus'
+import { navigations, currencies } from '../../lib/menus'
 import useMountedRef from '../../lib/mountedRef'
 import { generateUrl, numberFormat } from '../../lib/utils'
 
@@ -125,7 +125,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
   }, [all_crypto_data, vs_currency, coin_type, page])
 
   if (!navigationData) {
-    navigation.forEach(nav => {
+    navigations.forEach(nav => {
       if (nav.url === '/coins') navigationData = nav
       else if (nav.items) {
         nav.items.forEach(nav_1 => {

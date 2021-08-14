@@ -10,7 +10,7 @@ import { Badge } from '../../components/badges'
 import { ProgressBar } from '../../components/progress-bars'
 import _ from 'lodash'
 import { exchanges, derivativesExchanges } from '../../lib/api/coingecko'
-import { navigation, currencies } from '../../lib/menus'
+import { navigations, currencies } from '../../lib/menus'
 import useMountedRef from '../../lib/mountedRef'
 import { getName, numberFormat } from '../../lib/utils'
 
@@ -81,7 +81,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
   }, [exchange_type])
 
   if (!navigationData) {
-    navigation.forEach(nav => {
+    navigations.forEach(nav => {
       if (nav.url === '/exchanges') navigationData = nav
       else if (nav.items) {
         nav.items.forEach(nav_1 => {

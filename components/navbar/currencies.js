@@ -33,7 +33,7 @@ const Currencies = ({ handleDropdownClick }) => {
               />
               :
               <span className={`${item.background} w-4 h-4 rounded-full flex items-center justify-center text-white text-xs`}>
-                {item.symbol}
+                {item.symbol && item.symbol.substring(0, 2)}
               </span>
             }
             <span className="text-xs">{item.title}</span>

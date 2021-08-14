@@ -24,6 +24,14 @@
         @apply block;
       }
     }
+
+    [data-collapsed="true"] & {
+      @apply hidden -translate-x-0;
+    }
+
+    [data-collapsed="false"] & {
+      --tw-translate-x: 0 !important;
+    }
   }
 
   .left-sidebar-item {

@@ -2,7 +2,7 @@ import { Fragment, useState, useEffect } from 'react'
 import Logo from './logo'
 import Title from './title'
 import Item from './item'
-import { navigation } from '../../lib/menus'
+import { navigations } from '../../lib/menus'
 
 export default function LeftSidebar() {
   const [hiddenItem, setHiddenItem] = useState(null)
@@ -23,7 +23,7 @@ export default function LeftSidebar() {
   return (
     <div className="left-sidebar left-sidebar-1 inline-table md:block">
       <Logo />
-      {navigation.map((menu, i) => (
+      {navigations.map((menu, i) => (
         typeof window !== 'undefined' && (
           <Fragment key={i}>
             <Title>{menu.title}</Title>

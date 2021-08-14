@@ -7,7 +7,7 @@ import { Badge } from '../../components/badges'
 import { ProgressBar } from '../../components/progress-bars'
 import _ from 'lodash'
 import { publicCompanies } from '../../lib/api/coingecko'
-import { navigation } from '../../lib/menus'
+import { navigations } from '../../lib/menus'
 import useMountedRef from '../../lib/mountedRef'
 import { numberFormat } from '../../lib/utils'
 
@@ -38,7 +38,7 @@ const PublicCompanies = ({ navigationData, navigationItemData }) => {
   }, [coin_id])
 
   if (!navigationData) {
-    navigation.forEach(nav => {
+    navigations.forEach(nav => {
       if (nav.url === '/public-companies') navigationData = nav
       else if (nav.items) {
         nav.items.forEach(nav_1 => {
