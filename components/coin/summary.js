@@ -6,7 +6,7 @@ import DropdownExplorer from './dropdown-explorer'
 import DropdownSourceCode from './dropdown-sourcecode'
 import Widget from '../widget'
 import { ProgressBarWithText } from '../progress-bars'
-import { FaHome, FaFacebook, FaTwitter, FaTelegram, FaReddit, FaSlack, FaYoutube, FaGithub, FaBitbucket, FaLinkedin, FaDiscord, FaMedium, FaWeibo, FaCoins } from 'react-icons/fa'
+import { FaHome, FaFacebook, FaTwitter, FaTelegram, FaReddit, FaSlack, FaYoutube, FaInstagram, FaGithub, FaBitbucket, FaLinkedin, FaDiscord, FaMedium, FaWeibo, FaCoins } from 'react-icons/fa'
 import { RiKakaoTalkFill } from 'react-icons/ri'
 import { GoBrowser } from 'react-icons/go'
 import { AiOutlineLineChart, AiOutlineAreaChart, AiOutlineLock, AiOutlineBarChart } from 'react-icons/ai'
@@ -102,28 +102,31 @@ const Summary = ({ coinData }) => {
                           new URL(urlData.url).hostname.includes('youtube.com') ?
                             <FaYoutube size={20} className="text-youtube" />
                             :
-                            new URL(urlData.url).hostname.includes('github.com') ?
-                              <FaGithub size={20} className="text-github dark:text-white" />
+                            new URL(urlData.url).hostname.includes('instagram.com') ?
+                              <FaInstagram size={20} className="text-instagram" />
                               :
-                              new URL(urlData.url).hostname.includes('bitbucket.org') ?
-                                <FaBitbucket size={20} className="text-bitbucket" />
+                              new URL(urlData.url).hostname.includes('github.com') ?
+                                <FaGithub size={20} className="text-github dark:text-white" />
                                 :
-                                new URL(urlData.url).hostname.includes('linkedin.com') ?
-                                  <FaLinkedin size={20} className="text-linkedin" />
+                                new URL(urlData.url).hostname.includes('bitbucket.org') ?
+                                  <FaBitbucket size={20} className="text-bitbucket" />
                                   :
-                                  new URL(urlData.url).hostname.includes('discord') ?
-                                    <FaDiscord size={20} className="text-discord" />
+                                  new URL(urlData.url).hostname.includes('linkedin.com') ?
+                                    <FaLinkedin size={20} className="text-linkedin" />
                                     :
-                                    new URL(urlData.url).hostname.includes('medium.com') ?
-                                      <FaMedium size={20} className="text-medium dark:text-white" />
+                                    new URL(urlData.url).hostname.includes('discord') ?
+                                      <FaDiscord size={20} className="text-discord" />
                                       :
-                                      new URL(urlData.url).hostname.includes('weibo.com') ?
-                                        <FaWeibo size={20} className="text-weibo" />
+                                      new URL(urlData.url).hostname.includes('medium.com') ?
+                                        <FaMedium size={20} className="text-medium dark:text-white" />
                                         :
-                                        new URL(urlData.url).hostname.includes('kakao.com') ?
-                                          <RiKakaoTalkFill size={20} className="text-kakao" />
+                                        new URL(urlData.url).hostname.includes('weibo.com') ?
+                                          <FaWeibo size={20} className="text-weibo" />
                                           :
-                                          <GoBrowser size={20} className="text-google" />
+                                          new URL(urlData.url).hostname.includes('kakao.com') ?
+                                            <RiKakaoTalkFill size={20} className="text-kakao" />
+                                            :
+                                            <GoBrowser size={20} className="text-google" />
                 }
                 <span className="hidden sm:block text-blue-500 dark:text-blue-400">{urlData.value}</span>
               </a>

@@ -2,7 +2,7 @@ import { useSelector, shallowEqual } from 'react-redux'
 import PropTypes from 'prop-types'
 import Widget from '../widget'
 import Stars from '../stars'
-import { FaFacebook, FaTwitter, FaTelegram, FaReddit, FaSlack, FaYoutube, FaGithub, FaLinkedin, FaDiscord, FaMedium, FaWeibo, FaCoins } from 'react-icons/fa'
+import { FaFacebook, FaTwitter, FaTelegram, FaReddit, FaSlack, FaYoutube, FaInstagram, FaGithub, FaLinkedin, FaDiscord, FaMedium, FaWeibo, FaCoins } from 'react-icons/fa'
 import { GoBrowser } from 'react-icons/go'
 import { BsCheckCircle, BsCircle, BsFileCheck } from 'react-icons/bs'
 import { AiOutlineBarChart } from 'react-icons/ai'
@@ -82,22 +82,25 @@ const Summary = ({ exchangeData, tickersData, derivativeType = 'perpetual', sele
                          new URL(urlData.url).hostname.includes('youtube.com') ?
                           <FaYoutube size={20} className="text-youtube" />
                           :
-                          new URL(urlData.url).hostname.includes('github.com') ?
-                            <FaGithub size={20} className="text-github dark:text-white" />
+                          new URL(urlData.url).hostname.includes('instagram.com') ?
+                            <FaInstagram size={20} className="text-instagram" />
                             :
-                            new URL(urlData.url).hostname.includes('linkedin.com') ?
-                              <FaLinkedin size={20} className="text-linkedin" />
+                            new URL(urlData.url).hostname.includes('github.com') ?
+                              <FaGithub size={20} className="text-github dark:text-white" />
                               :
-                              new URL(urlData.url).hostname.includes('discord') ?
-                                <FaDiscord size={20} className="text-discord" />
+                              new URL(urlData.url).hostname.includes('linkedin.com') ?
+                                <FaLinkedin size={20} className="text-linkedin" />
                                 :
-                                new URL(urlData.url).hostname.includes('medium.com') ?
-                                  <FaMedium size={20} className="text-medium dark:text-white" />
+                                new URL(urlData.url).hostname.includes('discord') ?
+                                  <FaDiscord size={20} className="text-discord" />
                                   :
-                                  new URL(urlData.url).hostname.includes('weibo.com') ?
-                                    <FaWeibo size={20} className="text-weibo" />
+                                  new URL(urlData.url).hostname.includes('medium.com') ?
+                                    <FaMedium size={20} className="text-medium dark:text-white" />
                                     :
-                                    <GoBrowser size={20} className="text-google" />
+                                    new URL(urlData.url).hostname.includes('weibo.com') ?
+                                      <FaWeibo size={20} className="text-weibo" />
+                                      :
+                                      <GoBrowser size={20} className="text-google" />
             }
               <span className="text-blue-500 dark:text-blue-400">{urlData.value}</span>
             </a>
