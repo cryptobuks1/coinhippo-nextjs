@@ -106,7 +106,8 @@ button {
   }
 }
 
-.image-logo img {
+.image-logo img,
+.image-logo {
   height: auto !important;
   min-height: 1rem !important;
 }
