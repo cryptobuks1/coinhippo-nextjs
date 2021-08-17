@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 
-let fallbackImg = '/images/default.png'
+
 
 const myLoader = ({ src, width, quality }) => {
   return `${process.env.NEXT_PUBLIC_IMAGE_OPTIMIZER_URL}?url=${src}&w=${width}&q=${quality || 75}`
@@ -14,8 +14,8 @@ const customSrc = (src, host = process.env.NEXT_PUBLIC_SITE_URL) => {
   return newSrc
 }
 
-export default function ImageWithFallback({ src = fallbackImg, fallbackSrc = fallbackImg, className = '', useImg, useMocked, width, ...rest }) {
-  fallbackImg = typeof useMocked === 'number' ? `/images/addresses/${(useMocked % 8) + 1}.png` : fallbackImg
+export default function ImageWithFallback({ src, fallbackSrc, className = '', useImg, useMocked, width, ...rest }) {
+  const fallbackImg = `/images/${typeof useMocked === 'number' ? `addresses/${(useMocked % 8) + 1}` : 'default'}.png`
 
   const [imgSrc, setImgSrc] = useState(src || fallbackImg)
 
@@ -37,7 +37,7 @@ export default function ImageWithFallback({ src = fallbackImg, fallbackSrc = fal
         loader={myLoader}
         src={imgSrc}
         width={width}
-        onError={() => setImgSrc(customSrc(fallbackSrc, window.location.origin))}
+        onError={() => setImgSrc(customSrc(fallbackSrc || fallbackImg, window.location.origin))}
         className={`image-logo${width <= 16 ? '-mini' : ''} ${className}`}
       />
   )
