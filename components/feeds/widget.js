@@ -43,9 +43,8 @@ const repeatIcon = (data, iconSize = 24) => {
 }
 
 const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder = false }) => {
-  const { _data, theme } = useSelector(state => ({ _data: state.data, theme: state.theme }), shallowEqual)
+  const { _data } = useSelector(state => ({ _data: state.data }), shallowEqual)
   const { all_crypto_data } = { ..._data }
-  const { background } = { ...theme }
 
   let json = data && data.Json && JSON.parse(data.Json)
   if (feedType === 'whales' && json && !Array.isArray(json)) {

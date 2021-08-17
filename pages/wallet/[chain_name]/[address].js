@@ -5,12 +5,12 @@ import SectionTitle from '../../../components/section-title'
 import Image from '../../../components/image'
 import CopyClipboard from '../../../components/copy-clipboard'
 import { navigations } from '../../../lib/menus'
-import { getName, ellipseAddress } from '../../../lib/utils'
+import { generateUrl, getName, ellipseAddress } from '../../../lib/utils'
 
 export default function WalletAddress() {
   const router = useRouter()
   const { query, asPath } = { ...router }
-  const { chain_name, address } = { ...query }
+  const { chain_name, address, asset } = { ...query }
   const _asPath = (asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath).replace(`/${address}`, '')
 
   let navigationData, navigationItemData
@@ -67,7 +67,7 @@ export default function WalletAddress() {
         right={navigationData && navigationData.items && (
           <div className="flex flex-wrap items-center ml-0 sm:ml-4 pr-1">
             {navigationData.items.map((item, i) => (
-              <Link key={i} href={`${item.url}/${address}`}>
+              <Link key={i} href={generateUrl(`${item.url}/${address}`, asset ? { asset } : null)}>
                 <a className={`btn btn-raised min-w-max btn-rounded flex items-center ${navigationItemData && item.url === navigationItemData.url ? 'bg-indigo-600 text-white' : 'bg-transparent hover:bg-indigo-50 text-indigo-500 hover:text-indigo-600 dark:hover:bg-indigo-900 dark:text-white dark:hover:text-gray-200'} text-xs space-x-1.5 my-1 ${i < navigationData.items.length - 1 ? 'mr-2 md:mr-3' : ''} p-2`}>
                   {item.image && (
                     <Image

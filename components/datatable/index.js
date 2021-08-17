@@ -129,13 +129,13 @@ export default function Datatable({ columns, data, rowSelectEnable, noPagination
               </option>
             ))}
           </select>
-          {pageCount <= 10 && (
+          {pageCount <= 4 && (
             <span className="my-2 sm:my-0">
               Page <span className="font-bold">{pageIndex + 1}</span> of <span className="font-bold">{pageOptions.length}</span>
             </span>
           )}
           <div className="pagination flex flex-wrap items-center justify-end">
-            {pageCount > 10 ?
+            {pageCount > 4 ?
               <div className="flex flex-col sm:flex-row items-center justify-center mt-2 sm:mt-0">
                 <Pagination
                   disabled={loading}

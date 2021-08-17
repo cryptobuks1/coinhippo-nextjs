@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
-import { useSelector, shallowEqual } from 'react-redux'
 import PropTypes from 'prop-types'
 import Search from './search'
 import NFT from './nft'
@@ -12,17 +11,11 @@ import { FiBox } from 'react-icons/fi'
 import { TiArrowRight } from 'react-icons/ti'
 import _ from 'lodash'
 import { status, balances, pricing } from '../../lib/api/covalent'
-import { navigations, currencies } from '../../lib/menus'
+import { navigations } from '../../lib/menus'
 import useMountedRef from '../../lib/mountedRef'
 import { generateUrl, numberFormat } from '../../lib/utils'
 
 const Wallet = ({ navigationData, navigationItemData }) => {
-  const { preferences, data } = useSelector(state => ({ preferences: state.preferences, data: state.data }), shallowEqual)
-  const { vs_currency } = { ...preferences }
-  const { exchange_rates_data } = { ...data }
-  const currency = currencies[currencies.findIndex(c => c.id === vs_currency)] || currencies[0]
-  const currencyUSD = currencies[currencies.findIndex(c => c.id === 'usd')]
-
   const router = useRouter()
   const { query, pathname, asPath } = { ...router }
   const { chain_name, address, asset } = { ...query }
@@ -61,14 +54,20 @@ const Wallet = ({ navigationData, navigationItemData }) => {
 
         if (response && response.data) {
           data = (
-            _.uniqBy(_.concat(data || [], response.data.items), 'contract_address')
-            .map(balanceData => {
-              return {
-                ...balanceData,
-                balance: typeof balanceData.balance === 'string' ? Number(balanceData.balance) : typeof balanceData.balance === 'number' ? balanceData.balance : -1,
-                nft_data: balanceData.nft_data && balanceData.nft_data.length > 0 && balanceData.nft_data,
-              }
-            })
+            _.orderBy(
+              _.uniqBy(_.concat(data || [], response.data.items), 'contract_address')
+              .map(balanceData => {
+                return {
+                  ...balanceData,
+                  balance: typeof balanceData.balance === 'string' ? Number(balanceData.balance) : typeof balanceData.balance === 'number' ? balanceData.balance : -1,
+                  quote_rate: typeof balanceData.quote_rate === 'string' ? Number(balanceData.quote_rate) : typeof balanceData.quote_rate === 'number' ? balanceData.quote_rate : -1,
+                  quote: typeof balanceData.quote === 'string' ? Number(balanceData.quote) : typeof balanceData.quote === 'number' ? balanceData.quote : -1,
+                  logo_url: !balanceData.logo_url && balanceData.contract_ticker_symbol.toLowerCase() === navigationItemData.currency_symbol ? navigationItemData.image : balanceData.logo_url,
+                  nft_data: balanceData.nft_data && balanceData.nft_data.length > 0 && balanceData.nft_data,
+                }
+              }),
+              ['quote', 'balance'], ['desc', 'desc']
+            )
           )
 
           hasMore = response.data.pagination && response.data.pagination.has_more
@@ -81,6 +80,13 @@ const Wallet = ({ navigationData, navigationItemData }) => {
       }
 
       if (data) {
+        data = data.map(balanceData => {
+          return {
+            ...balanceData,
+            port_share: balanceData.quote > -1 && balanceData.quote_rate > -1 ? balanceData.quote / _.sumBy(data.filter(_balanceData => _balanceData.quote > 0), 'quote') : -1,
+          }
+        })
+
         if (mountedRef.current) {
           setBalancesData({ data, chain_name, address })
         }
@@ -160,11 +166,17 @@ const Wallet = ({ navigationData, navigationItemData }) => {
       </div>
       {pathname.endsWith('/[address]') ?
         asset === 'nft' ?
-          <NFT />
+          <NFT
+            balancesData={balancesData && balancesData.chain_name === chain_name && balancesData.address === address && balancesData.data && balancesData.data.filter(balanceData => balanceData.type === 'nft')}
+            contractData={contractData && contractData.chain_name === chain_name && contractData.address === address && contractData.data}
+          />
           :
-          <Asset />
+          <Asset
+            balancesData={balancesData && balancesData.chain_name === chain_name && balancesData.address === address && balancesData.data && balancesData.data.filter(balanceData => balanceData.type !== 'nft')}
+            contractData={contractData && contractData.chain_name === chain_name && contractData.address === address && contractData.data}
+          />
         :
-        <div className="flex flex-col justify-center">
+        <div className="w-full flex flex-col justify-center">
           <img
             src={navigationItemData && navigationItemData.image}
             alt=""
