@@ -44,7 +44,7 @@ const MarqueeCoins = ({ data }) => {
                 const currency = currencies[currencies.findIndex(c => c.id === item.vs_currency)] || currencies[0]
                 return (
                   <Link key={index} href={`/coin${item.id ? `/${item.id}` : 's'}`}>
-                    <a target={isWidget && '_blank'} rel={isWidget && 'noopener noreferrer'}>
+                    <a target={isWidget ? '_blank' : '_self'} rel={isWidget ? 'noopener noreferrer' : ''}>
                       <div className={`h-5 w-full flex items-center text-xs font-semibold mt-0.5 px-2 ${index && index % data.length === 0 ? 'pl-4 md:pl-8 pr-2 md:pr-3' : 'md:px-3'}`}>
                         <div className="flex items-center space-x-1 mr-2">
                           <Image

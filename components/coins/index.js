@@ -181,7 +181,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
             Cell: props => (
               !props.row.original.skeleton ?
                 <Link href={`/coin${props.row.original.id ? `${coin_type === 'categories' ? 's' : ''}/${props.row.original.id}` : 's'}`}>
-                  <a target={isWidget && '_blank'} rel={isWidget && 'noopener noreferrer'} className="flex flex-col whitespace-pre-wrap text-blue-600 dark:text-blue-400 font-semibold" style={{ maxWidth: coin_type === 'categories' ? 'unset' : '10rem' }}>
+                  <a target={isWidget ? '_blank' : '_self'} rel={isWidget ? 'noopener noreferrer' : ''} className="flex flex-col whitespace-pre-wrap text-blue-600 dark:text-blue-400 font-semibold" style={{ maxWidth: coin_type === 'categories' ? 'unset' : '10rem' }}>
                     <div className="coin-column flex items-center space-x-2">
                       {coin_type !== 'categories' && (
                         <Image

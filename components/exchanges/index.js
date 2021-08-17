@@ -126,7 +126,7 @@ const Exchanges = ({ navigationData, navigationItemData }) => {
             Cell: props => (
               !props.row.original.skeleton ?
                 <Link href={`/exchange${props.row.original.id ? `/${props.row.original.id}` : 's'}`}>
-                  <a target={isWidget && '_blank'} rel={isWidget && 'noopener noreferrer'} className="flex flex-col font-semibold">
+                  <a target={isWidget ? '_blank' : '_self'} rel={isWidget ? 'noopener noreferrer' : ''} className="flex flex-col font-semibold">
                     <div className="flex items-center space-x-2">
                       <Image
                         useImg={exchangesData.data.length > per_page}

@@ -43,7 +43,7 @@ export default function Dominance({ noBorder }) {
               <div key={i} className={`mt-${i > 0 ? 2 : 0}`}>
                 <div className="flex items-center">
                   <Link href={`/coin${coinData ? `/${coinData.id}` : 's'}`}>
-                    <a target={isWidget && '_blank'} rel={isWidget && 'noopener noreferrer'} className="flex items-center space-x-2">
+                    <a target={isWidget ? '_blank' : '_self'} rel={isWidget ? 'noopener noreferrer' : ''} className="flex items-center space-x-2">
                       {!coinData.large && coinData.name === 'Others' ?
                         <BiPieChartAlt size={24} className="stroke-current text-gray-400" />
                         :
