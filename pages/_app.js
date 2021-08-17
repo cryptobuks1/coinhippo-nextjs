@@ -16,6 +16,9 @@ import '../styles/components/buttons.css'
 import '../styles/components/dropdowns.css'
 import '../styles/components/nprogress.css'
 import '../styles/components/tables.css'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
+import 'video-react/dist/video-react.css'
 
 Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())

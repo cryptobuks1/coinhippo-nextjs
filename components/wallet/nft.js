@@ -1,8 +1,23 @@
+import { useState, useEffect } from 'react'
 import Summary from './summary'
 import NFTWidget from './nft-widget'
 import StackGrid from 'react-stack-grid'
+import moment from 'moment'
 
 export default function NFT({ balancesData, contractData }) {
+  const [timer, setTimer] = useState(null)
+
+  useEffect(() => {
+    const run = async () => setTimer(moment().unix())
+
+    if (!timer) {
+      run()
+    }
+
+    const interval = setInterval(() => run(), 0.5 * 1000)
+    return () => clearInterval(interval)
+  }, [timer])
+
   return (
     <>
       <Summary balancesData={balancesData} contractData={contractData} />

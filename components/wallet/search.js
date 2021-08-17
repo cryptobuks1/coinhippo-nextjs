@@ -2,17 +2,18 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { FiSearch } from 'react-icons/fi'
+import { generateUrl } from '../../lib/utils'
 
 export default function search() {
 	const router = useRouter()
 	const { query } = { ...router }
-	const { chain_name } = { ...query }
+	const { chain_name, asset } = { ...query }
 
   const [inputSearch, setInputSearch] = useState('')
 
   const { handleSubmit } = useForm()
 
-  const onSubmit = () => router.push(`/wallet/${chain_name}/${inputSearch}`)
+  const onSubmit = () => router.push(generateUrl(`/wallet/${chain_name}/${inputSearch}`, asset ? { asset } : null))
 
   return (
 		<form onSubmit={handleSubmit(onSubmit)}>

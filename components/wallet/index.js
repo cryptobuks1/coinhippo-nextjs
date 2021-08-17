@@ -79,6 +79,8 @@ const Wallet = ({ navigationData, navigationItemData }) => {
         page++
       }
 
+      data = data || []
+
       if (data) {
         data = data.map(balanceData => {
           return {
