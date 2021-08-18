@@ -4,7 +4,7 @@ import NFTWidget from './nft-widget'
 import StackGrid from 'react-stack-grid'
 import moment from 'moment'
 
-export default function NFT({ balancesData, contractData, loading, hasMore, pageSize, onLoadMore }) {
+export default function NFTs({ balancesData, contractData, loading, hasMore, pageSize, onLoadMore }) {
   const [timer, setTimer] = useState(null)
 
   useEffect(() => {

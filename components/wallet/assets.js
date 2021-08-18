@@ -9,7 +9,7 @@ import Image from '../image'
 import { currencies } from '../../lib/menus'
 import { numberFormat, ellipseAddress } from '../../lib/utils'
 
-export default function Asset({ balancesData, contractData }) {
+export default function Assets({ balancesData, contractData }) {
   const { preferences, data } = useSelector(state => ({ preferences: state.preferences, data: state.data }), shallowEqual)
   const { vs_currency } = { ...preferences }
   const { exchange_rates_data } = { ...data }

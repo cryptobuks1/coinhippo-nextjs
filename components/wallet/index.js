@@ -3,10 +3,10 @@ import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Search from './search'
-import NFT from './nft'
-import Asset from './asset'
-import { Badge } from '../../components/badges'
-import Image from '../../components/image'
+import NFTs from './nfts'
+import Assets from './assets'
+import { Badge } from '../badges'
+import Image from '../image'
 import { FiBox } from 'react-icons/fi'
 import { TiArrowRight } from 'react-icons/ti'
 import _ from 'lodash'
@@ -217,7 +217,7 @@ const Wallet = ({ navigationData, navigationItemData }) => {
       </div>
       {pathname.endsWith('/[address]') ?
         asset === 'nft' ?
-          <NFT
+          <NFTs
             balancesData={balancesData && balancesData.chain_name === chain_name && balancesData.address === address && balancesData.data && balancesData.data.filter(balanceData => balanceData.type === 'nft')}
             contractData={contractData && contractData.chain_name === chain_name && contractData.address === address && contractData.data}
             loading={nftLoading}
@@ -226,7 +226,7 @@ const Wallet = ({ navigationData, navigationItemData }) => {
             onLoadMore={() => setNFTPage(nftPage + 1)}
           />
           :
-          <Asset
+          <Assets
             balancesData={balancesData && balancesData.chain_name === chain_name && balancesData.address === address && balancesData.data && balancesData.data.filter(balanceData => balanceData.type !== 'nft')}
             contractData={contractData && contractData.chain_name === chain_name && contractData.address === address && contractData.data}
           />
