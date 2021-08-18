@@ -10,10 +10,12 @@ import Image from '../../components/image'
 import { FiBox } from 'react-icons/fi'
 import { TiArrowRight } from 'react-icons/ti'
 import _ from 'lodash'
-import { status, balances, pricing } from '../../lib/api/covalent'
+import { status, balances, pricing, nfts } from '../../lib/api/covalent'
 import { navigations } from '../../lib/menus'
 import useMountedRef from '../../lib/mountedRef'
 import { generateUrl, numberFormat } from '../../lib/utils'
+
+const nftPageSize = 4
 
 const Wallet = ({ navigationData, navigationItemData }) => {
   const router = useRouter()
@@ -24,6 +26,9 @@ const Wallet = ({ navigationData, navigationItemData }) => {
   const [statusData, setStatusData] = useState(null)
   const [balancesData, setBalancesData] = useState(null)
   const [contractData, setContractData] = useState(null)
+  const [nftPage, setNFTPage] = useState(0)
+  const [nftLoading, setNFTLoading] = useState(false)
+  const [nftHasMore, setNFTHasMore] = useState(true)
 
   const mountedRef = useMountedRef()
 
@@ -66,7 +71,7 @@ const Wallet = ({ navigationData, navigationItemData }) => {
                   nft_data: balanceData.nft_data && balanceData.nft_data.length > 0 && balanceData.nft_data,
                 }
               }),
-              ['quote', 'balance'], ['desc', 'desc']
+              [asset === 'nft' ? 'nft_data' : 'quote'], ['desc']
             )
           )
 
@@ -93,12 +98,20 @@ const Wallet = ({ navigationData, navigationItemData }) => {
           setBalancesData({ data, chain_name, address })
         }
       }
+
+      if (asset !== 'nft') {
+        if (mountedRef.current) {
+          setNFTPage(0)
+          setNFTLoading(false)
+          setNFTHasMore(true)
+        }
+      }
     }
 
     if (navigationItemData && address) {
       getBalances()
     }
-  }, [navigationItemData, address])
+  }, [navigationItemData, address, asset])
 
   useEffect(() => {
     const getPricing = async () => {
@@ -115,6 +128,42 @@ const Wallet = ({ navigationData, navigationItemData }) => {
       getPricing()
     }
   }, [navigationItemData, address])
+
+  useEffect(() => {
+    const getNfts = async () => {
+      if (mountedRef.current) {
+        setNFTLoading(true)
+      }
+
+      const response = await nfts(navigationItemData.chain_id, address, { 'page-size': nftPageSize, 'page-number': nftPage })
+
+      if (response && response.data) {
+        if (mountedRef.current) {
+          setBalancesData({
+            data: _.uniqBy(_.concat((balancesData && balancesData.data) || [], response.data.items), 'token_id')
+            .map(balanceData => {
+              return {
+                ...balanceData,
+                nft_data: balanceData.nft_data && balanceData.nft_data.length > 0 && balanceData.nft_data,
+              }
+            }),
+            chain_name,
+            address,
+          })
+
+          setNFTHasMore(response.data.pagination && response.data.pagination.has_more ? true : false)
+        }
+      }
+
+      if (mountedRef.current) {
+        setNFTLoading(false)
+      }
+    }
+
+    if (navigationItemData && address && contractData && contractData.address === address && contractData.data && asset === 'nft') {
+      getNfts()
+    }
+  }, [navigationItemData, address, contractData, asset, nftPage])
 
   if (!navigationData) {
     navigations.forEach(nav => {
@@ -171,6 +220,10 @@ const Wallet = ({ navigationData, navigationItemData }) => {
           <NFT
             balancesData={balancesData && balancesData.chain_name === chain_name && balancesData.address === address && balancesData.data && balancesData.data.filter(balanceData => balanceData.type === 'nft')}
             contractData={contractData && contractData.chain_name === chain_name && contractData.address === address && contractData.data}
+            loading={nftLoading}
+            hasMore={nftHasMore}
+            pageSize={nftPageSize}
+            onLoadMore={() => setNFTPage(nftPage + 1)}
           />
           :
           <Asset

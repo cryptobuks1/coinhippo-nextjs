@@ -4,7 +4,7 @@ import NFTWidget from './nft-widget'
 import StackGrid from 'react-stack-grid'
 import moment from 'moment'
 
-export default function NFT({ balancesData, contractData }) {
+export default function NFT({ balancesData, contractData, loading, hasMore, pageSize, onLoadMore }) {
   const [timer, setTimer] = useState(null)
 
   useEffect(() => {
@@ -27,14 +27,28 @@ export default function NFT({ balancesData, contractData }) {
           gutterWidth={12}
           gutterHeight={12}
         >
-          {(balancesData ? balancesData.map((balanceData, i) => { return { ...balanceData, i } }) : [...Array(4).keys()].map(i => {return { i, skeleton: true } })).map((balanceData, i) => (
+          {(balancesData ? balancesData.map((balanceData, i) => { return { ...balanceData, i } }) : [...Array(4).keys()].map(i => { return { i, skeleton: true } })).map((balanceData, i) => (
             <NFTWidget
               key={i}
               data={balanceData}
               i={i}
             />
           ))}
+          {balancesData && loading && [...Array(pageSize).keys()].map(i => (
+            <NFTWidget
+              key={i}
+              data={{ i: balancesData.length + i, skeleton: true }}
+              i={balancesData.length + i}
+            />
+          ))}
         </StackGrid>
+        {balancesData && balancesData.length > 0 && hasMore && (
+          <div className="w-full text-center">
+            <button disabled={loading} onClick={onLoadMore} className="btn btn-default bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded text-gray-900 dark:text-gray-100 mt-3">
+              Load More
+            </button>
+          </div>
+        )}
       </div>
     </>
   )

@@ -23,7 +23,7 @@ const Summary = ({ balancesData, contractData }) => {
         <div className="coin-column flex items-center space-x-2">
           <Image
             src={contractData.logo_url}
-            useMocked={0}
+            useMocked={Math.floor(Math.random() * 10)}
             alt=""
             width={28}
             height={28}

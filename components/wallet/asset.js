@@ -172,7 +172,7 @@ export default function Asset({ balancesData, contractData }) {
               ),
             }
           ]}
-          data={balancesData ? balancesData.map((balanceData, i) => { return { ...balanceData, i } }) : [...Array(10).keys()].map(i => {return { i, skeleton: true } })}
+          data={balancesData ? balancesData.map((balanceData, i) => { return { ...balanceData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
           defaultPageSize={10}
           pagination={(!balancesData || balancesData.length <= 10) && (<></>)}
         />

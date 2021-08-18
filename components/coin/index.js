@@ -462,7 +462,7 @@ const Coin = ({ coinData }) => {
                   }
                 })
                 :
-                [...Array(10).keys()].map(i => {return { i, skeleton: true } })
+                [...Array(10).keys()].map(i => { return { i, skeleton: true } })
               }
               noPagination={true}
               defaultPageSize={per_page}
