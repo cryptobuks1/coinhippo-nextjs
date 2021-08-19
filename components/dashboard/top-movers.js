@@ -72,7 +72,7 @@ export default function TopMover({ noBorder }) {
       </span>}
       description={<div className="mt-3.5">
         {coinsData ?
-          _.slice(_.orderBy(coinsData, ['price_change_percentage_24h'], [sortDirection]), 0, n).map((coinData, i) => {
+          _.slice(_.orderBy(coinsData, ['price_change_percentage_24h_in_currency'], [sortDirection]), 0, n).map((coinData, i) => {
             const currency = currencies[currencies.findIndex(c => c.id === coinData.vs_currency)] || currencies[0]
             return (
               <div key={i} className={`${i < 3 ? `bg-${sortDirection === 'desc' ? 'green' : 'red'}-${i < 1 ? 200 : i < 2 ? 100 : 50} dark:bg-${sortDirection === 'desc' ? 'green' : 'red'}-${i < 1 ? 700 : i < 2 ? 800 : 900} rounded pt-1 px-1` : ''} mt-${i > 0 ? i < 3 ? 1 : 2 : 0}`}>
@@ -92,7 +92,7 @@ export default function TopMover({ noBorder }) {
                       </div>
                     </a>
                   </Link>
-                  <span className={`${coinData.price_change_percentage_24h < 0 ? 'text-red-500 dark:text-red-400' : coinData.price_change_percentage_24h > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} text-xs font-medium text-right space-x-1 ml-auto`}>
+                  <span className={`${coinData.price_change_percentage_24h_in_currency < 0 ? 'text-red-500 dark:text-red-400' : coinData.price_change_percentage_24h_in_currency > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} text-xs font-medium text-right space-x-1 ml-auto`}>
                     {currency.symbol}
                     <span>{numberFormat(coinData.current_price, '0,0.00000000')}</span>
                     {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
@@ -108,9 +108,9 @@ export default function TopMover({ noBorder }) {
                       {!currency.symbol && (<span className="uppercase">{currency.id}</span>)}
                     </span>
                   </div>
-                  <div className={`flex items-center ${coinData.price_change_percentage_24h < 0 ? 'text-red-500 dark:text-red-400' : coinData.price_change_percentage_24h > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} font-extrabold ml-auto`}>
-                    {numberFormat(coinData.price_change_percentage_24h / 100, '+0,0.00%')}
-                    {coinData.price_change_percentage_24h < 0 ? <FiArrowDown size={10} className="mb-0.5" /> : coinData.price_change_percentage_24h > 0 ? <FiArrowUp size={10} className="mb-0.5" /> : null}
+                  <div className={`flex items-center ${coinData.price_change_percentage_24h_in_currency < 0 ? 'text-red-500 dark:text-red-400' : coinData.price_change_percentage_24h_in_currency > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} font-extrabold ml-auto`}>
+                    {numberFormat(coinData.price_change_percentage_24h_in_currency / 100, '+0,0.00%')}
+                    {coinData.price_change_percentage_24h_in_currency < 0 ? <FiArrowDown size={10} className="mb-0.5" /> : coinData.price_change_percentage_24h_in_currency > 0 ? <FiArrowUp size={10} className="mb-0.5" /> : null}
                   </div>
                 </div>
               </div>
