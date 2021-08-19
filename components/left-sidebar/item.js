@@ -60,7 +60,12 @@ export default function Item({ url, isExternalUrl, icon, title, badge, items, is
             className={`left-sidebar-item ${active ? 'active' : ''}`}
           >
             {icon}
-            <span className="title">{title}</span>
+            <span className="title flex flex-col text-xs">
+              <span>{title}</span>
+              {isExternalUrl && (
+                <span className="text-blue-600 dark:text-blue-400">{new URL(url).hostname}</span>
+              )}
+            </span>
             {badge && (
               <span className={`badge badge-circle badge-sm ${badge.color}`}>
                 {badge.text}
