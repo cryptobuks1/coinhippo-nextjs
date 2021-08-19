@@ -40,6 +40,9 @@ export default function LeftSidebar() {
                       placement="top"
                       content={<span className="title flex flex-col whitespace-nowrap text-xs">
                         <span>{l0.title}</span>
+                        {l0.isExternalUrl && (
+                          <span className="text-blue-600 dark:text-blue-400">{new URL(l0.url).hostname}</span>
+                        )}
                         {l0.isComing && (
                           <span className="text-gray-400 dark:text-gray-600 font-light">Coming Soon</span>
                         )}
