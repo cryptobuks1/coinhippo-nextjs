@@ -1,10 +1,15 @@
 import { Fragment, useState, useEffect } from 'react'
+import { useSelector, shallowEqual } from 'react-redux'
 import Logo from './logo'
 import Title from './title'
 import Item from './item'
+import Tooltip from '../tooltip'
 import { navigations } from '../../lib/menus'
 
 export default function LeftSidebar() {
+  const { config } = useSelector(state => ({ config: state.config }), shallowEqual)
+  const { collapsed } = { ...config }
+
   const [hiddenItem, setHiddenItem] = useState(null)
   const [openItem, setOpenItem] = useState(null)
 
@@ -30,8 +35,22 @@ export default function LeftSidebar() {
             <ul>
               {menu.items.map((l0, a) => (
                 <li key={a} className="l0">
-                  <Item {...l0} hiddenItem={hiddenItem} openItem={openItem} openItems={() => setOpenItem(l0)} />
-                  <ul>
+                  {collapsed ?
+                    <Tooltip
+                      placement="top"
+                      content={<span className="title flex flex-col whitespace-nowrap text-xs">
+                        <span>{l0.title}</span>
+                        {l0.isComing && (
+                          <span className="text-gray-400 dark:text-gray-600 font-light">Coming Soon</span>
+                        )}
+                      </span>}
+                    >
+                      <Item {...l0} hiddenItem={hiddenItem} openItem={openItem} openItems={() => setOpenItem(l0)} />
+                    </Tooltip>
+                    :
+                    <Item {...l0} hiddenItem={hiddenItem} openItem={openItem} openItems={() => setOpenItem(l0)} />
+                  }
+                  <ul className={l0.itemsClassName || ''}>
                     {l0.items.map((l1, b) => (
                       <li key={b} className="l1">
                         <Item {...l1} hiddenItem={hiddenItem} hiddenItems={() => setHiddenItem(l0)} openItem={openItem} openItems={() => setOpenItem(l1)} />

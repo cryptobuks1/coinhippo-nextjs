@@ -28,6 +28,7 @@
     "react-image": "^4.0.3",
     "react-linkify": "*",
     "react-page-visibility": "^6.4.0",
+    "react-popper": "^2.2.5",
     "react-redux": "^7.2.4",
     "react-slick": "^0.28.1",
     "react-stack-grid": "^0.7.1",

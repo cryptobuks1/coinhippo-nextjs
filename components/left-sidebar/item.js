@@ -1,11 +1,11 @@
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
-import Link from 'next/link'
 import { FiChevronRight } from 'react-icons/fi'
 import { CONFIG_KEY } from '../../reducers/types'
 
-export default function Item({ url, icon, title, badge, items, isComing, hiddenItem, hiddenItems, openItem, openItems }) {
+export default function Item({ url, isExternalUrl, icon, title, badge, items, isComing, hiddenItem, hiddenItems, openItem, openItems }) {
   const dispatch = useDispatch()
   const { config } = useSelector(state => ({ config: state.config }), shallowEqual)
   const { collapsed } = { ...config }
@@ -43,6 +43,8 @@ export default function Item({ url, icon, title, badge, items, isComing, hiddenI
         :
         <Link href={url}>
           <a
+            target={isExternalUrl ? '_blank' : '_self'}
+            rel={isExternalUrl ? 'noopener noreferrer' : ''}
             onClick={() => {
               if (!collapsed) {
                 dispatch({
