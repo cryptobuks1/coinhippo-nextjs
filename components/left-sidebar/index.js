@@ -53,7 +53,7 @@ export default function LeftSidebar() {
                     :
                     <Item {...l0} hiddenItem={hiddenItem} openItem={openItem} openItems={() => setOpenItem(l0)} />
                   }
-                  <ul className={l0.itemsClassName || ''}>
+                  <ul className={l0.itemsClassName || 'max-h-60'}>
                     {l0.items.map((l1, b) => (
                       <li key={b} className="l1">
                         <Item {...l1} hiddenItem={hiddenItem} hiddenItems={() => setHiddenItem(l0)} openItem={openItem} openItems={() => setOpenItem(l1)} />
