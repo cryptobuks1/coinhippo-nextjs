@@ -48,8 +48,6 @@ export default function Title({ watchlistsData, watchlistData, onSelect, editZon
     setTitle((watchlistData && watchlistData.title) || '')
   }, [editing])
 
-  const id = (watchlistData && watchlistData.id) || shortid.generate()
-
   const update = () => {
     if (title) {
       const updatedWatchlistsData = _.cloneDeep(watchlistsData) || []
@@ -69,12 +67,15 @@ export default function Title({ watchlistsData, watchlistData, onSelect, editZon
 
       dispatch({
         type: WATCHLISTS_DATA,
-        value: updatedWatchlistsData
+        value: updatedWatchlistsData,
+        saveId: id
       })
 
       setEditing(false)
     }
   }
+
+  const id = (watchlistData && watchlistData.id) || shortid.generate()
 
   return (
     <div className={`flex items-${editing ? 'start' : 'center'} space-x-1`}>

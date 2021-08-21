@@ -39,7 +39,7 @@ export default function Watchlist() {
 
       dispatch({
         type: WATCHLISTS_DATA,
-        value: updatedWatchlistsData
+        value: updatedWatchlistsData,
       })
     }
 

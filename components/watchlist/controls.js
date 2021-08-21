@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import Search from './search'
@@ -14,6 +15,10 @@ export default function Controls({ watchlistsData, watchlistData, addOnly }) {
   const dispatch = useDispatch()
   const { data } = useSelector(state => ({ data: state.data }), shallowEqual)
   const { all_crypto_data, trending_data } = { ...data }
+
+  const router = useRouter()
+  const { query, pathname } = { ...router }
+  const { watchlist_id } = { ...query }
 
   const [coinIds, setCoinIds] = useState((watchlistData && watchlistData.coin_ids) || [])
 
@@ -32,8 +37,27 @@ export default function Controls({ watchlistsData, watchlistData, addOnly }) {
 
     dispatch({
       type: WATCHLISTS_DATA,
-      value: updatedWatchlistsData
+      value: updatedWatchlistsData,
+      saveId: id
     })
+  }
+
+  const onShare = () => {
+    if (watchlistData) {
+      const updatedWatchlistsData = _.cloneDeep(watchlistsData) || []
+      const index = updatedWatchlistsData.findIndex(_watchlistData => _watchlistData.id === id)
+      const updatedWatchlistData = index > -1 && { ...updatedWatchlistsData[index], save: true }
+
+      if (index > -1) {
+        updatedWatchlistsData[index] = updatedWatchlistData
+      }
+
+      dispatch({
+        type: WATCHLISTS_DATA,
+        value: updatedWatchlistsData,
+        saveId: id
+      })
+    }
   }
 
   const id = watchlistData && watchlistData.id
@@ -41,26 +65,29 @@ export default function Controls({ watchlistsData, watchlistData, addOnly }) {
   return (
     <div className={`flex items-center justify-start sm:justify-end space-x-2 my-2 ${addOnly ? '' : 'pl-1 pr-2'}`}>
       {!addOnly && id && coinIds && coinIds.length > 0 && (
-        <Popover
-          placeholder="bottom"
-          title="Share Watchlist"
-          content={
-            <CopyClipboard
-              text={`${window.location.origin}/watchlist/${id}`}
-              copyTitle={<span className="text-blue-600 dark:text-blue-400 text-xs">{window.location.origin}/watchlist/{id}</span>}
-              onCopy={() => {}}
-            />
-          }
-        >
-          <button
-            className="btn btn-raised btn-sm btn-rounded bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-200"
+        pathname.endsWith('/[watchlist_id]') && watchlist_id ?
+          <></>
+          :
+          <Popover
+            placeholder="bottom"
+            title="Share Watchlist"
+            content={
+              <CopyClipboard
+                text={`${window.location.origin}/watchlist/${id}`}
+                copyTitle={<span className="text-blue-600 dark:text-blue-400 text-xs">{window.location.origin}/watchlist/{id}</span>}
+                onCopy={onShare}
+              />
+            }
           >
-            <div className="flex items-center space-x-1">
-              <FiShare2 size={18} className="stroke-current" />
-              <span className="normal-case">Share</span>
-            </div>
-          </button>
-        </Popover>
+            <button
+              className="btn btn-raised btn-sm btn-rounded bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-200"
+            >
+              <div className="flex items-center space-x-1">
+                <FiShare2 size={18} className="stroke-current" />
+                <span className="normal-case">Share</span>
+              </div>
+            </button>
+          </Popover>
       )}
       <Modal
         buttonTitle={<div className="flex items-center space-x-1">

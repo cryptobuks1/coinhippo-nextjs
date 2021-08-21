@@ -53,7 +53,7 @@ export default function List({ watchlistsData, watchlistData, onSelect, editZone
 
     dispatch({
       type: WATCHLISTS_DATA,
-      value: updatedWatchlistsData
+      value: updatedWatchlistsData,
     })
 
     setEditing(false)

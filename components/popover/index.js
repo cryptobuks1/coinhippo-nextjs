@@ -43,7 +43,7 @@ export default function Popover({ placement, title, content, children, className
   const handlePopoverClick = () => setHidden(!hidden)
 
   return (
-    <div className="hidden lg:flex relative">
+    <div className="flex relative">
       <button
         ref={buttonRef}
         onClick={handlePopoverClick}
