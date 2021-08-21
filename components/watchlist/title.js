@@ -24,10 +24,16 @@ export default function Title({ watchlistsData, watchlistData, onSelect, editZon
   }, [editZone])
 
   useEffect(() => {
-    if (editing && setEditZone) {
-      setEditZone()
+    if (setEditZone) {
+      if (editing && editZone !== 'title') {
+        setEditZone()
+      }
+      else if (!editing && editZone) {
+        setEditZone('')
+      }
     }
-    else if (!editing && watchlistData && !watchlistData.id) {
+
+    if (!editing && watchlistData && !watchlistData.id) {
       const updatedWatchlistsData = watchlistsData ? _.cloneDeep(watchlistsData).filter(_watchlistData => _watchlistData.id) : []
 
       localStorage.setItem(WATCHLISTS_DATA, JSON.stringify(updatedWatchlistsData))

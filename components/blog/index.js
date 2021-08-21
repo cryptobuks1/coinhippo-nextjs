@@ -98,19 +98,19 @@ export default function Blog() {
         {post_id && (<div className="text-gray-500 text-base mt-6 lg:mt-12">Chapter {blogData.order}</div>)}
         <div className="flex items-center mt-4">
           <a href={`https://twitter.com/intent/tweet?original_referer=${process.env.NEXT_PUBLIC_SITE_URL}&text=${blogData.title}&url=${process.env.NEXT_PUBLIC_SITE_URL}/blog/${category_id}${post_id ? `/${post_id}` : ''}&via=${process.env.NEXT_PUBLIC_TWITTER_USERNAME}`} target="_blank" rel="noopener noreferrer" className="mr-2">
-            <Badge color="bg-blue-400 text-white" rounded>
+            <Badge rounded color="bg-blue-400 text-white">
               <FaTwitter size={16} className="mr-1" />
               Tweet
             </Badge>
           </a>
           <a href={`https://telegram.me/share/url?text=${blogData.title}&url=${process.env.NEXT_PUBLIC_SITE_URL}/blog/${category_id}${post_id ? `/${post_id}` : ''}`} target="_blank" rel="noopener noreferrer" className="mr-2">
-            <Badge color="bg-indigo-400 text-white" rounded>
+            <Badge rounded color="bg-indigo-400 text-white">
               <FaTelegram size={16} className="mr-1" />
               Share
             </Badge>
           </a>
           <a href={`https://wa.me/?text=${process.env.NEXT_PUBLIC_SITE_URL}/blog/${category_id}${post_id ? `/${post_id}` : ''}`} target="_blank" rel="noopener noreferrer">
-            <Badge color="bg-green-400 text-white" rounded>
+            <Badge rounded color="bg-green-400 text-white">
               <FaWhatsapp size={16} className="mr-1" />
               Share
             </Badge>

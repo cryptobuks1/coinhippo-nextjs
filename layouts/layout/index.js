@@ -37,9 +37,16 @@ export default function Layout({ children, noSiderbar, noNavbar, noFooter, custo
       }
 
       if (localStorage.getItem(WATCHLISTS_DATA) && !_.isEqual(JSON.parse(localStorage.getItem(WATCHLISTS_DATA)), watchlists_data)) {
+        let watchlistsData = JSON.parse(localStorage.getItem(WATCHLISTS_DATA))
+        if (watchlistsData && watchlistsData.findIndex(_watchlistData => !_watchlistData.id) > -1) {
+          watchlistsData = watchlistsData.filter(_watchlistData => _watchlistData.id)
+
+          localStorage.setItem(WATCHLISTS_DATA, JSON.stringify(watchlistsData))
+        }
+
         dispatch({
           type: WATCHLISTS_DATA,
-          value: JSON.parse(localStorage.getItem(WATCHLISTS_DATA))
+          value: watchlistsData
         })
       }
     }

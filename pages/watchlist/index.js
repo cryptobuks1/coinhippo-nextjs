@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react'
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import Title from '../../components/watchlist/title'
 import List from '../../components/watchlist/list'
+import Controls from '../../components/watchlist/controls'
 import Coins from '../../components/coins'
 import SectionTitle from '../../components/section-title'
+import { WATCHLISTS_DATA } from '../../reducers/types'
 
 export default function Watchlist() {
   const dispatch = useDispatch()
@@ -29,7 +31,20 @@ export default function Watchlist() {
     }
   }, [watchlists_data])
 
-  const onSelect = item => setWatchlistData(item)
+  const onSelect = item => {
+    setWatchlistData(item)
+
+    if (item && item.id && watchlists_data && watchlists_data.findIndex(_watchlistData => !_watchlistData.id) > -1) {
+      const updatedWatchlistsData = _.cloneDeep(watchlists_data).filter(_watchlistData => _watchlistData.id)
+
+      localStorage.setItem(WATCHLISTS_DATA, JSON.stringify(updatedWatchlistsData))
+
+      dispatch({
+        type: WATCHLISTS_DATA,
+        value: updatedWatchlistsData
+      })
+    }
+  }
 
   return (
     <>
@@ -40,17 +55,23 @@ export default function Watchlist() {
           watchlistData={watchlistData}
           onSelect={onSelect}
           editZone={editZone}
-          setEditZone={() => setEditZone('title')}
+          setEditZone={zone => setEditZone(typeof zone === 'string' ? zone : 'title')}
         />}
         right={<List
           watchlistsData={watchlists_data}
           watchlistData={watchlistData}
           onSelect={onSelect}
           editZone={editZone}
-          setEditZone={() => setEditZone('list')}
+          setEditZone={zone => setEditZone(typeof zone === 'string' ? zone : 'list')}
         />}
         className="flex-col sm:flex-row items-start sm:items-center mx-1"
       />
+      {!editZone && watchlistData && watchlistData.id && (
+        <Controls
+          watchlistsData={watchlists_data}
+          watchlistData={watchlistData}
+        />
+      )}
       <Coins watchlistData={watchlistData} />
     </>
   )
