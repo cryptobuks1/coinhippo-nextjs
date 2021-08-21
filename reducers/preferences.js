@@ -8,6 +8,10 @@ export default function preferences(
 ) {
   switch (action.type) {
     case VS_CURRENCY:
+      if (!action.noSave) {
+        localStorage.setItem(VS_CURRENCY, action.value)
+      }
+
       return {
         ...state,
         [`${VS_CURRENCY}`]: action.value

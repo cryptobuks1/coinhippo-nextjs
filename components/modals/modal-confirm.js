@@ -3,7 +3,7 @@ import { useSelector, shallowEqual } from 'react-redux'
 import Portal from '../portal'
 import { FiX } from 'react-icons/fi'
 
-export default function Modal({ buttonTitle, buttonClassName, title, icon, body, cancelButtonTitle, confirmButtonTitle, onConfirm, confirmButtonClassName }) {
+export default function Modal({ buttonTitle, buttonClassName, title, icon, body, cancelButtonTitle, onCancel, confirmButtonTitle, onConfirm, confirmButtonClassName }) {
   const { theme } = useSelector(state => ({ theme: state.theme }), shallowEqual)
   const { background } = { ...theme }
 
@@ -13,7 +13,12 @@ export default function Modal({ buttonTitle, buttonClassName, title, icon, body,
 
   const show = () => setOpen(true)
 
-  const hide = () => setOpen(false)
+  const hide = () => {
+    if (onCancel) {
+      onCancel()
+    }
+    setOpen(false)
+  }
 
   useEffect(() => {
     const handleClickOutside = event => {

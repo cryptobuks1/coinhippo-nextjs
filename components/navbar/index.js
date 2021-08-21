@@ -44,7 +44,6 @@ export default function Navbar({ noSiderbar }) {
               type: THEME,
               value: themeSet
             })
-            localStorage.setItem(THEME, themeSet)
           }}
           className="w-8 h-16 btn-transparent flex items-center justify-center mx-1 md:mx-4"
         >

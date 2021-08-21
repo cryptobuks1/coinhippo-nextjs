@@ -19,7 +19,6 @@ const Currencies = ({ handleDropdownClick }) => {
                 type: VS_CURRENCY,
                 value: item.id
               })
-              localStorage.setItem(VS_CURRENCY, item.id)
               handleDropdownClick()
             }}
             className="dropdown-item w-1/2 flex items-center justify-start text-sm space-x-2 p-2"

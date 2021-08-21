@@ -40,10 +40,9 @@ export default function List({ watchlistsData, watchlistData, onSelect, editZone
 
     dispatch({
       type: WATCHLISTS_DATA,
-      value: updatedWatchlistsData
+      value: updatedWatchlistsData,
+      noSave: true
     })
-
-    setEditing(false)
   }
 
   const remove = id => {
@@ -51,8 +50,6 @@ export default function List({ watchlistsData, watchlistData, onSelect, editZone
     const index = updatedWatchlistsData.findIndex(_watchlistData => _watchlistData.id === id)
 
     updatedWatchlistsData = updatedWatchlistsData.filter((_watchlistData, i) => index > -1 ? i !== index : _watchlistData.id)
-
-    localStorage.setItem(WATCHLISTS_DATA, JSON.stringify(updatedWatchlistsData))
 
     dispatch({
       type: WATCHLISTS_DATA,
@@ -70,8 +67,6 @@ export default function List({ watchlistsData, watchlistData, onSelect, editZone
 
     updatedWatchlistsData[from] = toData
     updatedWatchlistsData[to] = fromData    
-
-    localStorage.setItem(WATCHLISTS_DATA, JSON.stringify(updatedWatchlistsData))
 
     dispatch({
       type: WATCHLISTS_DATA,
@@ -91,20 +86,23 @@ export default function List({ watchlistsData, watchlistData, onSelect, editZone
               Exit Editing
             </button>
             :
-            <>
-              <button
-                onClick={() => create()}
-                className="btn btn-flat btn-rounded bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-300 text-xs p-2"
-              >
-                Create Watchlist
-              </button>
-              <button
-                onClick={() => setEditing(true)}
-                className="btn btn-flat btn-rounded bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-300 text-xs p-2"
-              >
-                Manage
-              </button>
-            </>
+            editZone !== 'title' ?
+              <>
+                <button
+                  onClick={() => create()}
+                  className="btn btn-flat btn-rounded bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-300 text-xs p-2"
+                >
+                  Create Watchlist
+                </button>
+                <button
+                  onClick={() => setEditing(true)}
+                  className="btn btn-flat btn-rounded bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-300 text-xs p-2"
+                >
+                  Manage
+                </button>
+              </>
+              :
+              null
           }
         </div>
       )}

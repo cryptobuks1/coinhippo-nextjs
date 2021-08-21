@@ -46,7 +46,8 @@ export default function Layout({ children, noSiderbar, noNavbar, noFooter, custo
 
         dispatch({
           type: WATCHLISTS_DATA,
-          value: watchlistsData
+          value: watchlistsData,
+          noSave: true
         })
       }
     }

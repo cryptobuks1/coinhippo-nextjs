@@ -8,6 +8,10 @@ export default function watchlist(
 ) {
   switch (action.type) {
     case WATCHLISTS_DATA:
+      if (!action.noSave) {
+        localStorage.setItem(WATCHLISTS_DATA, JSON.stringify(action.value))
+      }
+
       return {
         ...state,
         [`${WATCHLISTS_DATA}`]: action.value

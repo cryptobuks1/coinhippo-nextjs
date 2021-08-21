@@ -390,9 +390,8 @@ export default function ErrorPage() {
         alt="500"
         className="w-auto h-64 sm:h-40 lg:h-64 object-contain mb-8 sm:mb-4 lg:mb-8"
       />
-      <h1 className="text-6xl text-blue-500 mb-4">500</h1>
-
-      <div className="text-center text-gray-900 mb-8 sm:mb-4 lg:mb-8">
+      <h1 className="text-blue-500 text-6xl mb-4">500</h1>
+      <div className="text-gray-900 text-center mb-8 sm:mb-4 lg:mb-8">
         We're sorry. The page you requested could not be found. Please go back
         to the homepage or contact us
       </div>

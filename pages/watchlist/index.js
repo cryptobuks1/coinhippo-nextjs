@@ -37,12 +37,14 @@ export default function Watchlist() {
     if (item && item.id && watchlists_data && watchlists_data.findIndex(_watchlistData => !_watchlistData.id) > -1) {
       const updatedWatchlistsData = _.cloneDeep(watchlists_data).filter(_watchlistData => _watchlistData.id)
 
-      localStorage.setItem(WATCHLISTS_DATA, JSON.stringify(updatedWatchlistsData))
-
       dispatch({
         type: WATCHLISTS_DATA,
         value: updatedWatchlistsData
       })
+    }
+
+    if (item && !item.id) {
+      setEditZone('title')
     }
   }
 
@@ -72,7 +74,16 @@ export default function Watchlist() {
           watchlistData={watchlistData}
         />
       )}
-      <Coins watchlistData={watchlistData} />
+      <Coins
+        watchlistData={watchlistData}
+        addCoinsButton={!editZone && watchlistData && watchlistData.id && (
+          <Controls
+            watchlistsData={watchlists_data}
+            watchlistData={watchlistData}
+            addOnly={true}
+          />
+        )}
+      />
     </>
   )
 }

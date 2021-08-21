@@ -21,6 +21,9 @@ export default function Title({ watchlistsData, watchlistData, onSelect, editZon
     if (editing && editZone !== 'title') {
       setEditing(false)
     }
+    else if (!editing && editZone === 'title' && watchlistData && !watchlistData.id) {
+      setEditing(true)
+    }
   }, [editZone])
 
   useEffect(() => {
@@ -33,10 +36,8 @@ export default function Title({ watchlistsData, watchlistData, onSelect, editZon
       }
     }
 
-    if (!editing && watchlistData && !watchlistData.id) {
+    if (!editing && editZone === 'title' && watchlistData && !watchlistData.id) {
       const updatedWatchlistsData = watchlistsData ? _.cloneDeep(watchlistsData).filter(_watchlistData => _watchlistData.id) : []
-
-      localStorage.setItem(WATCHLISTS_DATA, JSON.stringify(updatedWatchlistsData))
 
       dispatch({
         type: WATCHLISTS_DATA,
@@ -66,8 +67,6 @@ export default function Title({ watchlistsData, watchlistData, onSelect, editZon
         onSelect(updatedWatchlistData)
       }
 
-      localStorage.setItem(WATCHLISTS_DATA, JSON.stringify(updatedWatchlistsData))
-
       dispatch({
         type: WATCHLISTS_DATA,
         value: updatedWatchlistsData
@@ -92,29 +91,31 @@ export default function Title({ watchlistsData, watchlistData, onSelect, editZon
         :
         <span>{watchlistData ? watchlistData.title ? watchlistData.title : 'Unnamed Watchlist' : 'My First Watchlist'}</span>
       }
-      {editing ?
-        <span className="mt-1">
+
+      {editZone !== 'list' && (
+        editing ?
+          <span className="mt-1">
+            <button
+              onClick={() => setEditing(false)}
+              className="btn btn-flat btn-circle-lg btn-circle bg-transparent hover:bg-red-100 dark:hover:bg-red-900 text-red-500 hover:text-red-600 dark:text-red-100 dark:hover:text-red-200"
+            >
+              <FiX className="stroke-current" />
+            </button>
+            <button
+              onClick={() => update()}
+              className="btn btn-flat btn-circle-lg btn-circle bg-transparent hover:bg-green-100 dark:hover:bg-green-900 text-green-500 hover:text-green-600 dark:text-green-100 dark:hover:text-green-200"
+            >
+              <FiCheck className="stroke-current" />
+            </button>
+          </span>
+          :
           <button
-            onClick={() => setEditing(false)}
-            className="btn btn-flat btn-circle-lg btn-circle bg-transparent hover:bg-red-100 dark:hover:bg-red-900 text-red-500 hover:text-red-600 dark:text-red-100 dark:hover:text-red-200"
+            onClick={() => setEditing(true)}
+            className="btn btn-flat btn-circle-lg btn-circle bg-transparent hover:bg-indigo-50 dark:hover:bg-indigo-900 text-indigo-500 hover:text-indigo-600 dark:text-indigo-100 dark:hover:text-indigo-200"
           >
-            <FiX className="stroke-current" />
+            <FiEdit3 size={20} className="stroke-current" />
           </button>
-          <button
-            onClick={() => update()}
-            className="btn btn-flat btn-circle-lg btn-circle bg-transparent hover:bg-green-100 dark:hover:bg-green-900 text-green-500 hover:text-green-600 dark:text-green-100 dark:hover:text-green-200"
-          >
-            <FiCheck className="stroke-current" />
-          </button>
-        </span>
-        :
-        <button
-          onClick={() => setEditing(true)}
-          className="btn btn-flat btn-circle-lg btn-circle bg-transparent hover:bg-indigo-50 dark:hover:bg-indigo-900 text-indigo-500 hover:text-indigo-600 dark:text-indigo-100 dark:hover:text-indigo-200"
-        >
-          <FiEdit3 size={20} className="stroke-current" />
-        </button>
-      }
+      )}
     </div>
   )
 }

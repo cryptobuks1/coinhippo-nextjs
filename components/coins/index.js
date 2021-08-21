@@ -16,7 +16,7 @@ import { navigations, currencies } from '../../lib/menus'
 import useMountedRef from '../../lib/mountedRef'
 import { generateUrl, numberFormat } from '../../lib/utils'
 
-const Coins = ({ navigationData, navigationItemData, watchlistData }) => {
+const Coins = ({ navigationData, navigationItemData, watchlistData, addCoinsButton }) => {
   const { preferences, data } = useSelector(state => ({ preferences: state.preferences, data: state.data }), shallowEqual)
   const { vs_currency } = { ...preferences }
   const { all_crypto_data, exchange_rates_data } = { ...data }
@@ -52,7 +52,7 @@ const Coins = ({ navigationData, navigationItemData, watchlistData }) => {
             :
             coinsMarkets({
               vs_currency,
-              ids: watchlistData ? watchlistData.map(coinData => coinData.id).join(',') : undefined,
+              ids: watchlistData && watchlistData.coin_ids && watchlistData.coin_ids.length > 0 ? watchlistData.coin_ids.join(',') : undefined,
               category: coin_type && !(['high-volume', 'watchlist'].includes(coin_type)) ? coin_type : undefined,
               order: ['high-volume'].includes(coin_type) ? 'volume_desc' : 'market_cap_desc',
               per_page,
@@ -112,7 +112,7 @@ const Coins = ({ navigationData, navigationItemData, watchlistData }) => {
       }
     }
 
-    if (all_crypto_data && (coin_type === 'categories' || page > -1) &&
+    if ((all_crypto_data || watchlistData) && (coin_type === 'categories' || page > -1) &&
       (
         (
           ['/coins', '/watchlist'].findIndex(path => pathname.endsWith(path)) > -1 ||
@@ -128,7 +128,7 @@ const Coins = ({ navigationData, navigationItemData, watchlistData }) => {
 
     const interval = setInterval(() => getCoins(), 3 * 60 * 1000)
     return () => clearInterval(interval)
-  }, [all_crypto_data, vs_currency, coin_type, page])
+  }, [all_crypto_data, vs_currency, coin_type, page, watchlistData])
 
   if (!navigationData && !(['watchlist'].includes(coin_type))) {
     navigations.forEach(nav => {
@@ -585,6 +585,19 @@ const Coins = ({ navigationData, navigationItemData, watchlistData }) => {
         }
         className={`${coin_type === 'categories' ? 'striped' : ''}`}
       />
+      {watchlistData && !(watchlistData.coin_ids && watchlistData.coin_ids.length > 0) && (
+        <div className="w-full h-80 md:h-96 flex items-center justify-center">
+          <div>
+            <div className="text-gray-900 dark:text-white text-3xl text-center mb-4">
+              You watchlist is Empty
+            </div>
+            <div className="text-gray-400 dark:text-gray-600 text-base text-center mb-8">
+              {watchlistData && watchlistData.title ? 'Add any coins to get started' : 'Please set the watchlist name first'}
+            </div>
+            <div className="flex justify-center">{addCoinsButton}</div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
