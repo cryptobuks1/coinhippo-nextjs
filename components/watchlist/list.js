@@ -1,32 +1,59 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import Modal from '../modals/modal-confirm'
 import { FiX } from 'react-icons/fi'
+import _ from 'lodash'
 import { WATCHLISTS_DATA } from '../../reducers/types'
 
-export default function List({ watchlistsData, watchlistData, onSelect }) {
+export default function List({ watchlistsData, watchlistData, onSelect, editZone, setEditZone }) {
   const dispatch = useDispatch()
 
   const [editing, setEditing] = useState(false)
 
-  const remove = id => {
-    if (id) {
-      let updatedWatchlistsData = watchlistsData || []
-      const index = updatedWatchlistsData.findIndex(_watchlistData => _watchlistData.id === id)
+  useEffect(() => {
+    setEditing(false)
+  }, [watchlistsData, watchlistData])
 
-      if (index > -1) {
-        updatedWatchlistsData = updatedWatchlistsData.filter((_watchlistData, i) => i !== index)
-
-        localStorage.setItem(WATCHLISTS_DATA, JSON.stringify(updatedWatchlistsData))
-
-        dispatch({
-          type: WATCHLISTS_DATA,
-          value: updatedWatchlistsData
-        })
-
-        setEditing(false)
-      }
+  useEffect(() => {
+    if (editing && editZone !== 'list') {
+      setEditing(false)
     }
+  }, [editZone])
+
+  useEffect(() => {
+    if (editing && setEditZone) {
+      setEditZone()
+    }
+  }, [editing])
+
+  const create = () => {
+    const updatedWatchlistsData = _.cloneDeep(watchlistsData) || []
+    if (!_.last(updatedWatchlistsData) || _.last(updatedWatchlistsData).id) {
+      updatedWatchlistsData.push({ title: '' })
+    }
+
+    dispatch({
+      type: WATCHLISTS_DATA,
+      value: updatedWatchlistsData
+    })
+
+    setEditing(false)
+  }
+
+  const remove = id => {
+    let updatedWatchlistsData = _.cloneDeep(watchlistsData) || []
+    const index = updatedWatchlistsData.findIndex(_watchlistData => _watchlistData.id === id)
+
+    updatedWatchlistsData = updatedWatchlistsData.filter((_watchlistData, i) => index > -1 ? i !== index : _watchlistData.id)
+
+    localStorage.setItem(WATCHLISTS_DATA, JSON.stringify(updatedWatchlistsData))
+
+    dispatch({
+      type: WATCHLISTS_DATA,
+      value: updatedWatchlistsData
+    })
+
+    setEditing(false)
   }
 
   return (
@@ -43,6 +70,12 @@ export default function List({ watchlistsData, watchlistData, onSelect }) {
             :
             <>
               <button
+                onClick={() => create()}
+                className="btn btn-flat btn-rounded bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-300 text-xs p-2"
+              >
+                Create Watchlist
+              </button>
+              <button
                 onClick={() => setEditing(true)}
                 className="btn btn-flat btn-rounded bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-300 text-xs p-2"
               >
@@ -58,9 +91,9 @@ export default function List({ watchlistsData, watchlistData, onSelect }) {
             <div key={i} className="flex items-center">
               <button
                 onClick={() => onSelect(item)}
-                className={`btn btn-raised min-w-max btn-rounded flex items-center ${watchlistData && item.id === watchlistData.id ? 'bg-indigo-600 text-white' : 'bg-transparent hover:bg-indigo-50 text-indigo-500 hover:text-indigo-600 dark:hover:bg-indigo-900 dark:text-white dark:hover:text-gray-200'} text-xs space-x-1.5 my-1 ${i < watchlistsData.length - 1 ? 'mr-2 md:mr-3' : ''} p-2`}
+                className={`btn btn-raised min-w-max btn-rounded flex items-center ${!item.id || watchlistData && item.id === watchlistData.id ? 'bg-indigo-600 text-white' : 'bg-transparent hover:bg-indigo-50 text-indigo-500 hover:text-indigo-600 dark:hover:bg-indigo-900 dark:text-white dark:hover:text-gray-200'} text-xs space-x-1.5 my-1 ${i < watchlistsData.length - 1 ? 'mr-2 md:mr-3' : ''} p-2`}
               >
-                <span className="normal-case">{item.title}</span>
+                <span className={`normal-case ${!item.id ? 'italic' : ''}`}>{item.title || '[New Watchlist]'}</span>
               </button>
               {editing && (
                 <Modal
