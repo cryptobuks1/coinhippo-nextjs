@@ -71,13 +71,14 @@ export default function Controls({ watchlistsData, watchlistData, addOnly }) {
           <Popover
             placeholder="bottom"
             title="Share Watchlist"
-            content={
+            content={<div>
               <CopyClipboard
                 text={`${window.location.origin}/watchlist/${id}`}
-                copyTitle={<span className="text-blue-600 dark:text-blue-400 text-xs">{window.location.origin}/watchlist/{id}</span>}
+                copyTitle={<span className="min-w-max text-blue-600 dark:text-blue-400 text-xs">{window.location.origin}/watchlist/{id}</span>}
                 onCopy={onShare}
               />
-            }
+              <div className="text-gray-400 dark:text-gray-600 mt-3" style={{ fontSize: '.65rem' }}>* You can use this url to clone/backup your watchlist to other devices</div>
+            </div>}
           >
             <button
               className="btn btn-raised btn-sm btn-rounded bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-200"

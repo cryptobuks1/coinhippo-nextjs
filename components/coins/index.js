@@ -585,7 +585,7 @@ const Coins = ({ navigationData, navigationItemData, watchlistData, addCoinsButt
         }
         className={`${coin_type === 'categories' ? 'striped' : ''}`}
       />
-      {watchlistData && !(watchlistData.coin_ids && watchlistData.coin_ids.length > 0) && (
+      {(pathname.endsWith('/watchlist') || watchlistData) && !(watchlistData && watchlistData.coin_ids && watchlistData.coin_ids.length > 0) && (
         <div className="w-full h-80 md:h-96 flex items-center justify-center">
           <div>
             <div className="text-gray-900 dark:text-white text-3xl text-center mb-4">

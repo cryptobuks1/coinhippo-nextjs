@@ -59,7 +59,7 @@ export default function Popover({ placement, title, content, children, className
           <div className="bg-gray-100 dark:bg-gray-800 border-b border-solid border-gray-200 dark:border-gray-700 rounded-t-lg uppercase text-gray-900 dark:text-white font-semibold mb-0 p-2">
             {title}
           </div>
-          <div className="min-w-max p-2">{content}</div>
+          <div className="p-2">{content}</div>
         </div>
       </div>
     </div>
