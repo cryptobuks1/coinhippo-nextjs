@@ -5,13 +5,15 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import Navbar from '../../components/navbar'
 import LeftSidebar from '../../components/left-sidebar'
 import Footer from '../../components/footer'
+import _ from 'lodash'
 import meta from '../../lib/meta'
-import { VS_CURRENCY, THEME } from '../../reducers/types'
+import { VS_CURRENCY, THEME, WATCHLISTS_DATA } from '../../reducers/types'
 
 export default function Layout({ children, noSiderbar, noNavbar, noFooter, customTheme }) {
   const dispatch = useDispatch()
-  const { preferences, config, theme } = useSelector(state => ({ preferences: state.preferences, config: state.config, theme: state.theme }), shallowEqual)
+  const { preferences, watchlistsData, config, theme } = useSelector(state => ({ preferences: state.preferences, watchlistsData: state.watchlistsData, config: state.config, theme: state.theme }), shallowEqual)
   const { vs_currency } = { ...preferences }
+  const { watchlists_data } = { ...watchlistsData }
   const { title, layout, collapsed } = { ...config }
   const { background, navbar, leftSidebar } = { ...theme }
 
@@ -31,6 +33,13 @@ export default function Layout({ children, noSiderbar, noNavbar, noFooter, custo
         dispatch({
           type: THEME,
           value: localStorage.getItem(THEME)
+        })
+      }
+
+      if (localStorage.getItem(WATCHLISTS_DATA) && !_.isEqual(JSON.parse(localStorage.getItem(WATCHLISTS_DATA)), watchlists_data)) {
+        dispatch({
+          type: WATCHLISTS_DATA,
+          value: JSON.parse(localStorage.getItem(WATCHLISTS_DATA))
         })
       }
     }

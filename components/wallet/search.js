@@ -5,9 +5,9 @@ import { FiSearch } from 'react-icons/fi'
 import { generateUrl } from '../../lib/utils'
 
 export default function search() {
-	const router = useRouter()
-	const { query } = { ...router }
-	const { chain_name, asset } = { ...query }
+  const router = useRouter()
+  const { query } = { ...router }
+  const { chain_name, asset } = { ...query }
 
   const [inputSearch, setInputSearch] = useState('')
 
@@ -16,7 +16,7 @@ export default function search() {
   const onSubmit = () => router.push(generateUrl(`/wallet/${chain_name}/${inputSearch}`, asset ? { asset } : null))
 
   return (
-		<form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="relative">
         <input
           value={inputSearch}

@@ -10,6 +10,9 @@ export const EXCHANGE_RATES_DATA = 'exchange_rates_data'
 // external data
 export const GAS_DATA = 'gas_data'
 
+// watchlist
+export const WATCHLISTS_DATA = 'watchlists_data'
+
 // config
 export const CONFIG = 'config'
 export const CONFIG_KEY = 'config_key'

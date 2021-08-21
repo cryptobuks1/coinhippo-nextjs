@@ -16,7 +16,7 @@ import { navigations, currencies } from '../../lib/menus'
 import useMountedRef from '../../lib/mountedRef'
 import { generateUrl, numberFormat } from '../../lib/utils'
 
-const Coins = ({ navigationData, navigationItemData }) => {
+const Coins = ({ navigationData, navigationItemData, watchlistData }) => {
   const { preferences, data } = useSelector(state => ({ preferences: state.preferences, data: state.data }), shallowEqual)
   const { vs_currency } = { ...preferences }
   const { all_crypto_data, exchange_rates_data } = { ...data }
@@ -27,11 +27,11 @@ const Coins = ({ navigationData, navigationItemData }) => {
   const router = useRouter()
   const { query, pathname, asPath } = { ...router }
   const { view, n } = { ...query }
-  let { coin_type, page } = { ...query }
-  const _asPath = asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath
+  let { coin_type, watchlist_id, page } = { ...query }
+  const _asPath = (asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath).replace(`/${watchlist_id ? watchlist_id : ''}`, '/')
   coin_type = !coin_type && !pathname.endsWith('/[coin_type]') ? _.last(_asPath.split('/')) : coin_type
-  coin_type = coin_type === 'coins' ? '' : coin_type
-  page = coin_type !== 'categories' ? !isNaN(page) && Number(page) > 0 ? Number(page) : typeof page === 'undefined' ? 1 : -1 : -1
+  coin_type = ['coins'].includes(coin_type) ? '' : coin_type
+  page = !(['categories'].includes(coin_type)) ? !isNaN(page) && Number(page) > 0 ? Number(page) : typeof page === 'undefined' ? 1 : -1 : -1
 
   const per_page = coin_type && !(['high-volume'].includes(coin_type)) ? Number(n) > 0 ? Number(n) < 10 ? 10 : Number(n) > 50 ? 50 : Number(n) : 50 : Number(n) > 0 ? Number(n) < 10 ? 10 : Number(n) > 100 ? 100 : Number(n) : 100
 
@@ -43,17 +43,23 @@ const Coins = ({ navigationData, navigationItemData }) => {
     const getCoins = async () => {
       let data
 
-      for (let i = 0; i < (coin_type && !(['high-volume', 'categories'].includes(coin_type)) ? 10 : 1); i++) {
-        const response = await (coin_type === 'categories' ?
-          categoriesMarkets()
+      for (let i = 0; i < (coin_type && !(['high-volume', 'categories', 'watchlist'].includes(coin_type)) ? 10 : 1); i++) {
+        const response = !(watchlistData && watchlistData.coin_ids && watchlistData.coin_ids.length > 0) && ['watchlist'].includes(coin_type) ?
+          []
           :
-          coinsMarkets({ vs_currency,
-            category: coin_type && !(['high-volume'].includes(coin_type)) ? coin_type : undefined,
-            order: ['high-volume'].includes(coin_type) ? 'volume_desc' : 'market_cap_desc',
-            per_page,
-            page: coin_type && !(['high-volume'].includes(coin_type)) ? i + 1 : page, price_change_percentage: /*'1h*,*/'24h,7d,30d' }
+          await (coin_type === 'categories' ?
+            categoriesMarkets()
+            :
+            coinsMarkets({
+              vs_currency,
+              ids: watchlistData ? watchlistData.map(coinData => coinData.id).join(',') : undefined,
+              category: coin_type && !(['high-volume', 'watchlist'].includes(coin_type)) ? coin_type : undefined,
+              order: ['high-volume'].includes(coin_type) ? 'volume_desc' : 'market_cap_desc',
+              per_page,
+              page: coin_type && !(['high-volume'].includes(coin_type)) ? i + 1 : page,
+              price_change_percentage: '24h,7d,30d',
+            })
           )
-        )
 
         if (Array.isArray(response)) {
           data = (
@@ -109,9 +115,9 @@ const Coins = ({ navigationData, navigationItemData }) => {
     if (all_crypto_data && (coin_type === 'categories' || page > -1) &&
       (
         (
-          pathname.endsWith('/coins') ||
+          ['/coins', '/watchlist'].findIndex(path => pathname.endsWith(path)) > -1 ||
           (coin_type && (
-            (navigationData.items.findIndex(item => item.url === _asPath) > -1) ||
+            ((navigationData && navigationData.items.findIndex(item => item.url === _asPath) > -1)) ||
             (all_crypto_data.categories && all_crypto_data.categories.findIndex(categoryData => categoryData.category_id === coin_type) > -1)
           ))
         )
@@ -124,7 +130,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
     return () => clearInterval(interval)
   }, [all_crypto_data, vs_currency, coin_type, page])
 
-  if (!navigationData) {
+  if (!navigationData && !(['watchlist'].includes(coin_type))) {
     navigations.forEach(nav => {
       if (nav.url === '/coins') navigationData = nav
       else if (nav.items) {
@@ -143,7 +149,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
     ) {
       router.push(generateUrl(navigationData.items[0].url, query, ['coin_type', 'page']))
     }
-    else if (['?', 'page='].findIndex(keyword => !(asPath.includes(keyword))) < 0 && page < 0) {
+    else if (!(['watchlist'].includes(coin_type)) && ['?', 'page='].findIndex(keyword => !(asPath.includes(keyword))) < 0 && page < 0) {
       router.push(generateUrl(_asPath, query, ['coin_type', 'page']))
     }
   }
@@ -560,7 +566,7 @@ const Coins = ({ navigationData, navigationItemData }) => {
         .filter(column => isWidget ? ['i', 'market_cap_rank', 'name', 'current_price', 'price_change_percentage_24h_in_currency', 'market_cap'].includes(column.accessor) : true)}
         data={coinsData && coinsData.vs_currency === (coin_type === 'categories' ? currencyUSD.id : vs_currency) && coin_type === coinsData.coin_type && page === coinsData.page ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
         defaultPageSize={per_page}
-        pagination={!(coin_type && !(['high-volume'].includes(coin_type))) && (
+        pagination={!(coin_type && !(['high-volume'].includes(coin_type))) ?
           <div className="flex flex-col sm:flex-row items-center justify-center my-4">
             <Pagination
               disabled={!(coinsData && coinsData.vs_currency === vs_currency && coin_type === coinsData.coin_type && page === coinsData.page)}
@@ -571,7 +577,12 @@ const Coins = ({ navigationData, navigationItemData }) => {
               onClick={page => router.push(generateUrl(_asPath, { ...query, page }))}
             />
           </div>
-        )}
+          :
+          !(coinsData && coinsData.data.length > 10) ?
+            <></>
+            :
+            null
+        }
         className={`${coin_type === 'categories' ? 'striped' : ''}`}
       />
     </div>

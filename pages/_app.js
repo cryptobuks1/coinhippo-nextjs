@@ -15,6 +15,7 @@ import '../styles/components/skeleton.css'
 import '../styles/components/buttons.css'
 import '../styles/components/dropdowns.css'
 import '../styles/components/nprogress.css'
+import '../styles/components/modals.css'
 import '../styles/components/tables.css'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
@@ -34,6 +35,14 @@ export default function App({ Component, pageProps }) {
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
+        <meta charSet="utf-8" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="msapplication-TileColor" content="#050707" />
+        <meta
+          name="msapplication-TileImage"
+          content="/icons/mstile-150x150.png"
+        />
+        <meta name="theme-color" content="#050707" />
       </Head>
       <Provider store={store}>
         <Layout>
