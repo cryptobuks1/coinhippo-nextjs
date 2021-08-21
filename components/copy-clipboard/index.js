@@ -12,7 +12,7 @@ const CopyClipboard = ({ text, copyTitle, size = 16, onCopy, className = '' }) =
   }, [copied, setCopied])
 
   return copied ?
-    <div className="flex items-center space-x-1">
+    <div className={`${copyTitle ? 'min-w-max' : ''} flex items-center space-x-1`}>
       {copyTitle && (
         <span className="text-gray-400 dark:text-gray-500 font-medium">{copyTitle}</span>
       )}

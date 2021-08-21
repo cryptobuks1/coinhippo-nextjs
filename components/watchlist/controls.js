@@ -90,42 +90,44 @@ export default function Controls({ watchlistsData, watchlistData, addOnly }) {
             </button>
           </Popover>
       )}
-      <Modal
-        buttonTitle={<div className="flex items-center space-x-1">
-          <FiPlusCircle size={18} className="stroke-current" />
-          <span className="normal-case">Add {coinIds && coinIds.length > 0 ? ' / Remove' : 'Coins'}</span>
-        </div>}
-        buttonClassName={`btn btn-raised btn-rounded ${addOnly ? 'btn-default bg-indigo-600 hover:bg-indigo-700 text-white hover:text-gray-100' : 'btn-sm bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-200'}`}
-        title={coinIds && coinIds.length > 0 ? 'Modify Watchlist' : 'Add Coins'}
-        body={<div>
-          <Search initialCoinIds={coinIds} updateCoinIds={_coinIds => setCoinIds(_coinIds)} />
-          {coinIds && coinIds.length > 0 && (
-            <div className="flex flex-wrap items-center mt-2">
-              {coinIds.map((coinId, i) => {
-                const index = all_crypto_data && all_crypto_data.coins ? all_crypto_data.coins.findIndex(coinData => coinData.id === coinId) : -1
-                const coinData = index > -1 && all_crypto_data.coins[index]
+      {!(pathname.endsWith('/[watchlist_id]')) && (
+        <Modal
+          buttonTitle={<div className="flex items-center space-x-1">
+            <FiPlusCircle size={18} className="stroke-current" />
+            <span className="normal-case">Add {coinIds && coinIds.length > 0 ? ' / Remove' : 'Coins'}</span>
+          </div>}
+          buttonClassName={`btn btn-raised btn-rounded ${addOnly ? 'btn-default bg-indigo-600 hover:bg-indigo-700 text-white hover:text-gray-100' : 'btn-sm bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-200'}`}
+          title={coinIds && coinIds.length > 0 ? 'Modify Watchlist' : 'Add Coins'}
+          body={<div>
+            <Search initialCoinIds={coinIds} updateCoinIds={_coinIds => setCoinIds(_coinIds)} />
+            {coinIds && coinIds.length > 0 && (
+              <div className="flex flex-wrap items-center mt-2">
+                {coinIds.map((coinId, i) => {
+                  const index = all_crypto_data && all_crypto_data.coins ? all_crypto_data.coins.findIndex(coinData => coinData.id === coinId) : -1
+                  const coinData = index > -1 && all_crypto_data.coins[index]
 
-                return (
-                  <div
-                    key={i}
-                    onClick={() => setCoinIds(coinIds.filter(_coinId => _coinId !== coinId))}
-                    className="cursor-pointer"
-                  >
-                    <Badge rounded color={`bg-indigo-600 dark:bg-indigo-700 text-white dark:text-white space-x-1 my-0.5 mr-${i < coinIds.length - 1 ? 2 : 0}`}>
-                      <span className="normal-case font-medium">{coinData && coinData.name ? coinData.name : getName(coinId)}</span>
-                      {coinData && coinData.symbol && (<span className="uppercase text-gray-200 dark:text-gray-200 font-light">{coinData.symbol}</span>)}
-                    </Badge>
-                  </div>
-                )
-              })}
-            </div>
-          )}
-        </div>}
-        onCancel={() => setCoinIds((watchlistData && watchlistData.coin_ids) || [])}
-        confirmButtonTitle={`Select ${coinIds.length} Coin${coinIds.length > 1 ? 's' : ''}`}
-        onConfirm={() => update()}
-        confirmButtonClassName="btn btn-default btn-rounded bg-indigo-600 hover:bg-indigo-700 text-white"
-      />
+                  return (
+                    <div
+                      key={i}
+                      onClick={() => setCoinIds(coinIds.filter(_coinId => _coinId !== coinId))}
+                      className="cursor-pointer"
+                    >
+                      <Badge rounded color={`bg-indigo-600 dark:bg-indigo-700 text-white dark:text-white space-x-1 my-0.5 mr-${i < coinIds.length - 1 ? 2 : 0}`}>
+                        <span className="normal-case font-medium">{coinData && coinData.name ? coinData.name : getName(coinId)}</span>
+                        {coinData && coinData.symbol && (<span className="uppercase text-gray-200 dark:text-gray-200 font-light">{coinData.symbol}</span>)}
+                      </Badge>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>}
+          onCancel={() => setCoinIds((watchlistData && watchlistData.coin_ids) || [])}
+          confirmButtonTitle={`Select ${coinIds.length} Coin${coinIds.length > 1 ? 's' : ''}`}
+          onConfirm={() => update()}
+          confirmButtonClassName="btn btn-default btn-rounded bg-indigo-600 hover:bg-indigo-700 text-white"
+        />
+      )}
     </div>
   )
 }

@@ -12,10 +12,10 @@ export default function watchlist(
       if (!action.noSave) {
         localStorage.setItem(WATCHLISTS_DATA, JSON.stringify(action.value))
 
-        if (action.value && action.value.saveId) {
-          const watchlistData = action.value[action.value.findIndex(_watchlistData => _watchlistData.id === action.value.saveId && _watchlistData.save)]
+        if (action.value && action.saveId) {
+          const watchlistData = action.value[action.value.findIndex(_watchlistData => _watchlistData.id === action.saveId && _watchlistData.save)]
           if (watchlistData) {
-            Watchlist({ method: 'put', ID: action.value.id, Json: JSON.stringify(watchlistData) })
+            Watchlist({ method: 'put', ID: watchlistData.id, Json: JSON.stringify(watchlistData) })
           }
         }
       }

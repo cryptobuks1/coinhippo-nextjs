@@ -28,7 +28,7 @@ const Coins = ({ navigationData, navigationItemData, watchlistData, addCoinsButt
   const { query, pathname, asPath } = { ...router }
   const { view, n } = { ...query }
   let { coin_type, watchlist_id, page } = { ...query }
-  const _asPath = (asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath).replace(`/${watchlist_id ? watchlist_id : ''}`, '/')
+  const _asPath = (asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath).replace(`/${watchlist_id ? watchlist_id : ''}`, watchlist_id ? '' : '/')
   coin_type = !coin_type && !pathname.endsWith('/[coin_type]') ? _.last(_asPath.split('/')) : coin_type
   coin_type = ['coins'].includes(coin_type) ? '' : coin_type
   page = !(['categories'].includes(coin_type)) ? !isNaN(page) && Number(page) > 0 ? Number(page) : typeof page === 'undefined' ? 1 : -1 : -1
@@ -115,10 +115,10 @@ const Coins = ({ navigationData, navigationItemData, watchlistData, addCoinsButt
     if ((all_crypto_data || watchlistData) && (coin_type === 'categories' || page > -1) &&
       (
         (
-          ['/coins', '/watchlist'].findIndex(path => pathname.endsWith(path)) > -1 ||
+          ['/coins', '/watchlist', '/[watchlist_id]'].findIndex(path => pathname.endsWith(path)) > -1 ||
           (coin_type && (
             ((navigationData && navigationData.items.findIndex(item => item.url === _asPath) > -1)) ||
-            (all_crypto_data.categories && all_crypto_data.categories.findIndex(categoryData => categoryData.category_id === coin_type) > -1)
+            (all_crypto_data && all_crypto_data.categories && all_crypto_data.categories.findIndex(categoryData => categoryData.category_id === coin_type) > -1)
           ))
         )
       )
