@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { FaRegCopy, FaCheckCircle } from 'react-icons/fa'
 
-const CopyClipboard = ({ text, copyTitle, size = 16, className = '' }) => {
+const CopyClipboard = ({ text, copyTitle, size = 16, onCopy, className = '' }) => {
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
@@ -21,7 +21,12 @@ const CopyClipboard = ({ text, copyTitle, size = 16, className = '' }) => {
     :
     <CopyToClipboard
       text={text}
-      onCopy={() => setCopied(true)}
+      onCopy={() => {
+        setCopied(true)
+        if (onCopy) {
+          onCopy()
+        }
+      }}
     >
       <div className="flex items-center space-x-1">
         {copyTitle && (

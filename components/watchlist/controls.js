@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react'
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import Search from './search'
 import Modal from '../modals/modal-confirm-default'
+import Popover from '../popover'
+import CopyClipboard from '../copy-clipboard'
 import { Badge } from '../badges'
-import { FiPlusCircle } from 'react-icons/fi'
+import { FiShare2, FiPlusCircle } from 'react-icons/fi'
 import _ from 'lodash'
 import { getName } from '../../lib/utils'
 import { WATCHLISTS_DATA } from '../../reducers/types'
@@ -37,7 +39,29 @@ export default function Controls({ watchlistsData, watchlistData, addOnly }) {
   const id = watchlistData && watchlistData.id
 
   return (
-    <div className={`flex items-center justify-start sm:justify-end space-x-1 my-2 ${addOnly ? '' : 'pl-1 pr-2'}`}>
+    <div className={`flex items-center justify-start sm:justify-end space-x-2 my-2 ${addOnly ? '' : 'pl-1 pr-2'}`}>
+      {!addOnly && id && coinIds && coinIds.length > 0 && (
+        <Popover
+          placeholder="bottom"
+          title="Share Watchlist"
+          content={
+            <CopyClipboard
+              text={`${window.location.origin}/watchlist/${id}`}
+              copyTitle={<span className="text-blue-600 dark:text-blue-400 text-xs">{window.location.origin}/watchlist/{id}</span>}
+              onCopy={() => {}}
+            />
+          }
+        >
+          <button
+            className="btn btn-raised btn-sm btn-rounded bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-200"
+          >
+            <div className="flex items-center space-x-1">
+              <FiShare2 size={18} className="stroke-current" />
+              <span className="normal-case">Share</span>
+            </div>
+          </button>
+        </Popover>
+      )}
       <Modal
         buttonTitle={<div className="flex items-center space-x-1">
           <FiPlusCircle size={18} className="stroke-current" />
