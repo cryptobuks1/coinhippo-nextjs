@@ -10,12 +10,14 @@ import TopMovers from '../components/dashboard/top-movers'
 import Trending from '../components/dashboard/trending'
 import Watchlist from '../components/dashboard/watchlist'
 import TopCoins from '../components/dashboard/top-coins'
+import TopExchages from '../components/dashboard/top-exchanges'
 import SectionTitle from '../components/section-title'
 import { Badge } from '../components/badges'
 import { TiArrowRight } from 'react-icons/ti'
 import { FaCoins } from 'react-icons/fa'
 import { GiUnicorn } from 'react-icons/gi'
 import { IoGameControllerOutline } from 'react-icons/io5'
+import { RiExchangeBoxLine, RiPlantLine } from 'react-icons/ri'
 import { cryptoGlobal, simplePrice } from '../lib/api/coingecko'
 import FearAndGreedAPI from '../lib/api/fear-and-greed'
 import { navigations } from '../lib/menus'
@@ -156,16 +158,25 @@ export default function Index() {
             title="Top 10 Market Cap"
             icon={<FaCoins size={28} />}
           />
+          <TopExchages
+            title="Top 10 Exchanges by Confidence"
+            icon={<RiExchangeBoxLine size={28} />}
+          />
+          <Watchlist />
           <TopCoins
             category="non-fungible-tokens-nft"
             title="Top 10 NFTs"
             icon={<IoGameControllerOutline size={28} />}
           />
-          <Watchlist />
           <TopCoins
             category="decentralized-finance-defi"
             title="Top 10 DeFi"
             icon={<GiUnicorn size={28} />}
+          />
+          <TopExchages
+            exchange_type="dex"
+            title="Top 10 DEX by Volume"
+            icon={<RiPlantLine size={28} />}
           />
         </div>
       )}
