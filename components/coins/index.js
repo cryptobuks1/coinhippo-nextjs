@@ -176,7 +176,7 @@ const Coins = ({ navigationData, navigationItemData, watchlistData, addCoinsButt
                 :
                 null
             ),
-            className: 'watchlist-column',
+            className: 'nopadding-column',
           },
           {
             Header: '#',

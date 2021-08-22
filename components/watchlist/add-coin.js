@@ -81,40 +81,40 @@ export default function AddCoinToWatchlist({ coinId }) {
         </button>
         :
         <div className="relative">
-		      <button
-		        ref={buttonRef}
-		        onClick={handleDropdownClick}
-		        className="btn btn-flat btn-circle bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-yellow-500 hover:text-yellow-400"
-        	>
-		        {watched ? <FaStar size={16} className="stroke-current" /> : <FaRegStar size={16} className="stroke-current" />}
-		      </button>
-		      <div
-		        ref={dropdownRef} 
-		        className={`dropdown ${hidden ? '' : 'open'} absolute top-0 left-0 mt-8`}
-		      >
-		        <div className="dropdown-content w-56 bottom-start">
-		          <div className="dropdown-title text-left">Watchlist</div>
-				      <div className="flex flex-wrap pb-1">
-				        {watchlists_data.map((item, i) => (
-				          <button
-				            key={i}
-				            onClick={() => update(item.id)}
-				            className="dropdown-item w-full flex items-center justify-start py-2 px-3"
-				          >
-				            <span className="break-all text-gray-500 dark:text-gray-300 text-xs font-medium text-left">{item.title}</span>
-				            <span className="text-yellow-500 hover:text-yellow-400 ml-auto">
-				            	{item.coin_ids && item.coin_ids.includes(coinId) ?
-				            		<FaStar size={14} className="stroke-current" />
-				            		:
-				            		<FaRegStar size={14} className="stroke-current" />
-				            	}
-				            </span>
-				          </button>
-				        ))}
-				      </div>
-		        </div>
-		      </div>
-		    </div>
+          <button
+            ref={buttonRef}
+            onClick={handleDropdownClick}
+            className="btn btn-flat btn-circle bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-yellow-500 hover:text-yellow-400"
+          >
+            {watched ? <FaStar size={16} className="stroke-current" /> : <FaRegStar size={16} className="stroke-current" />}
+          </button>
+          <div
+            ref={dropdownRef} 
+            className={`dropdown ${hidden ? '' : 'open'} absolute top-0 left-0 mt-8`}
+          >
+            <div className="dropdown-content w-56 bottom-start">
+              <div className="dropdown-title text-left">Watchlist</div>
+              <div className="flex flex-wrap pb-1">
+                {watchlists_data.map((item, i) => (
+                  <button
+                    key={i}
+                    onClick={() => update(item.id)}
+                    className="dropdown-item w-full flex items-center justify-start py-2 px-3"
+                  >
+                    <span className="break-all text-gray-500 dark:text-gray-300 text-xs font-medium text-left">{item.title}</span>
+                    <span className="text-yellow-500 hover:text-yellow-400 ml-auto">
+                      {item.coin_ids && item.coin_ids.includes(coinId) ?
+                        <FaStar size={14} className="stroke-current" />
+                        :
+                        <FaRegStar size={14} className="stroke-current" />
+                      }
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       }
     </Tooltip>
   )

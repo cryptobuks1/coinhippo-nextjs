@@ -8,6 +8,7 @@ import FearAndGreed from '../components/dashboard/fear-and-greed'
 import Dominance from '../components/dashboard/dominance'
 import TopMovers from '../components/dashboard/top-movers'
 import Trending from '../components/dashboard/trending'
+import Watchlist from '../components/dashboard/watchlist'
 import SectionTitle from '../components/section-title'
 import { Badge } from '../components/badges'
 import { TiArrowRight } from 'react-icons/ti'
@@ -126,23 +127,30 @@ export default function Index() {
       {!widget && (
         <Global bitcoin={bitcoin} />
       )}
-      <div className={`w-full grid grid-flow-row grid-cols-1 ${!(['price-marquee'].includes(widget)) ? 'sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4' : ''} gap-4 lg:gap-2 xl:gap-4 mb-4 lg:mb-2 xl:mb-4 ${query.theme === 'dark' && widget ? '-mt-4 -ml-4' : ''}`}>
-        {['price-marquee'].includes(widget) && (
-          <CoinPrices />
-        )}
-        {(!widget || ['fear-and-greed'].includes(widget)) && (
-          <FearAndGreed data={fearAndGreedData} noBorder={['fear-and-greed'].includes(widget)} />
-        )}
-        {(!widget || ['dominance'].includes(widget)) && (
-          <Dominance noBorder={['dominance'].includes(widget)} />
-        )}
-        {(!widget || ['top-movers'].includes(widget)) && (
-          <TopMovers noBorder={['top-movers'].includes(widget)} />
-        )}
-        {(!widget || ['trending'].includes(widget)) && (
-          <Trending noBorder={['trending'].includes(widget)} />
-        )}
-      </div>
+      {(!widget || ['price-marquee', 'fear-and-greed', 'dominance', 'top-movers', 'trending'].includes(widget)) && (
+        <div className={`w-full grid grid-flow-row grid-cols-1 ${!(['price-marquee'].includes(widget)) ? 'sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4' : ''} gap-4 lg:gap-2 xl:gap-4 mb-4 lg:mb-2 xl:mb-4 ${query.theme === 'dark' && widget ? '-mt-4 -ml-4' : ''}`}>
+          {['price-marquee'].includes(widget) && (
+            <CoinPrices />
+          )}
+          {(!widget || ['fear-and-greed'].includes(widget)) && (
+            <FearAndGreed data={fearAndGreedData} noBorder={['fear-and-greed'].includes(widget)} />
+          )}
+          {(!widget || ['dominance'].includes(widget)) && (
+            <Dominance noBorder={['dominance'].includes(widget)} />
+          )}
+          {(!widget || ['top-movers'].includes(widget)) && (
+            <TopMovers noBorder={['top-movers'].includes(widget)} />
+          )}
+          {(!widget || ['trending'].includes(widget)) && (
+            <Trending noBorder={['trending'].includes(widget)} />
+          )}
+        </div>
+      )}
+      {!widget && (
+        <div className={`w-full grid grid-flow-row grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-2 xl:gap-4 mb-4 lg:mb-2 xl:mb-4 ${query.theme === 'dark' && widget ? '-mt-4 -ml-4' : ''}`}>
+          <Watchlist />
+        </div>
+      )}
     </>
   )
 }
