@@ -82,7 +82,7 @@ export default function TopCoins({ category, title, icon, noBorder }) {
   return (
     <Widget
       title={<span className="h-8 uppercase flex items-center">
-        <Link href={`/coins/${category}`}>
+        <Link href={`/coins${category ? `/${category}` : ''}`}>
           <a className="font-semibold">{title || getName(category)}</a>
         </Link>
         {icon && (

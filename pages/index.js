@@ -13,8 +13,9 @@ import TopCoins from '../components/dashboard/top-coins'
 import SectionTitle from '../components/section-title'
 import { Badge } from '../components/badges'
 import { TiArrowRight } from 'react-icons/ti'
-import { IoGameControllerOutline } from 'react-icons/io5'
+import { FaCoins } from 'react-icons/fa'
 import { GiUnicorn } from 'react-icons/gi'
+import { IoGameControllerOutline } from 'react-icons/io5'
 import { cryptoGlobal, simplePrice } from '../lib/api/coingecko'
 import FearAndGreedAPI from '../lib/api/fear-and-greed'
 import { navigations } from '../lib/menus'
@@ -152,9 +153,8 @@ export default function Index() {
       {!widget && (
         <div className={`w-full grid grid-flow-row grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-2 xl:gap-4 mb-4 lg:mb-2 xl:mb-4 ${query.theme === 'dark' && widget ? '-mt-4 -ml-4' : ''}`}>
           <TopCoins
-            category="decentralized-finance-defi"
-            title="Top 10 DeFi"
-            icon={<GiUnicorn size={28} />}
+            title="Top 10 Market Cap"
+            icon={<FaCoins size={28} />}
           />
           <TopCoins
             category="non-fungible-tokens-nft"
@@ -162,6 +162,11 @@ export default function Index() {
             icon={<IoGameControllerOutline size={28} />}
           />
           <Watchlist />
+          <TopCoins
+            category="decentralized-finance-defi"
+            title="Top 10 DeFi"
+            icon={<GiUnicorn size={28} />}
+          />
         </div>
       )}
     </>
