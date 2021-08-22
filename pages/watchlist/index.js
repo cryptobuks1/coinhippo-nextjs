@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import Title from '../../components/watchlist/title'
@@ -12,11 +13,18 @@ export default function Watchlist() {
   const { watchlist } = useSelector(state => ({ watchlist: state.watchlist }), shallowEqual)
   const { watchlists_data } = { ...watchlist }
 
+  const router = useRouter()
+  const { query, pathname } = { ...router }
+  const { id } = { ...query }
+
   const [watchlistData, setWatchlistData] = useState((watchlists_data || [])[0])
   const [editZone, setEditZone] = useState('')
 
   useEffect(() => {
-    if (!watchlistData && watchlists_data) {
+    if (id && watchlists_data && watchlists_data.findIndex(_watchlistData => _watchlistData.id === id) > -1) {
+      setWatchlistData(watchlists_data[watchlists_data.findIndex(_watchlistData => _watchlistData.id === id)])
+    }
+    else if (!watchlistData && watchlists_data) {
       setWatchlistData(watchlists_data[0])
     }
     else if (watchlistData) {
@@ -28,6 +36,10 @@ export default function Watchlist() {
         :
         -1
       setWatchlistData(index > -1 ? watchlists_data[index] : (watchlists_data || [])[0])
+    }
+
+    if (id) {
+      router.push(pathname)
     }
   }, [watchlists_data])
 

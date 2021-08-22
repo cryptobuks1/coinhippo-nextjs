@@ -42,7 +42,7 @@ export default function Controls({ watchlistsData, watchlistData, addOnly }) {
     })
   }
 
-  const onShare = () => {
+  const save = () => {
     if (watchlistData) {
       const updatedWatchlistsData = _.cloneDeep(watchlistsData) || []
       const index = updatedWatchlistsData.findIndex(_watchlistData => _watchlistData.id === id)
@@ -63,32 +63,29 @@ export default function Controls({ watchlistsData, watchlistData, addOnly }) {
   const id = watchlistData && watchlistData.id
 
   return (
-    <div className={`flex items-center justify-start sm:justify-end space-x-2 my-2 ${addOnly ? '' : 'pl-1 pr-2'}`}>
-      {!addOnly && id && coinIds && coinIds.length > 0 && (
-        pathname.endsWith('/[watchlist_id]') && watchlist_id ?
-          <></>
-          :
-          <Popover
-            placeholder="bottom"
-            title="Share Watchlist"
-            content={<div>
-              <CopyClipboard
-                text={`${window.location.origin}/watchlist/${id}`}
-                copyTitle={<span className="min-w-max text-blue-600 dark:text-blue-400 text-xs">{window.location.origin}/watchlist/{id}</span>}
-                onCopy={onShare}
-              />
-              <div className="text-gray-400 dark:text-gray-600 mt-3" style={{ fontSize: '.65rem' }}>* You can use this url to clone/backup your watchlist to other devices</div>
-            </div>}
+    <div className={`flex items-center justify-start sm:justify-end space-x-2 ${pathname.endsWith('/[watchlist_id]') && watchlist_id ? '' : 'my-2'} ${addOnly ? '' : 'pl-1 pr-2'}`}>
+      {!addOnly && id && coinIds && coinIds.length > 0 && !(pathname.endsWith('/[watchlist_id]') && watchlist_id) && (
+        <Popover
+          placeholder="bottom"
+          title="Share Watchlist"
+          content={<div>
+            <CopyClipboard
+              text={`${window.location.origin}/watchlist/${id}`}
+              copyTitle={<span className="min-w-max text-blue-600 dark:text-blue-400 text-xs">{window.location.origin}/watchlist/{id}</span>}
+              onCopy={() => save()}
+            />
+            <div className="text-gray-400 dark:text-gray-600 mt-3" style={{ fontSize: '.65rem' }}>* You can use this url to clone/backup your watchlist to other devices</div>
+          </div>}
+        >
+          <button
+            className="btn btn-raised btn-sm btn-rounded bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-200"
           >
-            <button
-              className="btn btn-raised btn-sm btn-rounded bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-200"
-            >
-              <div className="flex items-center space-x-1">
-                <FiShare2 size={18} className="stroke-current" />
-                <span className="normal-case">Share</span>
-              </div>
-            </button>
-          </Popover>
+            <div className="flex items-center space-x-1">
+              <FiShare2 size={18} className="stroke-current" />
+              <span className="normal-case">Share</span>
+            </div>
+          </button>
+        </Popover>
       )}
       {!(pathname.endsWith('/[watchlist_id]')) && (
         <Modal

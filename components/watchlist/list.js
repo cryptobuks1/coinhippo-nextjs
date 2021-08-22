@@ -4,6 +4,7 @@ import Modal from '../modals/modal-confirm'
 import { FiX } from 'react-icons/fi'
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs'
 import _ from 'lodash'
+import Watchlist from '../../lib/api/watchlist'
 import { WATCHLISTS_DATA } from '../../reducers/types'
 
 export default function List({ watchlistsData, watchlistData, onSelect, editZone, setEditZone }) {
@@ -45,9 +46,11 @@ export default function List({ watchlistsData, watchlistData, onSelect, editZone
     })
   }
 
-  const remove = id => {
+  const remove = async id => {
     let updatedWatchlistsData = _.cloneDeep(watchlistsData) || []
     const index = updatedWatchlistsData.findIndex(_watchlistData => _watchlistData.id === id)
+
+    const needRemoveOnDB = id && index > -1 && updatedWatchlistsData[index].save
 
     updatedWatchlistsData = updatedWatchlistsData.filter((_watchlistData, i) => index > -1 ? i !== index : _watchlistData.id)
 
@@ -57,6 +60,10 @@ export default function List({ watchlistsData, watchlistData, onSelect, editZone
     })
 
     setEditing(false)
+
+    if (needRemoveOnDB) {
+      await Watchlist({ method: 'delete', ID: id })
+    }
   }
 
   const move = (from, to) => {
