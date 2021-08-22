@@ -174,7 +174,7 @@ const Coins = ({ navigationData, navigationItemData, watchlistData, addCoinsButt
                   <AddCoinToWatchlist coinId={props.value} />
                 </div>
                 :
-                <div className="skeleton w-4 h-3 rounded" />
+                null
             ),
             className: 'watchlist-column',
           },
