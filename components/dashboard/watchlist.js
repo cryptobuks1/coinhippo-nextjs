@@ -301,6 +301,7 @@ export default function Watchlist({ noBorder }) {
           data={coinsData && coinsData.vs_currency === vs_currency && watchlistData && watchlistData.id === coinsData.watchlist_id ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
           defaultPageSize={10}
           pagination={!(coinsData && coinsData.data.length > 10) ? <></> : null}
+          className="inline-table"
         />
       </div>}
       className={`${noBorder ? 'border-0' : ''}`}

@@ -199,6 +199,7 @@ export default function TopExchanges({ exchange_type, title, icon, noBorder }) {
           data={exchangesData && exchange_type === exchangesData.exchange_type ? exchangesData.data.map((exchangeData, i) => { return { ...exchangeData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
           defaultPageSize={10}
           pagination={!(exchangesData && exchangesData.data.length > 10) ? <></> : null}
+          className="inline-table"
         />
       </div>}
       className={`${noBorder ? 'border-0' : ''}`}

@@ -29,7 +29,7 @@ export default function Tooltip({ placement, title, content, children }) {
   const hideTooltip = () => setHidden(true)
 
   return (
-    <div className="hidden lg:flex">
+    <div className="flex">
       <button
         ref={buttonRef}
         onMouseEnter={showTooltip}
