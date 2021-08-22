@@ -33,13 +33,13 @@ export default function Controls({ watchlistsData, watchlistData, addOnly }) {
 
     if (index > -1) {
       updatedWatchlistsData[index] = updatedWatchlistData
-    }
 
-    dispatch({
-      type: WATCHLISTS_DATA,
-      value: updatedWatchlistsData,
-      saveId: id
-    })
+      dispatch({
+        type: WATCHLISTS_DATA,
+        value: updatedWatchlistsData,
+        saveId: id
+      })
+    }
   }
 
   const save = () => {
@@ -50,13 +50,13 @@ export default function Controls({ watchlistsData, watchlistData, addOnly }) {
 
       if (index > -1) {
         updatedWatchlistsData[index] = updatedWatchlistData
-      }
 
-      dispatch({
-        type: WATCHLISTS_DATA,
-        value: updatedWatchlistsData,
-        saveId: id
-      })
+        dispatch({
+          type: WATCHLISTS_DATA,
+          value: updatedWatchlistsData,
+          saveId: id
+        })
+      }
     }
   }
 

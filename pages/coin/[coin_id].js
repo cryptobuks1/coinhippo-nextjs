@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import Coin from '../../components/coin'
 import DropdownExchange from '../../components/coin/dropdown-exchange'
+import AddCoinToWatchlist from '../../components/watchlist/add-coin'
 import SectionTitle from '../../components/section-title'
 import { Badge } from '../../components/badges'
 import Image from '../../components/image'
@@ -188,9 +189,10 @@ export default function CoinId() {
                   className="rounded"
                 />
               )}
-              <span className="space-x-1.5">
+              <span className="flex items-center space-x-1.5">
                 <span>{coinData.name}</span>
-                {coinData.symbol && (<span className={`uppercase text-gray-400 text-base font-normal ${coinData.symbol.length > 5 ? 'break-all' : ''}`}>{coinData.symbol}</span>)}
+                {coinData.symbol && (<span className={`h-8 uppercase text-gray-400 text-base font-normal pt-1.5 ${coinData.symbol.length > 5 ? 'break-all' : ''}`}>{coinData.symbol}</span>)}
+                <AddCoinToWatchlist coinId={coin_id} />
               </span>
             </div>
             <div className={`flex items-center ${coinData.market_data.price_change_percentage_24h_in_currency[currency.id] < 0 ? 'text-red-500 dark:text-red-400' : coinData.market_data.price_change_percentage_24h_in_currency[currency.id] > 0 ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'} font-bold space-x-1.5 mt-1`}>
