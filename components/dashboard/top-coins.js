@@ -1,76 +1,40 @@
 import Link from 'next/link'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import Widget from '../widget'
 import Datatable from '../datatable'
 import Image from '../image'
-import { FaStar } from 'react-icons/fa'
-import { BiChevronDown } from 'react-icons/bi'
 import _ from 'lodash'
 import { coinsMarkets } from '../../lib/api/coingecko'
 import { currencies } from '../../lib/menus'
 import useMountedRef from '../../lib/mountedRef'
-import { numberFormat } from '../../lib/utils'
+import { getName, numberFormat } from '../../lib/utils'
 
-const per_page = 100
+const per_page = 10
 
-export default function Watchlist({ noBorder }) {
-  const { preferences, data, watchlist } = useSelector(state => ({ preferences: state.preferences, data: state.data, watchlist: state.watchlist }), shallowEqual)
+export default function TopCoins({ category, title, icon, noBorder }) {
+  const { preferences, data } = useSelector(state => ({ preferences: state.preferences, data: state.data }), shallowEqual)
   const { vs_currency } = { ...preferences }
   const { exchange_rates_data } = { ...data }
-  const { watchlists_data } = { ...watchlist }
   const currency = currencies[currencies.findIndex(c => c.id === vs_currency)] || currencies[0]
   const currencyBTC = currencies[currencies.findIndex(c => c.id === 'btc')]
 
-  const [watchlistData, setWatchlistData] = useState((watchlists_data || [])[0])
   const [coinsData, setCoinsData] = useState(null)
-  const [hidden, setHidden] = useState(true)
-
-  const buttonRef = useRef(null)
-  const dropdownRef = useRef(null)
 
   const mountedRef = useMountedRef()
-
-  useEffect(() => {
-    const handleClickOutside = event => {
-      if (
-        hidden ||
-        buttonRef.current.contains(event.target) ||
-        dropdownRef.current.contains(event.target)
-      ) {
-        return false
-      }
-      setHidden(!hidden)
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [hidden, buttonRef, dropdownRef])
-
-  const handleDropdownClick = () => setHidden(!hidden)
-
-  useEffect(() => {
-    if (watchlists_data) {
-      if (!watchlistData || watchlists_data.findIndex(_watchlistData => _watchlistData.id === watchlistData.id) < 0) {
-        setWatchlistData(watchlists_data[0])
-      }
-    }
-  }, [watchlists_data])
 
   useEffect(() => {
     const getCoins = async () => {
       let data
 
-      const response = !(watchlistData && watchlistData.coin_ids && watchlistData.coin_ids.length > 0) ?
-        []
-        :
-        await coinsMarkets({
-          vs_currency,
-          ids: watchlistData && watchlistData.coin_ids && watchlistData.coin_ids.length > 0 ? watchlistData.coin_ids.join(',') : undefined,
-          order: 'market_cap_desc',
-          per_page,
-          price_change_percentage: '24h,7d,30d',
-        })
+      const response = await coinsMarkets({
+        vs_currency,
+        category,
+        order: 'market_cap_desc',
+        per_page,
+        page: 1,
+        price_change_percentage: '24h,7d,30d',
+      })
 
       if (Array.isArray(response)) {
         data = (
@@ -103,67 +67,29 @@ export default function Watchlist({ noBorder }) {
 
         if (data) {
           if (mountedRef.current) {
-            setCoinsData({ data, vs_currency, watchlist_id: watchlistData ? watchlistData.id : null })
+            setCoinsData({ data: _.slice(data, 0, per_page), vs_currency })
           }
         }
       }
     }
 
-    if (watchlistData) {
-      getCoins()
-    }
+    getCoins()
 
     const interval = setInterval(() => getCoins(), 3 * 60 * 1000)
     return () => clearInterval(interval)
-  }, [vs_currency, watchlistData])
+  }, [vs_currency])
 
-  return watchlists_data && watchlists_data.length > 0 && (
+  return (
     <Widget
       title={<span className="h-8 uppercase flex items-center">
-        <Link href="/watchlist">
-          <a className="flex items-center">
-            <FaStar size={20} className="stroke-current text-yellow-500 mb-0.5" />
-            <span className="font-semibold ml-1.5">Watchlist</span>
-          </a>
+        <Link href={`/coins/${category}`}>
+          <a className="font-semibold">{title || getName(category)}</a>
         </Link>
-        <div className="text-gray-700 dark:text-gray-300 font-semibold ml-auto">
-          {watchlists_data.length === 1 ?
-            watchlists_data[0].title
-            :
-            <div className="relative">
-              <button
-                ref={buttonRef}
-                onClick={handleDropdownClick}
-                className="btn btn-flat btn-rounded h-8 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center p-2"
-              >
-                <span className="break-all">{watchlistData && watchlistData.title}</span>
-                <BiChevronDown size={16} className="ml-0.5 mb-0.5" />
-              </button>
-              <div
-                ref={dropdownRef} 
-                className={`dropdown ${hidden ? '' : 'open'} absolute top-0 right-0 mt-8`}
-              >
-                <div className="dropdown-content w-48 bottom-start">
-                  <div className="dropdown-title text-left">Change Watchlist</div>
-                  <div className="flex flex-wrap pb-1">
-                    {watchlists_data.map((item, i) => (
-                      <button
-                        key={i}
-                        onClick={() => {
-                          setWatchlistData(item)
-                          handleDropdownClick()
-                        }}
-                        className="dropdown-item w-full flex items-center justify-start py-2 px-3"
-                      >
-                        <span className="break-all text-gray-500 dark:text-gray-300 text-xs font-medium text-left">{item.title}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          }
-        </div>
+        {icon && (
+          <div className="ml-auto">
+            {icon}
+          </div>
+        )}
       </span>}
       description={<div className="mt-3.5">
         <Datatable
@@ -298,7 +224,7 @@ export default function Watchlist({ noBorder }) {
               headerClassName: 'justify-end text-right',
             },
           ]}
-          data={coinsData && coinsData.vs_currency === vs_currency && watchlistData && watchlistData.id === coinsData.watchlist_id ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
+          data={coinsData && coinsData.vs_currency === vs_currency ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
           defaultPageSize={10}
           pagination={!(coinsData && coinsData.data.length > 10) ? <></> : null}
         />
