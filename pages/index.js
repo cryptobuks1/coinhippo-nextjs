@@ -18,6 +18,7 @@ import { BiCoinStack, BiTransferAlt } from 'react-icons/bi'
 import { IoGameControllerOutline } from 'react-icons/io5'
 import { RiSeedlingLine, RiPlantLine } from 'react-icons/ri'
 import { cryptoGlobal, simplePrice } from '../lib/api/coingecko'
+import { marketsStatus } from '../lib/api/coinhippo'
 import FearAndGreedAPI from '../lib/api/fear-and-greed'
 import { navigations } from '../lib/menus'
 import { isMatchRoute } from '../lib/routes'
@@ -36,6 +37,7 @@ export default function Index() {
   const _asPath = asPath.includes('?') ? asPath.substring(0, asPath.indexOf('?')) : asPath
 
   const [bitcoin, setBitcoin] = useState(null)
+  const [marketStatus, setMarketStatus] = useState(null)
   const [fearAndGreedData, setFearAndGreedData] = useState(null)
 
   const mountedRef = useMountedRef()
@@ -58,6 +60,25 @@ export default function Index() {
     const interval = setInterval(() => getBitcoin(), 3 * 60 * 1000)
     return () => clearInterval(interval)
   }, [vs_currency, query, widget])
+
+  useEffect(() => {
+    const getMarketsStatus = async () => {
+      const response = await marketsStatus()
+
+      if (response && response.data) {
+        if (mountedRef.current) {
+          setMarketStatus(response.data)
+        }
+      }
+    }
+
+    if ((query && Object.keys(query).length > 0 && !widget) || _asPath === asPath) {
+      getMarketsStatus()
+    }
+
+    const interval = setInterval(() => getMarketsStatus(), 5 * 60 * 1000)
+    return () => clearInterval(interval)
+  }, [query, widget])
 
   useEffect(() => {
     const getCryptoGlobal = async () => {
@@ -130,7 +151,7 @@ export default function Index() {
         />
       )}
       {!widget && (
-        <Global bitcoin={bitcoin} />
+        <Global bitcoin={bitcoin} marketStatus={marketStatus} />
       )}
       {(!widget || ['price-marquee', 'fear-and-greed', 'dominance', 'top-movers', 'trending'].includes(widget)) && (
         <div className={`w-full grid grid-flow-row grid-cols-1 ${!(['price-marquee'].includes(widget)) ? 'sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4' : ''} gap-4 lg:gap-2 xl:gap-4 mb-4 lg:mb-2 xl:mb-4 ${query.theme === 'dark' && widget ? '-mt-4 -ml-4' : ''}`}>
