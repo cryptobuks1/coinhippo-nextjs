@@ -127,7 +127,7 @@ const Global = ({ bitcoin, marketStatus }) => {
       </Link>
       <Widget
         title={<span className={`uppercase ${marketStatus && marketStatus.status ? 'text-white' : 'text-gray-500 dark:text-gray-300'} text-xs`}>Market Status</span>}
-        description={<span className={`${marketStatus && marketStatus.status ? 'text-white' : ''} text-sm sm:text-base md:text-xs space-x-1`}>
+        description={<span className={`${marketStatus && marketStatus.status ? 'text-white' : ''} space-x-1`}>
           {marketStatus ?
             parse(marketStatus.html)
             :
@@ -143,7 +143,7 @@ const Global = ({ bitcoin, marketStatus }) => {
           :
           <div className="skeleton w-9 h-6 rounded" />
         }
-        className={`${marketStatus && marketStatus.status ?
+        className={`col-span-2 sm:col-span-1 ${marketStatus && marketStatus.status ?
           marketStatus.status === 'bear' ?
             'bg-red-700 dark:bg-red-800' :
           marketStatus.status === 'bear_starting' ?
