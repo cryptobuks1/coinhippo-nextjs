@@ -5,13 +5,12 @@ import Widget from '../widget'
 import Image from '../image'
 import FearAndGreed from '../feeds/fear-and-greed'
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi'
-import { FaBitcoin, FaGasPump, FaYoutube, FaPodcast, FaRegNewspaper, FaBookDead, FaCoins, FaSearch, FaRegGrinStars, FaUserNinja } from 'react-icons/fa'
+import { FaBitcoin, FaGasPump, FaYoutube, FaPodcast, FaRegNewspaper, FaBookDead, FaCoins, FaSearch, FaRegGrinStars, FaUserNinja, FaRocket } from 'react-icons/fa'
 import { AiFillAlert, AiOutlinePrinter } from 'react-icons/ai'
-import { IoIosRocket } from 'react-icons/io'
-import { IoTrendingUp, IoTrendingDown } from 'react-icons/io5'
-import { RiEmotionSadLine } from 'react-icons/ri'
-import { GiWatch, GiUnicorn, GiWalk, GiRun, GiSprint, GiBurningEmbers, GiDolphin, GiSharkFin, GiWhaleTail, GiSpermWhale } from 'react-icons/gi'
-import { BiTime, BiGhost, BiDonateHeart } from 'react-icons/bi'
+import { IoTrendingUp, IoTrendingDown, IoGameController } from 'react-icons/io5'
+import { RiEmotionSadLine, RiSeedlingFill } from 'react-icons/ri'
+import { GiWatch, GiWalk, GiRun, GiSprint, GiBurningEmbers, GiDolphin, GiSharkFin, GiWhaleTail, GiSpermWhale } from 'react-icons/gi'
+import { BiTime, BiDonateHeart } from 'react-icons/bi'
 import { BsPencilSquare, BsBoxArrowInRight, BsQuestionSquare } from 'react-icons/bs'
 import { HiOutlineRefresh } from 'react-icons/hi'
 import { FcLock, FcUnlock } from 'react-icons/fc'
@@ -107,7 +106,7 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                 </div> :
               feedType === 'markets' && data.SortKey ?
                 data.SortKey.endsWith('_ath') ?
-                  <><IoIosRocket size={24} className="text-green-500 mr-2" /><span className="h-6">All Time High</span></> :
+                  <><FaRocket size={24} className="text-green-500 mr-2" /><span className="h-6">All Time High</span></> :
                 data.SortKey.endsWith('_atl') ?
                   <><FaBookDead size={20} className="text-red-500 mr-2.5" /><span className="h-6">All Time Low</span></> :
                 data.SortKey.endsWith('_marketcap') ?
@@ -119,9 +118,9 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                 data.SortKey.endsWith('_trending') ?
                   <><FaSearch size={20} className="text-indigo-400 mr-2.5" /><span className="h-6">Trending Search</span></> :
                 data.SortKey.endsWith('_defi') ?
-                  <><GiUnicorn size={24} className="text-indigo-400 mb-1 mr-1.5" /><span className="h-6">Top {getName('defi')}</span></> :
+                  <><RiSeedlingFill size={24} className="text-green-500 mb-1 mr-1.5" /><span className="h-6">Top {getName('defi')}</span></> :
                 data.SortKey.endsWith('_nfts') ?
-                  <><BiGhost size={24} className="text-indigo-400 mr-1.5" /><span className="h-6">Top NFTs</span></> :
+                  <><IoGameController size={24} className="text-indigo-400 mr-1.5" /><span className="h-6">Top NFTs</span></> :
                 data.SortKey.endsWith('_fomo') ?
                   <><FaRegGrinStars size={24} className="text-yellow-500 mb-0.5 mr-2" /><span className="h-6">FOMO Market</span></> :
                 data.SortKey.endsWith('_panic') ?

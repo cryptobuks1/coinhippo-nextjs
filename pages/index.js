@@ -14,10 +14,9 @@ import TopExchages from '../components/dashboard/top-exchanges'
 import SectionTitle from '../components/section-title'
 import { Badge } from '../components/badges'
 import { TiArrowRight } from 'react-icons/ti'
-import { FaCoins } from 'react-icons/fa'
-import { GiUnicorn } from 'react-icons/gi'
+import { BiCoinStack, BiTransferAlt } from 'react-icons/bi'
 import { IoGameControllerOutline } from 'react-icons/io5'
-import { RiExchangeBoxLine, RiPlantLine } from 'react-icons/ri'
+import { RiSeedlingLine, RiPlantLine } from 'react-icons/ri'
 import { cryptoGlobal, simplePrice } from '../lib/api/coingecko'
 import FearAndGreedAPI from '../lib/api/fear-and-greed'
 import { navigations } from '../lib/menus'
@@ -156,11 +155,11 @@ export default function Index() {
         <div className={`w-full grid grid-flow-row grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-2 xl:gap-4 mb-4 lg:mb-2 xl:mb-4 ${query.theme === 'dark' && widget ? '-mt-4 -ml-4' : ''}`}>
           <TopCoins
             title="Top 10 Market Cap"
-            icon={<FaCoins size={28} />}
+            icon={<BiCoinStack size={28} />}
           />
           <TopExchages
             title="Top 10 Exchanges by Confidence"
-            icon={<RiExchangeBoxLine size={28} />}
+            icon={<BiTransferAlt size={28} />}
           />
           <Watchlist />
           <TopCoins
@@ -171,7 +170,7 @@ export default function Index() {
           <TopCoins
             category="decentralized-finance-defi"
             title="Top 10 DeFi"
-            icon={<GiUnicorn size={28} />}
+            icon={<RiSeedlingLine size={28} />}
           />
           <TopExchages
             exchange_type="dex"

@@ -5,7 +5,7 @@ import Widget from '../widget'
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi'
 import { FaBitcoin } from 'react-icons/fa'
 import { GiCoins } from 'react-icons/gi'
-import { RiExchangeBoxLine } from 'react-icons/ri'
+import { BiTransferAlt } from 'react-icons/bi'
 import { AiOutlineStock, AiOutlineBarChart } from 'react-icons/ai'
 import { currencies } from '../../lib/menus'
 import { numberFormat } from '../../lib/utils'
@@ -70,7 +70,7 @@ const Global = ({ bitcoin }) => {
                   <div className="skeleton w-10 h-4 rounded mt-1" />
                 }
               </span>}
-              right={<RiExchangeBoxLine size={24} className="hidden sm:block stroke-current text-gray-500 dark:text-gray-400" />}
+              right={<BiTransferAlt size={24} className="hidden sm:block stroke-current text-gray-500 dark:text-gray-400" />}
               className="bg-transparent border-0 py-3 pl-0 pr-2 lg:p-2 xl:p-3"
             />
           </a>
