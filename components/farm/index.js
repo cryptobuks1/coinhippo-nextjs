@@ -124,9 +124,9 @@ const Farm = ({ navigationData, navigationItemData }) => {
     })
   }
 
-  if (typeof window !== 'undefined' && navigationData && navigationData.items && navigationData.items[0] &&
+  if (typeof window !== 'undefined' && navigationData && navigationData.items && navigationData.items.findIndex(item => !item.isExternalUrl) &&
     (['/[dex_name]'].findIndex(pathPattern => pathname.endsWith(pathPattern)) < 0 || (dex_name && navigationData.items.findIndex(item => item.url === _asPath) < 0))) {
-    router.push(navigationData.items[0].url)
+    router.push(navigationData.items[navigationData.items.findIndex(item => !item.isExternalUrl)].url)
   }
 
   return (
