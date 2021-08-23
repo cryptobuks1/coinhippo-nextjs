@@ -58,7 +58,7 @@ const NFTWidget = ({ data = null, i }) => {
                 />
                 <span className="space-x-1">
                   <span>{data.contract_name}</span>
-                  {data.contract_ticker_symbol && (<span className={`uppercase text-gray-400 font-normal ${data.contract_ticker_symbol.length > 5 ? 'break-all' : ''}`}>{data.contract_ticker_symbol}</span>)}
+                  {data.contract_ticker_symbol && (<span className={`uppercase text-gray-400 font-normal ${data.contract_ticker_symbol.length > 6 ? 'break-all' : ''}`}>{data.contract_ticker_symbol}</span>)}
                 </span>
               </div>
             </a>

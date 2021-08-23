@@ -108,7 +108,7 @@ export default function TopExchanges({ exchange_type, title, icon, noBorder }) {
                 !props.row.original.skeleton ?
                   <Link href={`/exchange${props.row.original.id ? `/${props.row.original.id}` : 's'}`}>
                     <a className="flex flex-col whitespace-pre-wrap text-blue-600 dark:text-blue-400 font-semibold" style={{ maxWidth: '5rem' }}>
-                      <div className="coin-column flex items-center space-x-1" style={{ fontSize: '.65rem' }}>
+                      <div className="coin-column flex items-center space-x-2" style={{ fontSize: '.65rem' }}>
                         <Image
                           useImg={exchangesData.data.length > per_page}
                           src={props.row.original.image}
@@ -124,7 +124,7 @@ export default function TopExchanges({ exchange_type, title, icon, noBorder }) {
                   :
                   <div className="flex flex-col">
                     <div className="flex items-center">
-                      <div className="skeleton w-6 h-6 rounded mr-1" />
+                      <div className="skeleton w-6 h-6 rounded mr-2" />
                       <div className="skeleton w-16 h-4 rounded" />
                     </div>
                   </div>
@@ -164,7 +164,7 @@ export default function TopExchanges({ exchange_type, title, icon, noBorder }) {
                     :
                     <>
                       <div className="skeleton w-20 h-4 rounded ml-auto" />
-                      <div className="skeleton w-12 h-3.5 rounded mt-1 ml-auto" />
+                      <div className="skeleton w-12 h-3.5 rounded mt-1.5 ml-auto" />
                     </>
                   }
                 </div>

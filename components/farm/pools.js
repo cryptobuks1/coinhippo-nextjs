@@ -211,7 +211,7 @@ export default function Pools({ navigationItemData, poolsData, ecosystemData }) 
                       />
                       <span className="space-x-1">
                         <span>{!isNaN(props.value) ? numberFormat(Number(props.value) * Math.pow(10, -props.row.original.token_0.contract_decimals), '0,0') : '-'}</span>
-                        {props.row.original.token_0.contract_ticker_symbol && (<span className={`uppercase text-blue-600 dark:text-blue-400 font-semibold ${props.row.original.token_0.contract_ticker_symbol.length > 5 ? 'break-all' : ''}`}>{props.row.original.token_0.contract_ticker_symbol}</span>)}
+                        {props.row.original.token_0.contract_ticker_symbol && (<span className={`uppercase text-blue-600 dark:text-blue-400 font-semibold ${props.row.original.token_0.contract_ticker_symbol.length > 6 ? 'break-all' : ''}`}>{props.row.original.token_0.contract_ticker_symbol}</span>)}
                       </span>
                     </div>
                   </a>
@@ -255,7 +255,7 @@ export default function Pools({ navigationItemData, poolsData, ecosystemData }) 
                       />
                       <span className="space-x-1">
                         <span>{!isNaN(props.value) ? numberFormat(Number(props.value) * Math.pow(10, -props.row.original.token_1.contract_decimals), '0,0') : '-'}</span>
-                        {props.row.original.token_1.contract_ticker_symbol && (<span className={`uppercase text-blue-600 dark:text-blue-400 font-semibold ${props.row.original.token_1.contract_ticker_symbol.length > 5 ? 'break-all' : ''}`}>{props.row.original.token_1.contract_ticker_symbol}</span>)}
+                        {props.row.original.token_1.contract_ticker_symbol && (<span className={`uppercase text-blue-600 dark:text-blue-400 font-semibold ${props.row.original.token_1.contract_ticker_symbol.length > 6 ? 'break-all' : ''}`}>{props.row.original.token_1.contract_ticker_symbol}</span>)}
                       </span>
                     </div>
                   </a>

@@ -4,13 +4,14 @@ import PropTypes from 'prop-types'
 import Widget from '../widget'
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi'
 import { FaBitcoin } from 'react-icons/fa'
-import { GiCoins } from 'react-icons/gi'
+import { GiCoins, GiChargingBull, GiBearHead, GiCamel } from 'react-icons/gi'
 import { BiTransferAlt } from 'react-icons/bi'
 import { AiOutlineStock, AiOutlineBarChart } from 'react-icons/ai'
+import parse from 'html-react-parser'
 import { currencies } from '../../lib/menus'
 import { numberFormat } from '../../lib/utils'
 
-const Global = ({ bitcoin }) => {
+const Global = ({ bitcoin, marketStatus }) => {
   const { preferences, data } = useSelector(state => ({ preferences: state.preferences, data: state.data }), shallowEqual)
   const { vs_currency } = { ...preferences }
   const { global_data, all_crypto_data } = { ...data }
@@ -124,6 +125,42 @@ const Global = ({ bitcoin }) => {
           />
         </a>
       </Link>
+      <Widget
+        title={<span className={`uppercase ${marketStatus && marketStatus.status ? 'text-white' : 'text-gray-500 dark:text-gray-300'} text-xs`}>Market Status</span>}
+        description={<span className={`${marketStatus && marketStatus.status ? 'text-white' : ''} text-sm sm:text-base md:text-xs space-x-1`}>
+          {marketStatus ?
+            parse(marketStatus.html)
+            :
+            <div className="skeleton w-20 h-4 rounded mt-1" />
+          }
+        </span>}
+        right={marketStatus && marketStatus.status ?
+          marketStatus.status.includes('bull') ?
+            <GiChargingBull size={36} className="stroke-current text-white" style={{ transform: 'scaleX(-1)' }} /> :
+          marketStatus.status.includes('bear') ?
+            <GiBearHead size={36} className="stroke-current text-white" style={{ transform: 'scaleX(-1)' }} /> :
+            <GiCamel size={36} className="stroke-current text-white" style={{ transform: 'scaleX(-1)' }} />
+          :
+          <div className="skeleton w-9 h-6 rounded" />
+        }
+        className={`${marketStatus && marketStatus.status ?
+          marketStatus.status === 'bear' ?
+            'bg-red-700 dark:bg-red-800' :
+          marketStatus.status === 'bear_starting' ?
+            'bg-red-500 dark:bg-red-600' :
+          marketStatus.status === 'likely_bear' ?
+            'bg-red-300 dark:bg-red-400' :
+          marketStatus.status === 'likely_bull' ?
+            'bg-indigo-300 dark:bg-indigo-400' :
+          marketStatus.status === 'bull_starting' ?
+            'bg-indigo-500 dark:bg-indigo-600' :
+          marketStatus.status === 'bull' ?
+            'bg-indigo-700 dark:bg-indigo-800' :
+            'bg-gray-300 dark:bg-gray-700'
+          :
+          ''
+        } p-3 lg:p-2 xl:p-3`}
+      />
     </div>
   )
 }

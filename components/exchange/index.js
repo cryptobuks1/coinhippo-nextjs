@@ -141,7 +141,7 @@ const Exchange = ({ exchangeData }) => {
                       />
                       <span className="space-x-1">
                         <span>{props.value}</span>
-                        {props.row.original.coin && props.row.original.coin.symbol && (<span className={`uppercase text-gray-400 font-normal ${props.row.original.coin.symbol.length > 5 ? 'break-all' : ''}`}>{props.row.original.coin.symbol}</span>)}
+                        {props.row.original.coin && props.row.original.coin.symbol && (<span className={`uppercase text-gray-400 font-normal ${props.row.original.coin.symbol.length > 6 ? 'break-all' : ''}`}>{props.row.original.coin.symbol}</span>)}
                       </span>
                     </div>
                   </a>

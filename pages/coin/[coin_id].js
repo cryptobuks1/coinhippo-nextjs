@@ -191,7 +191,7 @@ export default function CoinId() {
               )}
               <span className="flex items-center space-x-1.5">
                 <span>{coinData.name}</span>
-                {coinData.symbol && (<span className={`h-8 uppercase text-gray-400 text-base font-normal pt-1.5 ${coinData.symbol.length > 5 ? 'break-all' : ''}`}>{coinData.symbol}</span>)}
+                {coinData.symbol && (<span className={`h-8 uppercase text-gray-400 text-base font-normal pt-1.5 ${coinData.symbol.length > 6 ? 'break-all' : ''}`}>{coinData.symbol}</span>)}
                 <AddCoinToWatchlist coinId={coin_id} />
               </span>
             </div>

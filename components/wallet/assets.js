@@ -63,7 +63,7 @@ export default function Assets({ balancesData, contractData }) {
                           />
                           <span className="space-x-1">
                             <span>{props.value}</span>
-                            {props.row.original.contract_ticker_symbol && (<span className={`uppercase text-gray-400 font-normal ${props.row.original.contract_ticker_symbol.length > 5 ? 'break-all' : ''}`}>{props.row.original.contract_ticker_symbol}</span>)}
+                            {props.row.original.contract_ticker_symbol && (<span className={`uppercase text-gray-400 font-normal ${props.row.original.contract_ticker_symbol.length > 6 ? 'break-all' : ''}`}>{props.row.original.contract_ticker_symbol}</span>)}
                           </span>
                         </div>
                       </a>
@@ -94,7 +94,7 @@ export default function Assets({ balancesData, contractData }) {
                     props.value > -1 ?
                       <span className="space-x-1">
                         <span>{numberFormat(props.value * Math.pow(10, -props.row.original.contract_decimals), '0,0.00000000')}</span>
-                        {props.row.original.contract_ticker_symbol && (<span className={`uppercase text-gray-400 font-normal ${props.row.original.contract_ticker_symbol.length > 5 ? 'break-all' : ''}`}>{props.row.original.contract_ticker_symbol}</span>)}
+                        {props.row.original.contract_ticker_symbol && (<span className={`uppercase text-gray-400 font-normal ${props.row.original.contract_ticker_symbol.length > 6 ? 'break-all' : ''}`}>{props.row.original.contract_ticker_symbol}</span>)}
                       </span>
                       :
                       '-'

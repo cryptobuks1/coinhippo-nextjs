@@ -31,7 +31,7 @@ const Summary = ({ balancesData, contractData }) => {
           />
           <span className="space-x-1">
             <span className="font-semibold">{contractData.contract_name}</span>
-            {contractData.contract_ticker_symbol && (<span className={`uppercase text-gray-400 font-normal ${contractData.contract_ticker_symbol.length > 5 ? 'break-all' : ''}`}>{contractData.contract_ticker_symbol}</span>)}
+            {contractData.contract_ticker_symbol && (<span className={`uppercase text-gray-400 font-normal ${contractData.contract_ticker_symbol.length > 6 ? 'break-all' : ''}`}>{contractData.contract_ticker_symbol}</span>)}
             {contractData.prices.findIndex(priceData => typeof priceData.price === 'number') > -1 && [contractData.prices[contractData.prices.findIndex(priceData => typeof priceData.price === 'number')]].map((priceData, i) => (
               <span key={i} className="text-gray-700 dark:text-gray-300 font-medium space-x-1">
                 {(exchange_rates_data ? currency : currencyUSD).symbol}

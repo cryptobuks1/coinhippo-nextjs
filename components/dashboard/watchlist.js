@@ -205,7 +205,7 @@ export default function Watchlist({ noBorder }) {
                         />
                         <span className="space-x-1">
                           <span className={`${props.value && props.value.length > 15 ? '' : 'whitespace-pre'}`}>{props.value}</span>
-                          {props.row.original.symbol && (<span className={`uppercase text-gray-400 font-normal ${props.row.original.symbol.length > 5 ? 'break-all' : ''}`}>{props.row.original.symbol}</span>)}
+                          {props.row.original.symbol && (<span className={`uppercase text-gray-400 font-normal ${props.row.original.symbol.length > 6 ? 'break-all' : ''}`}>{props.row.original.symbol}</span>)}
                         </span>
                       </div>
                     </a>
@@ -249,7 +249,7 @@ export default function Watchlist({ noBorder }) {
                     :
                     <>
                       <div className="skeleton w-12 h-4 rounded ml-auto" />
-                      <div className="skeleton w-6 h-3 rounded mt-1 ml-auto" />
+                      <div className="skeleton w-6 h-3 rounded mt-1.5 ml-auto" />
                     </>
                   }
                 </div>
@@ -290,7 +290,7 @@ export default function Watchlist({ noBorder }) {
                     :
                     <>
                       <div className="skeleton w-20 h-4 rounded ml-auto" />
-                      <div className="skeleton w-12 h-3.5 rounded mt-1 ml-auto" />
+                      <div className="skeleton w-12 h-3.5 rounded mt-1.5 ml-auto" />
                     </>
                   }
                 </div>

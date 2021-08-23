@@ -216,7 +216,7 @@ const Coins = ({ navigationData, navigationItemData, watchlistData, addCoinsButt
                       )}
                       <span className="space-x-1">
                         <span>{props.value}</span>
-                        {props.row.original.symbol && (<span className={`uppercase text-gray-400 font-normal ${props.row.original.symbol.length > 5 ? 'break-all' : ''}`}>{props.row.original.symbol}</span>)}
+                        {props.row.original.symbol && (<span className={`uppercase text-gray-400 font-normal ${props.row.original.symbol.length > 6 ? 'break-all' : ''}`}>{props.row.original.symbol}</span>)}
                       </span>
                     </div>
                   </a>
