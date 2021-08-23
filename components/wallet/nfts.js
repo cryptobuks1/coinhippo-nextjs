@@ -42,7 +42,7 @@ export default function NFTs({ balancesData, contractData, loading, hasMore, pag
             />
           ))}
         </StackGrid>
-        {balancesData && balancesData.length > 0 && hasMore && (
+        {contractData && balancesData && balancesData.length > 0 && hasMore && (
           <div className="w-full text-center">
             <button disabled={loading} onClick={onLoadMore} className="btn btn-default bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded text-gray-900 dark:text-gray-100 mt-3">
               Load More
