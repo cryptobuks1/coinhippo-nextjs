@@ -14,6 +14,7 @@ export default function Footer() {
         <a href="https://coingecko.com" target="_blank" rel="noopener noreferrer" className="flex items-center ml-2"><Image src="/logos/api/coingecko.png" alt="" width={24} height={24} /></a>
         <a href="https://covalenthq.com" target="_blank" rel="noopener noreferrer" className="flex items-center ml-2"><Image src="/logos/api/covalent.png" alt="" width={24} height={24} /></a>
         <a href="https://etherscan.io" target="_blank" rel="noopener noreferrer" className="flex items-center ml-2"><Image src="/logos/api/etherscan.png" alt="" width={24} height={24} className="bg-white rounded-full" /></a>
+        <a href="https://subscan.io" target="_blank" rel="noopener noreferrer" className="flex items-center ml-2"><Image src="/logos/api/subscan.png" alt="" width={24} height={24} /></a>
         <a href="https://alternative.me/crypto" target="_blank" rel="noopener noreferrer" className="flex items-center ml-2"><Image src="/logos/api/alternative.png" alt="" width={24} height={24} /></a>
         <a href="https://whale-alert.io" target="_blank" rel="noopener noreferrer" className="flex items-center ml-2"><Image src="/logos/api/whalealert.png" alt="" width={24} height={24} /></a>
         <a href="https://cryptopanic.com" target="_blank" rel="noopener noreferrer" className="flex items-center ml-2"><Image src="/logos/api/cryptopanic.png" alt="" width={24} height={24} /></a>

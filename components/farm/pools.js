@@ -1,5 +1,3 @@
-import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useSelector, shallowEqual } from 'react-redux'
 import Datatable from '../datatable'
 import CopyClipboard from '../copy-clipboard'
@@ -17,10 +15,6 @@ export default function Pools({ navigationItemData, poolsData, ecosystemData }) 
   const { exchange_rates_data } = { ...data }
   const currency = currencies[currencies.findIndex(c => c.id === vs_currency)] || currencies[0]
   const currencyUSD = currencies[currencies.findIndex(c => c.id === 'usd')]
-
-  const router = useRouter()
-  const { query } = { ...router }
-  const { dex_name } = { ...query }
 
   return (
     <div className="my-4 mx-auto">
@@ -132,7 +126,7 @@ export default function Pools({ navigationItemData, poolsData, ecosystemData }) 
             accessor: 'total_liquidity_quote',
             sortType: (rowA, rowB) => rowA.original.total_liquidity_quote > rowB.original.total_liquidity_quote ? 1 : -1,
             Cell: props => (
-              <div className="text-gray-900 dark:text-gray-100 font-semibold text-right ml-auto">
+              <div className="text-gray-900 dark:text-gray-100 font-semibold text-right ml-auto mr-2">
                 {!props.row.original.skeleton ?
                   props.value > -1 ?
                     <>

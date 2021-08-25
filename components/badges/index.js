@@ -5,6 +5,7 @@ export const Badge = ({
   outlined = false,
   size = 'default',
   color = '',
+  onClick,
   children
 }) => {
   let css = []
@@ -27,14 +28,14 @@ export const Badge = ({
 
   if (outlined) {
     return (
-      <span className={`bg-transparent border border-current inline-flex uppercase ${css.includes('font-') ? '' : 'font-semibold'} text-center ${css}`}>
+      <span onClick={onClick} className={`bg-transparent border border-current inline-flex uppercase ${css.includes('font-') ? '' : 'font-semibold'} text-center ${css}`}>
         {children}
       </span>
     )
   }
 
   return (
-    <span className={`inline-flex uppercase ${css.includes('font-') ? '' : 'font-semibold'} text-center badge-${size} ${css}`}>
+    <span onClick={onClick} className={`inline-flex uppercase ${css.includes('font-') ? '' : 'font-semibold'} text-center badge-${size} ${css}`}>
       {children}
     </span>
   )
@@ -52,6 +53,7 @@ export const CircularBadge = ({
   size = 'default',
   outlined = false,
   color,
+  onClick,
   children
 }) => {
   let css = []
@@ -72,14 +74,14 @@ export const CircularBadge = ({
 
   if (outlined) {
     return (
-      <span className={`bg-transparent leading-none border border-current inline-flex uppercase font-semibold text-center p-0 ${css}`}>
+      <span onClick={onClick} className={`bg-transparent leading-none border border-current inline-flex uppercase font-semibold text-center p-0 ${css}`}>
         {children}
       </span>
     )
   }
 
   return (
-    <span className={`leading-none inline-flex uppercase font-semibold text-center p-0 ${css}`}>
+    <span onClick={onClick} className={`leading-none inline-flex uppercase font-semibold text-center p-0 ${css}`}>
       {children}
     </span>
   )
@@ -88,5 +90,6 @@ export const CircularBadge = ({
 CircularBadge.propTypes = {
   size: PropTypes.oneOf(['sm', 'default', 'lg']),
   color: PropTypes.string,
+  onClick: PropTypes.any,
   children: PropTypes.any,
 }
