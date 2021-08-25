@@ -14,7 +14,7 @@ export default function Projects({ navigationItemData, projectsData, tokenData, 
             accessor: 'i',
             sortType: (rowA, rowB) => rowA.original.i > rowB.original.i ? 1 : -1,
             Cell: props => (
-              <div className="flex items-center justify-center text-gray-600 dark:text-gray-400">
+              <div className="flex items-center justify-center text-gray-600 dark:text-gray-400 my-4">
                 {!props.row.original.skeleton ?
                   props.value > -1 ?
                     numberFormat(props.value + 1, '0,0')
@@ -112,7 +112,7 @@ export default function Projects({ navigationItemData, projectsData, tokenData, 
               <div className="text-gray-900 dark:text-gray-100 font-semibold text-right ml-auto mr-2">
                 {!props.row.original.skeleton && tokenData ?
                   props.value ?
-                    <>{numberFormat(Number(props.value) * Math.pow(10, -tokenData.token_decimals), '0,0')} {tokenData.symbol}</>
+                    <>{numberFormat(Number(props.value) * Math.pow(10, -tokenData.token_decimals), '0,0.00')} {tokenData.symbol}</>
                     :
                     '-'
                   :
@@ -141,36 +141,23 @@ export default function Projects({ navigationItemData, projectsData, tokenData, 
             headerClassName: 'justify-end text-right mr-2',
           },
           {
-            Header: 'First Period',
+            Header: 'Lease Period',
             accessor: 'first_period',
             sortType: (rowA, rowB) => rowA.original.first_period > rowB.original.first_period ? 1 : -1,
             Cell: props => (
               <div className="text-gray-600 dark:text-gray-400 font-normal text-right ml-auto mr-2">
                 {!props.row.original.skeleton ?
                   typeof props.value === 'number' ?
-                    numberFormat(props.value, '0,0')
+                    <div className="space-x-1">
+                      <span>{numberFormat(props.value, '0,0')}</span>
+                      {typeof props.row.original.last_period === 'number' && (
+                        <span>- {numberFormat(props.row.original.last_period, '0,0')}</span>
+                      )}
+                    </div>
                     :
                     '-'
                   :
-                  <div className="skeleton w-8 h-4 rounded ml-auto mr-2" />
-                }
-              </div>
-            ),
-            headerClassName: 'whitespace-nowrap justify-end text-right mr-2',
-          },
-          {
-            Header: 'Last Period',
-            accessor: 'last_period',
-            sortType: (rowA, rowB) => rowA.original.last_period > rowB.original.last_period ? 1 : -1,
-            Cell: props => (
-              <div className="text-gray-600 dark:text-gray-400 font-normal text-right ml-auto mr-2">
-                {!props.row.original.skeleton ?
-                  typeof props.value === 'number' ?
-                    numberFormat(props.value, '0,0')
-                    :
-                    '-'
-                  :
-                  <div className="skeleton w-8 h-4 rounded ml-auto mr-2" />
+                  <div className="skeleton w-16 h-4 rounded ml-auto mr-2" />
                 }
               </div>
             ),
@@ -225,7 +212,7 @@ export default function Projects({ navigationItemData, projectsData, tokenData, 
                 </div>
             ),
           },
-        ].filter(column => !((status === 'parathread' ? ['first_period', 'last_period', 'balance', 'contributors'] : status === 'registered' ? ['fund_id', 'first_period', 'last_period', 'balance', 'contributors'] : []).includes(column.accessor)))}
+        ].filter(column => !((status === 'parathread' ? ['first_period', 'balance', 'contributors'] : status === 'registered' ? ['fund_id', 'first_period', 'balance', 'contributors'] : []).includes(column.accessor)))}
         data={projectsData ? projectsData.map((projectData, i) => { return { ...projectData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
         defaultPageSize={10}
         pagination={(!projectsData || projectsData.length <= 10) && (<></>)}
