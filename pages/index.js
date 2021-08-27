@@ -175,27 +175,27 @@ export default function Index() {
       {!widget && (
         <div className={`w-full grid grid-flow-row grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-2 xl:gap-4 mb-4 lg:mb-2 xl:mb-4 ${query.theme === 'dark' && widget ? '-mt-4 -ml-4' : ''}`}>
           <TopCoins
-            title="Top 10 Market Cap"
+            title="Top Market Cap"
             icon={<BiCoinStack size={28} />}
           />
           <TopExchages
-            title="Top 10 Exchanges by Confidence"
+            title="Top Exchanges by Confidence"
             icon={<BiTransferAlt size={28} />}
           />
           <Watchlist />
           <TopCoins
             category="non-fungible-tokens-nft"
-            title="Top 10 NFTs"
+            title="Top NFTs"
             icon={<IoGameControllerOutline size={28} />}
           />
           <TopCoins
             category="decentralized-finance-defi"
-            title="Top 10 DeFi"
+            title="Top DeFi"
             icon={<RiSeedlingLine size={28} />}
           />
           <TopExchages
             exchange_type="dex"
-            title="Top 10 DEX by Volume"
+            title="Top DEX by Volume"
             icon={<RiPlantLine size={28} />}
           />
         </div>
