@@ -1,9 +1,11 @@
 import Head from 'next/head'
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { Provider } from 'react-redux'
 import NProgress from 'nprogress'
 import { useStore } from '../store'
 import Layout from '../layouts'
+import * as ga from '../lib/api/ga'
 import '../styles/tailwind.css'
 import '../styles/global.css'
 import '../styles/layout.css'
@@ -26,7 +28,20 @@ Router.events.on('routeChangeComplete', () => NProgress.done())
 Router.events.on('routeChangeError', () => NProgress.done())
 
 export default function App({ Component, pageProps }) {
+  const router = useRouter()
+
   const store = useStore(pageProps.initialReduxState)
+
+  useEffect(() => {
+    const handleRouteChange = url => ga.pageview(url)
+    //When the component is mounted, subscribe to router changes
+    //and log those page views
+    router.events.on('routeChangeComplete', handleRouteChange)
+
+    // If the component is unmounted, unsubscribe
+    // from the event with the `off` method
+    return () => router.events.off('routeChangeComplete', handleRouteChange)
+  }, [router.events])
 
   return (
     <>
