@@ -12,11 +12,13 @@ import Watchlist from '../components/dashboard/watchlist'
 import TopCoins from '../components/dashboard/top-coins'
 import TopExchages from '../components/dashboard/top-exchanges'
 import SectionTitle from '../components/section-title'
+import Image from '../components/image'
 import { Badge } from '../components/badges'
 import { TiArrowRight } from 'react-icons/ti'
 import { BiCoinStack, BiTransferAlt } from 'react-icons/bi'
 import { IoGameControllerOutline } from 'react-icons/io5'
 import { RiSeedlingLine, RiPlantLine } from 'react-icons/ri'
+import _ from 'lodash'
 import { cryptoGlobal, simplePrice } from '../lib/api/coingecko'
 import { marketsStatus } from '../lib/api/analytics'
 import FearAndGreedAPI from '../lib/api/fear-and-greed'
@@ -39,6 +41,9 @@ export default function Index() {
   const [bitcoin, setBitcoin] = useState(null)
   const [marketStatus, setMarketStatus] = useState(null)
   const [fearAndGreedData, setFearAndGreedData] = useState(null)
+
+  const ecosystems = navigations.filter(navigation => navigation.title === 'Cryptocurrencies').flatMap(navigation => navigation.items.filter(item => item.title === 'Categories')).flatMap(item => item.items.filter(_item => _item.isEcosystem).map(_item => { return { ..._item, id: _.last(_item.url.split('/').filter(path => path)) } }))
+  const [ecosystem, setEcosystem] = useState(ecosystems[0].id)
 
   const mountedRef = useMountedRef()
 
@@ -197,6 +202,32 @@ export default function Index() {
             exchange_type="dex"
             title="Top DEX by Volume"
             icon={<RiPlantLine size={28} />}
+          />
+          <TopCoins
+            category={ecosystem}
+            title={<>
+              <div className="h-4 text-xs">{ecosystems[ecosystems.findIndex(_ecosystem => _ecosystem.id === ecosystem)].title}</div>
+              <div className="h-4 normal-case text-gray-400 dark:text-gray-600 font-light" style={{ fontSize: '.65rem' }}>Ecosystem</div>
+            </>}
+            icon={ecosystems && ecosystems.length > 0 && (
+              <div className="flex flex-wrap items-center space-x-1">
+                {ecosystems.map((item, i) => (
+                  <div
+                    key={i}
+                    onClick={() => setEcosystem(item.id)}
+                    className={`btn btn-raised btn-circle cursor-pointer ${item.id === ecosystem ? 'bg-indigo-50 dark:bg-gray-700' : 'bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800'} p-2`}
+                  >
+                    <Image
+                      src={item.image}
+                      alt=""
+                      width={16}
+                      height={16}
+                      className="rounded"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           />
         </div>
       )}

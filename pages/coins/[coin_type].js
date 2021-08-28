@@ -57,8 +57,8 @@ export default function CoinType() {
               <div className="flex flex-wrap items-center ml-0 sm:ml-4 pr-1">
                 {navigationData.items.map((item, i) => (
                   <Link key={i} href={generateUrl(item.url, query, ['coin_type', 'page'])}>
-                    <a className={`btn btn-raised min-w-max btn-rounded flex items-center ${navigationItemData && item.url === navigationItemData.url ? 'bg-indigo-600 text-white' : 'bg-transparent hover:bg-indigo-50 text-indigo-500 hover:text-indigo-600 dark:hover:bg-indigo-900 dark:text-white dark:hover:text-gray-200'} text-xs space-x-1.5 my-1 ${i < navigationData.items.length - 1 ? 'mr-2 md:mr-3' : 'mr-2 md:mr-3'} p-2`}>
-                      {item.image && (
+                    <a className={`btn btn-raised min-w-max btn-rounded flex items-center ${navigationItemData && item.url === navigationItemData.url ? 'bg-indigo-600 text-white' : 'bg-transparent hover:bg-indigo-50 text-indigo-500 hover:text-indigo-600 dark:hover:bg-indigo-900 dark:text-white dark:hover:text-gray-200'} text-xs space-x-1.5 my-1 ${i < navigationData.items.length - 1 ? 'mr-2' : 'mr-2'} p-2`}>
+                      {navigationData.items < 10 && item.image && (
                         <Image
                           src={item.image}
                           alt=""

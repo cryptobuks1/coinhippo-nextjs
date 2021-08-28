@@ -49,7 +49,7 @@ export default function DropdownCategory({ data }) {
           }
         }}
         placeholder={hidden ? 'Others' : 'Search...'}
-        className={`btn btn-raised btn-rounded w-${hidden ? 16 : 40} flex items-center border-0 outline-none bg-transparent text-indigo-500 dark:text-white ${hidden ? 'placeholder-indigo-500 dark:placeholder-white' : 'placeholder-gray-400 dark:placeholder-gray-600'} text-xs space-x-1.5 my-1 p-2`}
+        className={`btn btn-raised btn-rounded w-${hidden ? 16 : 40} ${hidden ? 'cursor-pointer' : ''} flex items-center border-0 outline-none bg-transparent text-indigo-500 dark:text-white ${hidden ? 'placeholder-indigo-500 dark:placeholder-white' : 'placeholder-gray-400 dark:placeholder-gray-600'} text-xs space-x-1.5 my-1 p-2`}
         style={{ textTransform: hidden ? 'uppercase' : 'none', fontWeight: hidden ? 600 : 500 }}
       />
       <div

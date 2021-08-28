@@ -67,7 +67,7 @@ export default function TopCoins({ category, title, icon, noBorder }) {
 
         if (data) {
           if (mountedRef.current) {
-            setCoinsData({ data: _.slice(data, 0, per_page), vs_currency })
+            setCoinsData({ data: _.slice(data, 0, per_page), category, vs_currency })
           }
         }
       }
@@ -77,7 +77,7 @@ export default function TopCoins({ category, title, icon, noBorder }) {
 
     const interval = setInterval(() => getCoins(), 3 * 60 * 1000)
     return () => clearInterval(interval)
-  }, [vs_currency])
+  }, [category, vs_currency])
 
   return (
     <Widget
@@ -224,7 +224,7 @@ export default function TopCoins({ category, title, icon, noBorder }) {
               headerClassName: 'justify-end text-right',
             },
           ]}
-          data={coinsData && coinsData.vs_currency === vs_currency ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
+          data={coinsData && coinsData.category === category && coinsData.vs_currency === vs_currency ? coinsData.data.map((coinData, i) => { return { ...coinData, i } }) : [...Array(10).keys()].map(i => { return { i, skeleton: true } })}
           defaultPageSize={10}
           pagination={!(coinsData && coinsData.data.length > 10) ? <></> : null}
           className="inline-table"
