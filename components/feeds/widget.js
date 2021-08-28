@@ -6,7 +6,7 @@ import Widget from '../widget'
 import Image from '../image'
 import { Badge } from '../badges'
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi'
-import { FaBitcoin, FaGasPump, FaYoutube, FaPodcast, FaRegNewspaper, FaBookDead, FaCoins, FaSearch, FaRegGrinStars, FaUserNinja, FaRocket, FaHandPointRight } from 'react-icons/fa'
+import { FaBitcoin, FaGasPump, FaYoutube, FaPodcast, FaRegNewspaper, FaBookDead, FaCoins, FaSearch, FaRegGrinStars, FaUserNinja, FaRocket, FaCommentDots } from 'react-icons/fa'
 import { AiFillAlert, AiOutlinePrinter } from 'react-icons/ai'
 import { IoTrendingUp, IoTrendingDown, IoGameController } from 'react-icons/io5'
 import { RiEmotionSadLine, RiSeedlingFill } from 'react-icons/ri'
@@ -108,7 +108,7 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                   </div>
                 </div> :
               feedType === 'signal' ?
-                <><FaHandPointRight size={24} className="text-indigo-400 mr-2" /><span className="h-6">Trade Signal</span></> :
+                <><FaCommentDots size={24} className="text-indigo-400 mr-2" /><span className="h-6">Trade Signal</span></> :
               feedType === 'markets' && data.SortKey ?
                 data.SortKey.endsWith('_ath') ?
                   <><FaRocket size={24} className="text-green-500 mr-2" /><span className="h-6">All Time High</span></> :
@@ -452,21 +452,29 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                         </span>
                       </div>
                       <div className="w-full flex flex-col mt-3 mb-2">
-                        <Badge rounded color="bg-indigo-600 dark:bg-indigo-700 text-white dark:text-white">{coinData.signal.action}</Badge>
-                        <div className="text-gray-400 space-x-2"><span className="text-xs">Strategy:</span><span className="uppercase font-semibold">{getName(coinData.signal.strategy)}</span></div>
-                        <div className="text-gray-400 space-x-2"><span className="text-xs">Criteria:</span><span className="uppercase font-medium">{c.signal[c.signal.action].map(signal => signal.text).join(', ')}</span></div>
+                        <Badge rounded color={`${coinData.signal.action === 'buy' ? 'bg-indigo-600 dark:bg-indigo-700' : 'bg-red-600 dark:bg-red-700'} text-white dark:text-white`}>
+                          {coinData.signal.action}
+                        </Badge>
+                        <div className="text-gray-400 space-x-2">
+                          <span className="text-xs">Strategy:</span>
+                          <span className="uppercase font-semibold">{getName(coinData.signal.strategy)}</span>
+                        </div>
+                        <div className="text-gray-400 space-x-2">
+                          <span className="text-xs">Criteria:</span>
+                          <span className="capitalize font-medium">{coinData.signal[coinData.signal.action].map(signal => signal.text).join(', ')}</span>
+                        </div>
                       </div>
                     </div>
                   )) :
                   json.map((coinData, i) => (
-                    <div key={coinData.id} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < json.length - 1 ? 'border-b border-gray-100 pb-3' : ''}`}>
+                    <div key={coinData.id} className={`mt-${i > 0 ? 1 : 0} mb-1 ${i < json.length - 1 ? 'border-b border-gray-100 pb-1' : ''}`}>
                       <div className="flex items-center text-sm font-semibold">
                         <div className="flex items-center space-x-2 mr-2">
                           <Image
                             src={coinData.image || coinData.large || coinData.thumb}
                             alt=""
-                            width={24}
-                            height={24}
+                            width={20}
+                            height={20}
                             className="rounded"
                           />
                           <span className={`uppercase ${data.SortKey.endsWith('_trending') ? 'font-extrabold' : ''}`}>{coinData.symbol}</span>
@@ -476,17 +484,23 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                           {coinData.price_change_percentage_24h_in_currency < 0 ? <FiArrowDown size={16} className="mb-0.5 ml-0.5" /> : coinData.price_change_percentage_24h_in_currency > 0 ? <FiArrowUp size={16} className="mb-0.5 ml-0.5" /> : null}
                         </div>
                       </div>
-                      <div className="flex items-center text-xs font-normal mt-1">
-                        <div className="text-gray-400 dark:text-gray-500 mr-2">
-                          <Badge rounded color="bg-indigo-600 dark:bg-indigo-700 text-white dark:text-white">{coinData.signal.action}</Badge>
-                          <div className="text-gray-400 space-x-2"><span className="text-xs">Strategy:</span><span className="uppercase font-semibold">{getName(coinData.signal.strategy)}</span></div>
+                      <div className="flex items-start text-xs font-normal mt-1">
+                        <div className="flex items-center text-gray-400 dark:text-gray-500 mr-1">
+                          <Badge size="sm" rounded color={`${coinData.signal.action === 'buy' ? 'bg-indigo-600 dark:bg-indigo-700' : 'bg-red-600 dark:bg-red-700'} text-white dark:text-white py-0.5 px-1.5 mr-1.5`}>
+                            {coinData.signal.action}
+                          </Badge>
+                          <div className="text-gray-400 text-xs space-x-1">
+                            <span>Strategy:</span>
+                            <span className="uppercase font-semibold">{getName(coinData.signal.strategy)}</span>
+                          </div>
                         </div>
-                        <div className={`text-${coinData.price_change_percentage_24h_in_currency < 0 ? 'red' : coinData.price_change_percentage_24h_in_currency > 0 ? 'green' : 'gray'}-500 ${['_marketcap', '_top_gainers', '_top_losers'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ? 'font-extrabold' : ''} ml-auto`}>
+                        <div className={`text-${coinData.price_change_percentage_24h_in_currency < 0 ? 'red' : coinData.price_change_percentage_24h_in_currency > 0 ? 'green' : 'gray'}-500 ${['_marketcap', '_top_gainers', '_top_losers'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ? 'font-extrabold' : ''} mt-0.5 ml-auto`}>
                           {numberFormat(coinData.price_change_percentage_24h_in_currency / 100, '+0,0.00%')}
                         </div>
                       </div>
-                      <div className="font-normal space-x-1 mt-0.5" style={{ fontSize: '.65rem' }}>
-                        <span>Criteria:</span><span className="uppercase font-medium">{c.signal[c.signal.action].map(signal => signal.text).join(', ')}</span>
+                      <div className="font-normal space-x-1" style={{ fontSize: '.65rem' }}>
+                        <span>Criteria:</span>
+                        <span className="capitalize font-medium">{coinData.signal[coinData.signal.action].map(signal => signal.text).join(', ')}</span>
                       </div>
                     </div>
                   )) :
