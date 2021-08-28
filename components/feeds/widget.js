@@ -1,9 +1,10 @@
 import Link from 'next/link'
 import { useSelector, shallowEqual } from 'react-redux'
 import PropTypes from 'prop-types'
+import FearAndGreed from '../feeds/fear-and-greed'
 import Widget from '../widget'
 import Image from '../image'
-import FearAndGreed from '../feeds/fear-and-greed'
+import { Badge } from '../badges'
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi'
 import { FaBitcoin, FaGasPump, FaYoutube, FaPodcast, FaRegNewspaper, FaBookDead, FaCoins, FaSearch, FaRegGrinStars, FaUserNinja, FaRocket } from 'react-icons/fa'
 import { AiFillAlert, AiOutlinePrinter } from 'react-icons/ai'
@@ -63,7 +64,7 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
     data.FeedType === 'whales' ?
       json[0].is_donation || json[0].is_hacked || repeatIcon(json[0]).length > (json[0].transaction_type === 'transfer' ? 3 : 2) :
     data.FeedType === 'signal' ?
-      json && json.filter(coinData => coinData.signal && (coinData.signal.buy.length > 2 || coinData.signal.sell.length > 2)).length / json.length > 0.5 :
+      json && json.filter(coinData => coinData.signal && coinData.signal[coinData.signal.action].length > 2).length / json.length > 0.5 :
     data.FeedType === 'markets' ?
       ['_ath', '_atl', '_fomo', '_panic', '_bitcoin', '_top_gainers', '_top_losers'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 : false
     : false
@@ -430,21 +431,65 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                   )
                 }) :
               feedType === 'signal' ?
-                json.map(coinData => (
-                  <div key={coinData.id}>
-                    <div className={`flex items-start text-${coinData.price_change_percentage_24h_in_currency < 0 ? 'red' : coinData.price_change_percentage_24h_in_currency > 0 ? 'green' : 'gray'}-500 text-3xl font-semibold my-2`}>
-                      <span className="mr-2">${numberFormat(coinData.current_price, '0,0')}</span>
-                      <span className="flex items-start text-sm font-normal mt-0.5 ml-auto">
-                        {numberFormat(coinData.price_change_percentage_24h_in_currency / 100, '+0,0.00%')}
-                        {coinData.price_change_percentage_24h_in_currency < 0 ? <FiArrowDown size={18} className="ml-0.5" /> : coinData.price_change_percentage_24h_in_currency > 0 ? <FiArrowUp size={18} className="ml-0.5" /> : null}
-                      </span>
+                json.length === 1 ?
+                  json.map(coinData => (
+                    <div key={coinData.id}>
+                      <div className="flex items-center space-x-2 mr-2">
+                        <Image
+                          src={coinData.image || coinData.large || coinData.thumb}
+                          alt=""
+                          width={32}
+                          height={32}
+                          className="rounded"
+                        />
+                        <span className="text-base font-semibold">{coinData.name}</span>
+                      </div>
+                      <div className={`flex items-start text-${coinData.price_change_percentage_24h_in_currency < 0 ? 'red' : coinData.price_change_percentage_24h_in_currency > 0 ? 'green' : 'gray'}-500 text-3xl font-semibold my-2`}>
+                        <span className="mr-2">${numberFormat(data.SortKey.endsWith('_ath') ? coinData.high_price : data.SortKey.endsWith('_atl') ? coinData.low_price : coinData.current_price, '0,0.00000000')}</span>
+                        <span className="flex items-start text-sm font-normal mt-0.5 ml-auto">
+                          {numberFormat(coinData.price_change_percentage_24h_in_currency / 100, '+0,0.00%')}
+                          {coinData.price_change_percentage_24h_in_currency < 0 ? <FiArrowDown size={18} className="ml-0.5" /> : coinData.price_change_percentage_24h_in_currency > 0 ? <FiArrowUp size={18} className="ml-0.5" /> : null}
+                        </span>
+                      </div>
+                      <div className="w-full flex flex-col mt-3 mb-2">
+                        <Badge rounded color="bg-indigo-600 dark:bg-indigo-700 text-white dark:text-white">{coinData.signal.action}</Badge>
+                        <div className="text-gray-400 space-x-2"><span className="text-xs">Strategy:</span><span className="uppercase font-semibold">{getName(coinData.signal.strategy)}</span></div>
+                        <div className="text-gray-400 space-x-2"><span className="text-xs">Criteria:</span><span className="uppercase font-medium">{c.signal[c.signal.action].map(signal => signal.text).join(', ')}</span></div>
+                      </div>
                     </div>
-                    <div className="w-full flex flex-col mt-3 mb-2">
-                      <div className="uppercase text-gray-400"><span className="text-xs mr-1">Market Cap</span><span className="font-semibold">#{numberFormat(coinData.market_cap_rank, '0,0')}</span></div>
-                      <div className="text-xs font-semibold">{numberFormat(coinData.market_cap, '0,0')}</div>
+                  )) :
+                  json.map((coinData, i) => (
+                    <div key={coinData.id} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < json.length - 1 ? 'border-b border-gray-100 pb-3' : ''}`}>
+                      <div className="flex items-center text-sm font-semibold">
+                        <div className="flex items-center space-x-2 mr-2">
+                          <Image
+                            src={coinData.image || coinData.large || coinData.thumb}
+                            alt=""
+                            width={24}
+                            height={24}
+                            className="rounded"
+                          />
+                          <span className={`uppercase ${data.SortKey.endsWith('_trending') ? 'font-extrabold' : ''}`}>{coinData.symbol}</span>
+                        </div>
+                        <div className={`flex items-center text-${coinData.price_change_percentage_24h_in_currency < 0 ? 'red' : coinData.price_change_percentage_24h_in_currency > 0 ? 'green' : 'gray'}-500 ${['_ath', '_atl'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ? 'font-extrabold' : 'font-medium'} ml-auto`}>
+                          ${numberFormat(data.SortKey.endsWith('_ath') ? coinData.high_price : data.SortKey.endsWith('_atl') ? coinData.low_price : coinData.current_price, '0,0.00000000')}
+                          {coinData.price_change_percentage_24h_in_currency < 0 ? <FiArrowDown size={16} className="mb-0.5 ml-0.5" /> : coinData.price_change_percentage_24h_in_currency > 0 ? <FiArrowUp size={16} className="mb-0.5 ml-0.5" /> : null}
+                        </div>
+                      </div>
+                      <div className="flex items-center text-xs font-normal mt-1">
+                        <div className="text-gray-400 dark:text-gray-500 mr-2">
+                          <Badge rounded color="bg-indigo-600 dark:bg-indigo-700 text-white dark:text-white">{coinData.signal.action}</Badge>
+                          <div className="text-gray-400 space-x-2"><span className="text-xs">Strategy:</span><span className="uppercase font-semibold">{getName(coinData.signal.strategy)}</span></div>
+                        </div>
+                        <div className={`text-${coinData.price_change_percentage_24h_in_currency < 0 ? 'red' : coinData.price_change_percentage_24h_in_currency > 0 ? 'green' : 'gray'}-500 ${['_marketcap', '_top_gainers', '_top_losers'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ? 'font-extrabold' : ''} ml-auto`}>
+                          {numberFormat(coinData.price_change_percentage_24h_in_currency / 100, '+0,0.00%')}
+                        </div>
+                      </div>
+                      <div className="font-normal space-x-1 mt-0.5" style={{ fontSize: '.65rem' }}>
+                        <span>Criteria:</span><span className="uppercase font-medium">{c.signal[c.signal.action].map(signal => signal.text).join(', ')}</span>
+                      </div>
                     </div>
-                  </div>
-                )) :
+                  )) :
               feedType === 'markets' && data.SortKey ?
                 ['_ath', '_atl', '_marketcap', '_top_gainers', '_top_losers', '_trending', '_defi', '_nfts', '_fomo', '_panic'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ?
                   json.length === 1 ?
