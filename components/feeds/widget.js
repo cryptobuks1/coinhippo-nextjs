@@ -451,7 +451,7 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                           {coinData.price_change_percentage_24h_in_currency < 0 ? <FiArrowDown size={18} className="ml-0.5" /> : coinData.price_change_percentage_24h_in_currency > 0 ? <FiArrowUp size={18} className="ml-0.5" /> : null}
                         </span>
                       </div>
-                      <div className="w-full flex flex-col mt-3 mb-2">
+                      <div className="w-full mt-3 mb-2">
                         <Badge rounded color={`${coinData.signal.action === 'buy' ? 'bg-indigo-600 dark:bg-indigo-700' : 'bg-red-600 dark:bg-red-700'} text-white dark:text-white`}>
                           {coinData.signal.action}
                         </Badge>
