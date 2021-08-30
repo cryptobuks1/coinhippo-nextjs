@@ -455,7 +455,7 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                         <Badge rounded color={`${coinData.signal.action === 'buy' ? 'bg-indigo-600 dark:bg-indigo-700' : 'bg-red-600 dark:bg-red-700'} text-white dark:text-white`}>
                           {coinData.signal.action}
                         </Badge>
-                        <div className="text-gray-400 space-x-2">
+                        <div className="text-gray-400 space-x-2 mt-1">
                           <span className="text-xs">Strategy:</span>
                           <span className="uppercase font-semibold">{getName(coinData.signal.strategy)}</span>
                         </div>
