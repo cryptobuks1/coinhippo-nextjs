@@ -68,10 +68,12 @@ export default function Assets({ balancesData, contractData }) {
                         </div>
                       </a>
                     </Link>
-                    <div className="flex items-center text-gray-400 text-xs font-normal space-x-1 ml-9">
-                      <span>{ellipseAddress(props.row.original.contract_address, 6)}</span>
-                      <CopyClipboard text={props.row.original.contract_address} size={14} />
-                    </div>
+                    {props.row.original.contract_address && (
+                      <div className="flex items-center text-gray-400 text-xs font-normal space-x-1 ml-9">
+                        <span>{ellipseAddress(props.row.original.contract_address, 6)}</span>
+                        <CopyClipboard text={props.row.original.contract_address} size={14} />
+                      </div>
+                    )}
                   </>
                   :
                   <div className="flex flex-col">
