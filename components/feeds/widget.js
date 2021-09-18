@@ -116,6 +116,8 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                   <><FaBookDead size={20} className="text-red-500 mr-2.5" /><span className="h-6">All Time Low</span></> :
                 data.SortKey.endsWith('_marketcap') ?
                   <><FaCoins size={20} className="text-yellow-400 mr-2.5" /><span className="h-6">High % Change</span></> :
+                data.SortKey.endsWith('_volume') ?
+                  <><FaCoins size={20} className="text-yellow-400 mr-2.5" /><span className="h-6">High % Volume Change</span></> :
                 data.SortKey.endsWith('_top_gainers') ?
                   <><IoTrendingUp size={20} className="text-green-500 mr-2.5" /><span className="h-6">Top Gainers</span></> :
                 data.SortKey.endsWith('_top_losers') ?
@@ -248,7 +250,7 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                     </div>
                   </> :
                 feedType.startsWith('markets') ?
-                  ['_ath', '_atl', '_marketcap', '_top_gainers', '_top_losers', '_trending', '_defi', '_nfts', '_fomo', '_panic'].findIndex(market_type => feedType.endsWith(market_type)) > -1 ?
+                  ['_ath', '_atl', '_marketcap', '_volume', '_top_gainers', '_top_losers', '_trending', '_defi', '_nfts', '_fomo', '_panic'].findIndex(market_type => feedType.endsWith(market_type)) > -1 ?
                     [...Array(3).keys()].map(i => (
                       <div key={i} className={`mt-${i > 0 ? 3 : 0} mb-2 ${i < 3 - 1 ? 'border-b border-gray-100 pb-3' : ''}`}>
                         <div className="flex items-center font-semibold">
@@ -494,7 +496,7 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                             <span className="uppercase font-semibold">{getName(coinData.signal.strategy)}</span>
                           </div>
                         </div>
-                        <div className={`text-${coinData.price_change_percentage_24h_in_currency < 0 ? 'red' : coinData.price_change_percentage_24h_in_currency > 0 ? 'green' : 'gray'}-500 ${['_marketcap', '_top_gainers', '_top_losers'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ? 'font-extrabold' : ''} mt-0.5 ml-auto`}>
+                        <div className={`text-${coinData.price_change_percentage_24h_in_currency < 0 ? 'red' : coinData.price_change_percentage_24h_in_currency > 0 ? 'green' : 'gray'}-500 ${['_marketcap', '_volume', '_top_gainers', '_top_losers'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ? 'font-extrabold' : ''} mt-0.5 ml-auto`}>
                           {numberFormat(coinData.price_change_percentage_24h_in_currency / 100, '+0,0.00%')}
                         </div>
                       </div>
@@ -505,7 +507,7 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                     </div>
                   )) :
               feedType === 'markets' && data.SortKey ?
-                ['_ath', '_atl', '_marketcap', '_top_gainers', '_top_losers', '_trending', '_defi', '_nfts', '_fomo', '_panic'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ?
+                ['_ath', '_atl', '_marketcap', '_volume', '_top_gainers', '_top_losers', '_trending', '_defi', '_nfts', '_fomo', '_panic'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ?
                   json.length === 1 ?
                     json.map(coinData => (
                       <div key={coinData.id}>
@@ -552,7 +554,7 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                         </div>
                         <div className="flex items-center text-xs font-normal mt-1">
                           <div className="text-gray-400 dark:text-gray-500 mr-2"><span className="text-gray-600 dark:text-gray-400 font-semibold mr-1.5">#{numberFormat(coinData.market_cap_rank, '0,0')}</span>{coinData.name}</div>
-                          <div className={`text-${coinData.price_change_percentage_24h_in_currency < 0 ? 'red' : coinData.price_change_percentage_24h_in_currency > 0 ? 'green' : 'gray'}-500 ${['_marketcap', '_top_gainers', '_top_losers'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ? 'font-extrabold' : ''} ml-auto`}>
+                          <div className={`text-${coinData.price_change_percentage_24h_in_currency < 0 ? 'red' : coinData.price_change_percentage_24h_in_currency > 0 ? 'green' : 'gray'}-500 ${['_marketcap', '_volume', '_top_gainers', '_top_losers'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ? 'font-extrabold' : ''} ml-auto`}>
                             {numberFormat(coinData.price_change_percentage_24h_in_currency / 100, '+0,0.00%')}
                           </div>
                         </div>
@@ -594,7 +596,7 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                   {json.length < 2 && json.map((coinData, i) => <Link key={i} href={`/coin${coinData ? `/${coinData.id}` : 's'}`}><a className="uppercase font-semibold mr-1">${coinData && coinData.symbol}</a></Link>)}
                 </> :
               feedType === 'markets' && data.SortKey ?
-                ['_ath', '_atl', '_marketcap', '_top_gainers', '_top_losers', '_trending', '_defi', '_nfts', '_fomo', '_panic', '_bitcoin'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ?
+                ['_ath', '_atl', '_marketcap', '_volume', '_top_gainers', '_top_losers', '_trending', '_defi', '_nfts', '_fomo', '_panic', '_bitcoin'].findIndex(market_type => data.SortKey.endsWith(market_type)) > -1 ?
                   <>
                     {json.map((coinData, i) => <Link key={i} href={`/coin${coinData ? `/${coinData.id}` : 's'}`}><a className="font-semibold mr-1">#{coinData && coinData.name}</a></Link>)}
                     {json.length < 2 && json.map((coinData, i) => <Link key={i} href={`/coin${coinData ? `/${coinData.id}` : 's'}`}><a className="uppercase font-semibold mr-1">${coinData && coinData.symbol}</a></Link>)}

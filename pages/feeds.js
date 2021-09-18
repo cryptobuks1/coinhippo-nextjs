@@ -45,7 +45,7 @@ export default function FeedsIndex() {
                 return { ...feedData, Json: JSON.stringify(_tx) }
               }) : feedData)
               .filter(feedData => !(feedData.FeedType === 'markets' && feedData.Json && feedData.SortKey &&
-                ['_ath', '_atl', '_marketcap', '_top_gainers', '_top_losers', '_trending', '_defi', '_nfts'].findIndex(market_type => feedData.SortKey.endsWith(market_type)) > -1 &&
+                ['_ath', '_atl', '_marketcap', '_volume', '_top_gainers', '_top_losers', '_trending', '_defi', '_nfts'].findIndex(market_type => feedData.SortKey.endsWith(market_type)) > -1 &&
                   response.data.findIndex(_feedData => _feedData.FeedType === feedData.FeedType && _.last(_feedData.SortKey.split('_')) === _.last(feedData.SortKey.split('_')) &&
                     _feedData.CreatedAt > feedData.CreatedAt &&
                     _feedData.Json && _.isEqual(JSON.parse(_feedData.Json).map(coinData => coinData.id), JSON.parse(feedData.Json).map(coinData => coinData.id))
