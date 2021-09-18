@@ -117,7 +117,7 @@ const FeedWidget = ({ feedType = null, data = null, exactTime = false, noBorder 
                 data.SortKey.endsWith('_marketcap') ?
                   <><FaCoins size={20} className="text-yellow-400 mr-2.5" /><span className="h-6">High % Change</span></> :
                 data.SortKey.endsWith('_volume') ?
-                  <><FaCoins size={20} className="text-yellow-400 mr-2.5" /><span className="h-6">High % Volume Change</span></> :
+                  <><FaCoins size={20} className="text-yellow-400 mr-2.5" /><span className="h-6">High Volume / MCap</span></> :
                 data.SortKey.endsWith('_top_gainers') ?
                   <><IoTrendingUp size={20} className="text-green-500 mr-2.5" /><span className="h-6">Top Gainers</span></> :
                 data.SortKey.endsWith('_top_losers') ?
